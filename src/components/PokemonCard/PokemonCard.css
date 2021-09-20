@@ -1,0 +1,40 @@
+.pokemon-card {
+    width: 30%;
+    min-width: 30vw;
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1em !important;
+    align-items: center;
+}
+
+.card-img {
+    height: 100px;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card-link {
+    text-transform: capitalize !important;
+    border-radius: 2em !important;
+    color: white !important;
+    width: 7vw !important;
+    min-width: 7vw !important;
+}
+
+.bulbapedia {
+    background-color: #0CAA38 !important;
+}
+
+.serebii {
+    background-color: #8DC76D !important;
+}
+
+.smogon {
+    background-color: #C184FF !important;
+}
+
+.stats-loader {
+    overflow: hidden;
+}

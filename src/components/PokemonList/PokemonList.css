@@ -1,0 +1,15 @@
+.pokemon-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pokemon-row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.row-loader {
+    width: 100%;
+    text-align: center;
+}

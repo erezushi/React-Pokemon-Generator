@@ -1,0 +1,44 @@
+.options-box {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 66%;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 2em !important;
+    margin-top: 9em;
+}
+
+.options-row {
+    width: 90%;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.options-control {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.input-field {
+    width: 7em !important;
+    text-align: start;
+}
+
+.gen-checkbox {
+    margin: 0 !important;
+}
+
+.generate {
+    margin-top: 0.5em !important;
+    width: 10em !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 2em !important;
+}

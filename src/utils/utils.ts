@@ -3,18 +3,23 @@ import Swal from 'sweetalert2';
 
 // #region imageUrl
 const imgReplacements: {[name: string]: string} = {
+  'Meowstic-M': 'meowstic-male',
+  'Meowstic-F': 'meowstic-female',
+  'Indeedee-M': 'indeedee-male',
+  'Indeedee-F': 'indeedee-female',
   Urshifu: 'urshifu-single-strike',
   Zacian: 'zacian-hero',
   Zamazenta: 'zamazenta-hero',
 };
 
-const imgSpecialStrings = /['.:♀♂é ]/g;
+const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
 
 const imgStringMap: {[match: string]: string} = {
   "'": '',
   '.': '',
   ':': '',
   ' ': '-',
+  '-m': '',
   '♀': '-f',
   '♂': '-m',
   é: 'e',
@@ -40,6 +45,10 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // 'Static' functions put into place as TypeScript won't accept a
   // union type for the second parameter of String.Prototype.replace()
 
+  // Single character changes
+  [/['.]/g, () => ''],
+  [' ', () => '-'],
+
   // Alolan forms
   ['alolan', () => 'alola'],
 
@@ -49,17 +58,14 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // Gigantamax forms
   ['gigantamax', () => 'gmax'],
 
-  // Flabébé
-  [/flabébé-.+/g, () => 'flabebe'],
-
-  // Oricorio Pa'u style
-  ["pa'u", () => 'pau'],
-
   // Oricorio Meteor form
   ['meteor', () => 'red-meteor'],
 
   // G-Max Toxtricity
   ['toxtricity-gmax', () => 'toxtricity-amped-gmax'],
+
+  // Flabébé
+  [/flabébé-.+/g, () => 'flabebe'],
 
   // Specific form names not found in the API
   [/-(confined|core|mane|wings)/g, () => ''],
@@ -67,13 +73,19 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // Galarian Darmanitan (galar-[form] -> [form]-galar)
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
 
+  // Indeedee
+  [/(?<=indeedee-).+/g, (match) => {
+    if (match === 'f') return 'female';
+    return 'male';
+  }],
+
   // Pokémon with consistant stats througout their forms
   [new RegExp(
     [
       '(unown',
       '|burmy|cherrim|shellos|gastrodon|arceus',
-      '|deerling|sawsbuck|genesect',
-      '|vivillon|floette|florges|furfrou|xerneas',
+      '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect',
+      '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas',
       '|silvally',
       '|cramorant|morpeko|zarude)-.+',
     ].join(''),

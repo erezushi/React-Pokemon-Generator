@@ -32,7 +32,13 @@ export interface IPokemonResponse {
       effort: number,
       stat: any
     }[],
-    types: any[],
+    types: {
+      slot: number,
+      type: {
+        name: string,
+        url: string,
+      }
+    }[],
     weight: number,
   }
 }

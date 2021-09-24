@@ -1,0 +1,12 @@
+.app {
+    min-height: calc(100vh - 10.5em);
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 1.5em;
+    width: 100%;
+    text-align: center;
+    z-index: -1;
+}

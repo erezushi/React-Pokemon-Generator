@@ -1,10 +1,10 @@
 .app-header {
+    height: 5em;
     width: 100%;
     display: flex;
+    flex-direction: column;
     position: fixed;
     top: 0;
-    flex-direction: column;
-    height: 5em;
     font-size: 20pt;
     font-weight: bold;
     z-index: 1;

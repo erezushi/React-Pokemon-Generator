@@ -10,6 +10,13 @@ function App() {
       <Header />
       <OptionsBox />
       <PokemonList />
+      <div className="footer">
+        Site powered by
+        {' '}
+        <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">this</a>
+        {' '}
+        NPM library
+      </div>
     </div>
   );
 }

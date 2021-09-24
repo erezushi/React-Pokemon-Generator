@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { StarRounded } from '@material-ui/icons';
 import axios from 'axios';
+import _ from 'lodash';
 import React, { useCallback, useMemo } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -95,7 +96,9 @@ const PokemonCard = ({ instance }: ICardProps) => {
         html = `${html}<b>BST:</b> ${total}`;
 
         Swal.fire({
-          title: `${fullName}<br />#${specie.dexNo!.toString().padStart(3, '0')}`,
+          title: `${fullName}
+            #${specie.dexNo!.toString().padStart(3, '0')}
+            Type: ${res.data.types.map((type) => _.capitalize(type.type.name)).join(' / ')}`,
           imageUrl: imageUrl(fullName, isShiny),
           html,
         });

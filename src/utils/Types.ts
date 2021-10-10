@@ -12,7 +12,14 @@ export interface IPokemonInstance {
 
 export interface IPokemonResponse {
   data: {
-    abilities: any[],
+    abilities: {
+      ability: {
+        name: string,
+        url: string
+      },
+      'is_hidden': boolean,
+      slot: number
+    }[],
     'base_experience': number,
     forms: any[],
     'game_indices': any[],
@@ -32,13 +39,7 @@ export interface IPokemonResponse {
       effort: number,
       stat: any
     }[],
-    types: {
-      slot: number,
-      type: {
-        name: string,
-        url: string,
-      }
-    }[],
+    types: any[],
     weight: number,
   }
 }

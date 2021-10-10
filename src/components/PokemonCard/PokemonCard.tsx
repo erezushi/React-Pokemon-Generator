@@ -84,10 +84,25 @@ const PokemonCard = ({ instance }: ICardProps) => {
           'Sp. Def',
           'Speed',
         ];
-        let html = '';
-        let total = 0;
+        let html = `Type: ${
+          specie.type.split(' ').map((type) => _.startCase(type)).join(' / ')
+        }<br/>`;
 
-        res.data.stats.forEach((stat, index) => {
+        const { stats, abilities } = res.data;
+
+        html = `${html}Abilities: ${
+          abilities
+            .filter((ability) => !ability.is_hidden)
+            .map((ability) => _.startCase(ability.ability.name/* .replace('-', ' ') */))
+            .join(' / ')
+        }${abilities.some((ability) => ability.is_hidden)
+          ? `<br />Hidden Ability: ${
+            _.startCase(abilities.find((ability) => ability.is_hidden)!.ability.name)
+          }`
+          : ''}<br /> <br />`;
+
+        let total = 0;
+        stats.forEach((stat, index) => {
           const { base_stat: base } = stat;
           html = `${html}${statNames[index]}: ${base}<br />`;
           total += base;
@@ -97,8 +112,7 @@ const PokemonCard = ({ instance }: ICardProps) => {
 
         Swal.fire({
           title: `${fullName}
-            #${specie.dexNo!.toString().padStart(3, '0')}
-            Type: ${res.data.types.map((type) => _.capitalize(type.type.name)).join(' / ')}`,
+            #${specie.dexNo!.toString().padStart(3, '0')}`,
           imageUrl: imageUrl(fullName, isShiny),
           html,
         });

@@ -85,20 +85,32 @@ const PokemonCard = ({ instance }: ICardProps) => {
           'Speed',
         ];
         let html = `Type: ${
-          specie.type.split(' ').map((type) => _.startCase(type)).join(' / ')
-        }<br/>`;
+          specie.type.split(' ').map((type) => {
+            const formattedName = _.startCase(type);
+            return `<a href="https://bulbapedia.bulbagarden.net/wiki/${
+              formattedName
+            }_(type)">${formattedName}</a>`;
+          }).join(' / ')
+        }<br />`;
 
         const { stats, abilities } = res.data;
+        const regularAbilities = abilities
+          .filter((ability) => !ability.is_hidden)
+          .map((ability) => _.startCase(ability.ability.name));
+        const hiddenAbility = _.startCase(
+          abilities.find((ability) => ability.is_hidden)?.ability.name,
+        );
 
         html = `${html}Abilities: ${
-          abilities
-            .filter((ability) => !ability.is_hidden)
-            .map((ability) => _.startCase(ability.ability.name/* .replace('-', ' ') */))
+          regularAbilities
+            .map((ability) => `<a href="https://bulbapedia.bulbagarden.net/wiki/${
+              ability.replace(' ', '_')
+            }_(Ability)" rel="noopener noreferrer" target="_blank">${ability}</a>`)
             .join(' / ')
-        }${abilities.some((ability) => ability.is_hidden)
-          ? `<br />Hidden Ability: ${
-            _.startCase(abilities.find((ability) => ability.is_hidden)!.ability.name)
-          }`
+        }${hiddenAbility
+          ? `<br />Hidden Ability: <a href="https://bulbapedia.bulbagarden.net/wiki/${
+            hiddenAbility.replace(' ', '_')
+          }_(Ability)" rel="noopener noreferrer" target="_blank">${hiddenAbility}</a>`
           : ''}<br /> <br />`;
 
         let total = 0;

@@ -28,7 +28,7 @@ const imgStringMap: {[match: string]: string} = {
 const imageName = (name: string) => imgReplacements[name]
     ?? name.toLowerCase().replace(imgSpecialStrings, (match) => imgStringMap[match]);
 
-export const imageUrl = (name: string, shiny: boolean) => (
+export const imageUrl = (name: string, shiny: boolean): string => (
   `https://img.pokemondb.net/sprites/home/${
     shiny ? 'shiny' : 'normal'
   }/${imageName(shiny ? name.replace(/Alcremie-(?!Gigantamax)/, (match) => {
@@ -106,7 +106,7 @@ const apiName = (name: string, formName: string) => {
   return modifiedName;
 };
 
-export const apiUrl = (specie: Pokemon, formName: string | null) => {
+export const apiUrl = (specie: Pokemon, formName: string | null): string => {
   const baseUrl = 'https://pokeapi.co/api/v2/pokemon';
   if (formName === null || formName === 'default') {
     return `${baseUrl}/${specie.dexNo}`;
@@ -159,7 +159,7 @@ const alcremieSweets = [
   'Ribbon',
 ];
 
-export const alcremieForm = () => {
+export const alcremieForm = (): string => {
   const cream = randomArrayEntry(alcremieCreams);
   const sweet = randomArrayEntry(alcremieSweets);
 

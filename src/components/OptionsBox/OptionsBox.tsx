@@ -34,7 +34,7 @@ const keyMap = {
   generate: 'Enter',
 };
 
-const OptionsBox = () => {
+const OptionsBox: React.FC = () => {
   const [unique, setUnique] = useState(true);
   const [forms, setForms] = useState(true);
   const [amount, setAmount] = useState(6);
@@ -57,7 +57,7 @@ const OptionsBox = () => {
     setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as Types[]);
   }, []);
 
-  const appendGenList = useCallback((data: object) => {
+  const appendGenList = useCallback((data: { [gen: string]: boolean }) => {
     setGenerationList((prevGenList) => Object.assign(prevGenList, data));
   }, []);
 

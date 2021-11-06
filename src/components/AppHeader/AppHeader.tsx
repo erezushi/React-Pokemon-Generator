@@ -3,7 +3,7 @@ import React from 'react';
 
 import './AppHeader.css';
 
-const Header = () => (
+const Header: React.FC = () => (
   <div className="app-header">
     <div className="header-top">
       Random Pokémon

@@ -4,6 +4,7 @@
         "es2021": true
     },
     "extends": [
+        "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
         "airbnb"
@@ -16,20 +17,19 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
+    "plugins": ["react", "@typescript-eslint"],
     "rules": {
         "linebreak-style": ["off"],
         "import/extensions": ["off"],
         "import/no-unresolved": ["off"],
-        "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx", ".tsx"]}],
+        "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx", ".tsx"] }],
         "react/jsx-sort-props": ["warn"],
-        "react/jsx-indent-props": ["warn"],        
+        "react/jsx-indent-props": ["warn"],
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": ["error"],
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     }
 }

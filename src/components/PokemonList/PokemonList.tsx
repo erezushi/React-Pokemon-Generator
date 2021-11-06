@@ -1,8 +1,8 @@
 import random from '@erezushi/pokemon-randomizer';
-import { Options } from '@erezushi/pokemon-randomizer/dist/types';
+import { Form, Options } from '@erezushi/pokemon-randomizer/dist/types';
 import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
 import { errorToast } from '../../utils/utils';
@@ -12,19 +12,21 @@ import './PokemonList.css';
 
 const ROWS_PER_PAGE = 10;
 
-const PokemonList = () => {
+const PokemonList: React.FC = () => {
   const [monList, setMonList] = useState<IPokemonInstance[]>([]);
   const [splitArray, setSplitArray] = useState<IPokemonInstance[][]>([]);
   const [loadedRows, setLoadedRows] = useState<IPokemonInstance[][]>([]);
   const [lastRowPos, setLastRowPos] = useState(0);
+  const [currentScroll, setCurrentScroll] = useState(0);
 
   const randomize = useCallback(async (opt: Options, shinyChance: number) => {
     try {
+      setCurrentScroll(window.scrollY);
       const results = await random(opt);
 
       setMonList(results.map((instance) => {
         const isShiny = Math.floor(Math.random() * 99) < shinyChance;
-        let form = null;
+        let form: Form | null = null;
         if (instance.forms) {
           form = instance.forms[Math.floor(Math.random() * instance.forms.length)];
         }
@@ -71,6 +73,12 @@ const PokemonList = () => {
     setLastRowPos((value) => value + ROWS_PER_PAGE);
   }, [lastRowPos, splitArray]);
 
+  useEffect(() => {
+    if (loadedRows.length <= ROWS_PER_PAGE) {
+      window.scroll(0, currentScroll);
+    }
+  }, [currentScroll, loadedRows.length]);
+
   return (
     <div className="pokemon-list">
       <InfiniteScroll
@@ -79,9 +87,9 @@ const PokemonList = () => {
         loadMore={loadMore}
       >
         {loadedRows.map((row) => (
-          <div key={v4()} className="pokemon-row">
+          <div key={uuid()} className="pokemon-row">
             {row.map((instance) => (
-              <PokemonCard key={v4()} instance={instance} />
+              <PokemonCard key={uuid()} instance={instance} />
             ))}
           </div>
         ))}

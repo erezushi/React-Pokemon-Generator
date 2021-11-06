@@ -47,7 +47,7 @@ interface ICardProps {
   instance: IPokemonInstance,
 }
 
-const PokemonCard = ({ instance }: ICardProps) => {
+const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   const { specie, isShiny, form } = instance;
 
   let fullName = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
@@ -84,9 +84,10 @@ const PokemonCard = ({ instance }: ICardProps) => {
           'Sp. Def',
           'Speed',
         ];
+        const type = form?.type ?? specie.type;
         let html = `Type: ${
-          specie.type.split(' ').map((type) => {
-            const formattedName = _.startCase(type);
+          type.split(' ').map((currentType) => {
+            const formattedName = _.startCase(currentType);
             return `<a href="https://bulbapedia.bulbagarden.net/wiki/${
               formattedName
             }_(type)">${formattedName}</a>`;
@@ -134,7 +135,7 @@ const PokemonCard = ({ instance }: ICardProps) => {
           text: 'error fetching base stats',
         });
       });
-  }, [form?.name, fullName, isShiny, specie]);
+  }, [form?.name, form?.type, fullName, isShiny, specie]);
 
   const links = useMemo<{[site: string]: string}>(() => {
     const { name } = specie;

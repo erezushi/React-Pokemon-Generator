@@ -25,7 +25,6 @@ import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IGenList } from '../../utils/Types';
 
 import './OptionsBox.css';
-import 'animate.css';
 import CustomCheckbox from '../../utilComponents/CustomCheckbox';
 
 const useForceUpdate = () => useReducer((x) => x + 1, 0)[1];

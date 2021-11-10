@@ -5,28 +5,23 @@ import {
   CardMedia,
   Typography,
   Button,
-  CircularProgress,
 } from '@material-ui/core';
 import { StarRounded } from '@material-ui/icons';
 import axios from 'axios';
-import _ from 'lodash';
-import React, { useCallback, useMemo } from 'react';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import { IPokemonInstance, IPokemonResponse } from '../../utils/Types';
+import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
 import {
   apiUrl,
   errorToast,
   imageUrl,
-  Toast,
   alcremieForm,
   shinyReplacements,
 } from '../../utils/utils';
+import DetailsModal from '../DetailsModal';
+import LoadingSnackbar from '../LoadingSnackbar';
 
 import './PokemonCard.css';
-
-const ReactToast = withReactContent(Toast);
 
 const specialChars = /[♂ ♀é]/g;
 
@@ -50,6 +45,12 @@ interface ICardProps {
 const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   const { specie, isShiny, form } = instance;
 
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const [details, setDetails] = useState<IPokemonDetails>(
+    { abilities: [], stats: [], type: form?.type ?? specie.type },
+  );
+  const [isModalOpen, setModalOpen] = useState(false);
+
   let fullName = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
 
   if (specie.name === 'Alcremie' && form?.name === 'default') {
@@ -63,82 +64,30 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   }
 
   const handleCardClick = useCallback(() => {
-    ReactToast.fire({
-      title: fullName,
-      html: (
-        <div className="stats-loader">
-          Loading base Stats...
-          <br />
-          <CircularProgress />
-        </div>
-      ),
-    });
+    setSnackbarOpen(true);
 
-    axios.get(apiUrl(specie, form?.name ?? null))
-      .then((res: IPokemonResponse) => {
-        const statNames = [
-          'HP',
-          'Attack',
-          'Sp. Atk',
-          'Defense',
-          'Sp. Def',
-          'Speed',
-        ];
-        const type = form?.type ?? specie.type;
-        let html = `Type: ${
-          type.split(' ').map((currentType) => {
-            const formattedName = _.startCase(currentType);
-            return `<a href="https://bulbapedia.bulbagarden.net/wiki/${
-              formattedName
-            }_(type)">${formattedName}</a>`;
-          }).join(' / ')
-        }<br />`;
-
-        const { stats, abilities } = res.data;
-        const regularAbilities = abilities
-          .filter((ability) => !ability.is_hidden)
-          .map((ability) => _.startCase(ability.ability.name));
-        const hiddenAbility = _.startCase(
-          abilities.find((ability) => ability.is_hidden)?.ability.name,
-        );
-
-        html = `${html}Abilities: ${
-          regularAbilities
-            .map((ability) => `<a href="https://bulbapedia.bulbagarden.net/wiki/${
-              ability.replace(' ', '_')
-            }_(Ability)" rel="noopener noreferrer" target="_blank">${ability}</a>`)
-            .join(' / ')
-        }${hiddenAbility
-          ? `<br />Hidden Ability: <a href="https://bulbapedia.bulbagarden.net/wiki/${
-            hiddenAbility.replace(' ', '_')
-          }_(Ability)" rel="noopener noreferrer" target="_blank">${hiddenAbility}</a>`
-          : ''}<br /> <br />`;
-
-        let total = 0;
-        stats.forEach((stat, index) => {
-          const { base_stat: base } = stat;
-          html = `${html}${statNames[index]}: ${base}<br />`;
-          total += base;
+    if (!details.stats.length) {
+      axios.get(apiUrl(specie, form?.name ?? null))
+        .then((res: IPokemonResponse) => {
+          const { abilities, stats } = res.data;
+          setDetails((currDetails) => ({ ...currDetails, abilities, stats }));
+          setModalOpen(true);
+          setSnackbarOpen(false);
+        })
+        .catch(() => {
+          errorToast.fire({
+            text: 'error fetching base stats',
+          });
         });
-
-        html = `${html}<b>BST:</b> ${total}`;
-
-        Swal.fire({
-          title: `${fullName}
-            #${specie.dexNo!.toString().padStart(3, '0')}`,
-          imageUrl: imageUrl(fullName, isShiny),
-          html,
-        });
-      })
-      .catch(() => {
-        errorToast.fire({
-          text: 'error fetching base stats',
-        });
-      });
-  }, [form?.name, form?.type, fullName, isShiny, specie]);
+    } else {
+      setModalOpen(true);
+      setSnackbarOpen(false);
+    }
+  }, [details.stats.length, form?.name, specie]);
 
   const links = useMemo<{[site: string]: string}>(() => {
     const { name } = specie;
+
     return ({
       bulbapedia: `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`,
       serebii: `https://www.serebii.net/pokemon/${
@@ -186,6 +135,17 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
           </Button>
         ))}
       </CardActions>
+      <LoadingSnackbar
+        isOpen={isSnackbarOpen}
+        name={fullName}
+      />
+      <DetailsModal
+        details={details}
+        fullName={fullName}
+        instance={instance}
+        isOpen={isModalOpen}
+        setOpen={setModalOpen}
+      />
     </Card>
   );
 };

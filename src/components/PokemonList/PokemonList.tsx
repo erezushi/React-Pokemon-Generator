@@ -1,5 +1,6 @@
 import random from '@erezushi/pokemon-randomizer';
 import { Form, Options } from '@erezushi/pokemon-randomizer/dist/types';
+import { Chance } from 'chance';
 import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { v4 as uuid } from 'uuid';
@@ -11,6 +12,7 @@ import PokemonCard from '../PokemonCard';
 import './PokemonList.css';
 
 const ROWS_PER_PAGE = 10;
+const chance = new Chance();
 
 const PokemonList: React.FC = () => {
   const [monList, setMonList] = useState<IPokemonInstance[]>([]);
@@ -25,10 +27,10 @@ const PokemonList: React.FC = () => {
       const results = await random(opt);
 
       setMonList(results.map((instance) => {
-        const isShiny = Math.floor(Math.random() * 99) < shinyChance;
+        const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
         let form: Form | null = null;
         if (instance.forms) {
-          form = instance.forms[Math.floor(Math.random() * instance.forms.length)];
+          form = instance.forms[chance.integer({ min: 0, max: instance.forms.length - 1 })];
         }
 
         return ({

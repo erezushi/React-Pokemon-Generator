@@ -21,6 +21,7 @@
     "rules": {
         "linebreak-style": "off",
         "newline-before-return": "error",
+        "no-debugger": "warn",
         "import/extensions": "off",
         "import/no-unresolved": "off",
         "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx", ".tsx"] }],

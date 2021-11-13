@@ -164,18 +164,24 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
 
                 return (
                   <>
-                    <CardMedia
-                      className="evolution-img"
-                      image={imageUrl(name, isShiny)}
-                    />
+                    <div>
+                      <CardMedia
+                        className="evolution-img"
+                        image={imageUrl(name, isShiny)}
+                      />
+                      {name}
+                    </div>
                     <ArrowRightAltRounded />
                   </>
                 );
               })}
-              <CardMedia
-                className="evolution-img"
-                image={imageUrl(fullName, isShiny)}
-              />
+              <div>
+                <CardMedia
+                  className="evolution-img"
+                  image={imageUrl(fullName, isShiny)}
+                />
+                {fullName}
+              </div>
               {evolutions.map((evo) => {
                 if (Array.isArray(evo)) {
                   if (evo.length > 3) {
@@ -197,15 +203,22 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                               evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
                             }`;
 
-                            return (
-                              <div className="evolution-list">
-                                {index === 0 && <ArrowRightAltRounded />}
-                                <CardMedia
-                                  className="evolution-img"
-                                  image={imageUrl(name, isShiny)}
-                                />
-                              </div>
-                            );
+                            return name === 'MissingNo.'
+                              ? (
+                                <div className="placeholder" />
+                              )
+                              : (
+                                <div className="evolution-list">
+                                  {index === 0 && <ArrowRightAltRounded />}
+                                  <div>
+                                    <CardMedia
+                                      className="evolution-img"
+                                      image={imageUrl(name, isShiny)}
+                                    />
+                                    {name}
+                                  </div>
+                                </div>
+                              );
                           })}
                         </div>
                       ))
@@ -222,15 +235,22 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                           evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
                         }`;
 
-                        return (
-                          <div className="evolution-list">
-                            <ArrowRightAltRounded />
-                            <CardMedia
-                              className="evolution-img"
-                              image={imageUrl(name, isShiny)}
-                            />
-                          </div>
-                        );
+                        return name === 'MissingNo.'
+                          ? (
+                            <div className="placeholder" />
+                          )
+                          : (
+                            <div className="evolution-list">
+                              <ArrowRightAltRounded />
+                              <div>
+                                <CardMedia
+                                  className="evolution-img"
+                                  image={imageUrl(name, isShiny)}
+                                />
+                                {name}
+                              </div>
+                            </div>
+                          );
                       })}
                     </div>
                   );
@@ -245,10 +265,13 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                 return (
                   <>
                     <ArrowRightAltRounded />
-                    <CardMedia
-                      className="evolution-img"
-                      image={imageUrl(name, isShiny)}
-                    />
+                    <div>
+                      <CardMedia
+                        className="evolution-img"
+                        image={imageUrl(name, isShiny)}
+                      />
+                      {name}
+                    </div>
                   </>
                 );
               })}

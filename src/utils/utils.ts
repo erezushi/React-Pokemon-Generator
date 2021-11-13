@@ -91,8 +91,8 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // Galarian Darmanitan (galar-[form] -> [form]-galar)
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
 
-  // Indeedee
-  [/(?<=indeedee-).+/g, (match) => {
+  // Meowstic & Indeedee
+  [/(?<=(meowstic|indeedee)-).+/g, (match) => {
     if (match === 'f') return 'female';
 
     return 'male';
@@ -104,7 +104,7 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
       '(unown',
       '|burmy|cherrim|shellos|gastrodon|arceus',
       '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect',
-      '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas',
+      '|vivillon|pyroar|floette|florges|furfrou|xerneas',
       '|silvally',
       '|cramorant|morpeko|zarude)-.+',
     ].join(''),
@@ -195,30 +195,86 @@ export interface Evolution {
   form?: Form
 }
 
+const missinoNo: Evolution = {
+  specie: {
+    name: 'MissingNo.',
+    type: 'bird normal',
+  },
+};
+
+const extraEvoForms = ['Mega', 'Primal', 'Ash', 'Gigantamax', 'Eternamax'];
+
 export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])[] => {
   const pokemonList = getPokemon();
-  const evolveTo = form ? form.evolveTo : pokemon.evolveTo;
+
+  if (pokemon.name === 'Urshifu') {
+    return form && !form.name.includes('Gigantamax')
+      ? [{
+        specie: pokemon,
+        form: pokemon.forms?.find((currForm) => currForm.name === `${form.name}-Gigantamax`),
+      }]
+      : [];
+  }
+
+  let evolveTo = form ? form.evolveTo : pokemon.evolveTo;
+
+  if (
+    (!form
+    || !extraEvoForms.some((extraEvo) => form.name.includes(extraEvo)))
+    && pokemon.forms?.some(
+      (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+    )
+  ) {
+    const dexNo = pokemon.dexNo ?? Object.keys(pokemonList)
+      .find((currDexNo) => pokemonList[currDexNo].name === pokemon.name);
+    if (evolveTo !== undefined) {
+      evolveTo = `${evolveTo} ${pokemon.forms.filter(
+        (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+      ).map((extraForm) => `${dexNo}-${extraForm.name}`).join(' ')}`;
+    } else {
+      evolveTo = pokemon.forms.filter(
+        (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+      ).map((extraForm) => `${dexNo}-${extraForm.name}`).join(' ');
+    }
+  }
 
   if (evolveTo?.includes(' ')) {
-    const evolutions = evolveTo.split(' ').map((wantedEvoString) => {
-      if (wantedEvoString.includes('-')) {
-        const evolution = pokemonList[wantedEvoString.substring(0, wantedEvoString.indexOf('-'))];
+    const evolutions = evolveTo.split(' ').map((evoString) => {
+      if (evoString.includes('-')) {
+        const evolution = pokemonList[evoString.substring(0, evoString.indexOf('-'))];
 
         return {
           specie: evolution,
           form: evolution.forms!.find(
-            (evoForm) => evoForm.name === wantedEvoString.substring(
-              wantedEvoString.indexOf('-') + 1,
+            (evoForm) => evoForm.name === evoString.substring(
+              evoString.indexOf('-') + 1,
             ),
           ),
         };
       }
 
-      return { specie: pokemonList[wantedEvoString] };
+      return { specie: pokemonList[evoString] };
     });
 
-    return evolutions.some((evolution) => evolution.specie.evolveTo)
-      ? [evolutions, evolutions.map((evolution) => nextEvos(evolution.specie)[0] as Evolution)]
+    return evolutions.some((evolution) => {
+      const { specie, form: evoForm } = evolution;
+
+      const evolutionEvolveTo = evoForm ? evoForm.evolveTo : specie.evolveTo;
+      const hasExtraEvos = (!evoForm
+        || !extraEvoForms.some((extraEvo) => evoForm.name.includes(extraEvo)))
+        && specie.forms?.some(
+          (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+        );
+
+      return Boolean(evolutionEvolveTo) || hasExtraEvos;
+    })
+      ? [
+        evolutions,
+        evolutions
+          .map(
+            (evolution) => nextEvos(evolution.specie, evolution.form)[0] as Evolution ?? missinoNo,
+          ),
+      ]
       : [evolutions];
   }
 
@@ -226,7 +282,7 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
     if (evolveTo.includes('-')) {
       const evolution = pokemonList[evolveTo.substring(0, evolveTo.indexOf('-'))];
       const evoForm = evolution.forms!.find(
-        (currentForm) => currentForm.name === evolveTo.substring(evolveTo.indexOf('-') + 1),
+        (currentForm) => currentForm.name === evolveTo!.substring(evolveTo!.indexOf('-') + 1),
       );
 
       return [{
@@ -242,12 +298,38 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
   return [];
 };
 
-export const prevEvos = (pokemon: Pokemon, form = {} as Form): Evolution[] => {
+const ignoreForms = ['Cherrim', 'Vivllon', 'Aegislash', 'Silvally', 'Toxtricity'];
+
+export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   const pokemonList = getPokemon();
+
+  if (pokemon.name === 'Urshifu') {
+    const prevolutions: Evolution[] = [{ specie: pokemonList['891'] }];
+
+    if (form?.name.includes('Gigantamax')) {
+      prevolutions.push({
+        specie: pokemon,
+        form: pokemon.forms
+          ?.find(
+            (currForm) => currForm.name === form.name.substring(0, form.name.lastIndexOf('-')),
+          ),
+      });
+    }
+
+    return prevolutions;
+  }
+
+  if (form && extraEvoForms.some((extraEvo) => form.name.includes(extraEvo))) {
+    const prevoForm = pokemon.forms!.find((currForm) => currForm.name === 'default');
+
+    return [...prevEvos(pokemon, prevoForm), { specie: pokemon, form: prevoForm }];
+  }
   const wantedEvoString = `${Object
     .keys(pokemonList)
     .find((dexNo) => pokemonList[dexNo].name === pokemon.name)}${
-    form.name && form.name !== 'default' ? `-${form.name}` : ''
+    form?.name && form.name !== 'default' && !ignoreForms.includes(pokemon.name)
+      ? `-${form.name}`
+      : ''
   }`;
 
   let prevoForm: Form | undefined;

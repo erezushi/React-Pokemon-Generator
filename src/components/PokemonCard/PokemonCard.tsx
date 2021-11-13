@@ -8,7 +8,9 @@ import {
 } from '@material-ui/core';
 import { StarRounded } from '@material-ui/icons';
 import axios from 'axios';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
 import {
@@ -45,23 +47,26 @@ interface ICardProps {
 const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   const { specie, isShiny, form } = instance;
 
+  const [fullName, setFullName] = useState(
+    `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`,
+  );
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [details, setDetails] = useState<IPokemonDetails>(
     { abilities: [], stats: [], type: form?.type ?? specie.type },
   );
   const [isModalOpen, setModalOpen] = useState(false);
 
-  let fullName = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
+  useEffect(() => {
+    if (specie.name === 'Alcremie' && form?.name === 'default') {
+      setFullName((prevFullName) => `${prevFullName}-${alcremieForm()}`);
+    }
 
-  if (specie.name === 'Alcremie' && form?.name === 'default') {
-    fullName = `${fullName}-${alcremieForm()}`;
-  }
-
-  if (isShiny) {
-    shinyReplacements.forEach((value, key) => {
-      fullName = fullName.replace(key, value);
-    });
-  }
+    if (isShiny) {
+      shinyReplacements.forEach((value, key) => {
+        setFullName((prevFullName) => prevFullName.replace(key, value));
+      });
+    }
+  }, [form?.name, isShiny, specie.name]);
 
   const handleCardClick = useCallback(() => {
     setSnackbarOpen(true);
@@ -75,6 +80,7 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
           setSnackbarOpen(false);
         })
         .catch(() => {
+          setSnackbarOpen(false);
           errorToast.fire({
             text: 'error fetching base stats',
           });

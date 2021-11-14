@@ -365,7 +365,7 @@ const OptionsBox: React.FC = () => {
             id="generate"
             onClick={generateClick}
             size="large"
-            variant="contained"
+            variant="outlined"
           >
             Generate
           </Button>

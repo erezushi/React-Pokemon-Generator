@@ -220,7 +220,9 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
 
   if (
     (!form
-    || !extraEvoForms.some((extraEvo) => form.name.includes(extraEvo)))
+    || form.name === 'default'
+    || form.name === 'Amped'
+    || form.name === 'Low-Key')
     && pokemon.forms?.some(
       (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
     )
@@ -261,7 +263,9 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
 
       const evolutionEvolveTo = evoForm ? evoForm.evolveTo : specie.evolveTo;
       const hasExtraEvos = (!evoForm
-        || !extraEvoForms.some((extraEvo) => evoForm.name.includes(extraEvo)))
+        || evoForm.name === 'default'
+        || evoForm.name === 'Amped'
+        || evoForm.name === 'Low-Key')
         && specie.forms?.some(
           (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
         );

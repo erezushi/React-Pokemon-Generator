@@ -205,7 +205,7 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
 
                             return name === 'MissingNo.'
                               ? (
-                                <div className="placeholder" />
+                                <div className="MissingNo" />
                               )
                               : (
                                 <div className="evolution-list">
@@ -237,7 +237,7 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
 
                         return name === 'MissingNo.'
                           ? (
-                            <div className="placeholder" />
+                            <div className="MissingNo" />
                           )
                           : (
                             <div className="evolution-list">

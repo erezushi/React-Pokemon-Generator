@@ -37,7 +37,10 @@
     margin-right: auto;
 }
 
-.placeholder {
+.MissingNo {
     height: 75px;
-    width: 0;
+    background-image: url(https://www.serebii.net/pokearth/sprites/rb/000.png);
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-position: center; 
 }

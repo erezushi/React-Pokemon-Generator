@@ -83,6 +83,10 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
             </span>
             )}
           </Typography>
+          <Typography variant="h5">
+            #
+            {specie.dexNo!.padStart(3, '0')}
+          </Typography>
           <Typography>
             Type:
             {' '}

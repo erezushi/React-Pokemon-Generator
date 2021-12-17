@@ -113,10 +113,9 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
 
   return (
     <Card className="pokemon-card" onClick={handleCardClick}>
-      <CardMedia
-        className="card-img"
-        image={imageUrl(fullName, isShiny)}
-      />
+      <CardMedia>
+        <img alt={fullName} className="card-img" src={imageUrl(fullName, isShiny)} />
+      </CardMedia>
       <CardContent>
         <Typography variant="h5">
           {fullName}

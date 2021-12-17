@@ -69,10 +69,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
       open={isOpen}
     >
       <Card className="details-card">
-        <CardMedia
-          className="details-img"
-          image={imageUrl(fullName, isShiny)}
-        />
+        <CardMedia>
+          <img alt={fullName} className="details-img" src={imageUrl(fullName, isShiny)} />
+        </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
             {fullName}
@@ -169,10 +168,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                 return (
                   <>
                     <div>
-                      <CardMedia
-                        className="evolution-img"
-                        image={imageUrl(name, isShiny)}
-                      />
+                      <CardMedia>
+                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      </CardMedia>
                       {name}
                     </div>
                     <ArrowRightAltRounded />
@@ -180,10 +178,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                 );
               })}
               <div>
-                <CardMedia
-                  className="evolution-img"
-                  image={imageUrl(fullName, isShiny)}
-                />
+                <CardMedia>
+                  <img alt={fullName} className="evolution-img" src={imageUrl(fullName, isShiny)} />
+                </CardMedia>
                 {fullName}
               </div>
               {evolutions.map((evo) => {
@@ -215,10 +212,13 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                                 <div className="evolution-list">
                                   {index === 0 && <ArrowRightAltRounded />}
                                   <div>
-                                    <CardMedia
-                                      className="evolution-img"
-                                      image={imageUrl(name, isShiny)}
-                                    />
+                                    <CardMedia>
+                                      <img
+                                        alt={name}
+                                        className="evolution-img"
+                                        src={imageUrl(name, isShiny)}
+                                      />
+                                    </CardMedia>
                                     {name}
                                   </div>
                                 </div>
@@ -247,10 +247,13 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                             <div className="evolution-list">
                               <ArrowRightAltRounded />
                               <div>
-                                <CardMedia
-                                  className="evolution-img"
-                                  image={imageUrl(name, isShiny)}
-                                />
+                                <CardMedia>
+                                  <img
+                                    alt={name}
+                                    className="evolution-img"
+                                    src={imageUrl(name, isShiny)}
+                                  />
+                                </CardMedia>
                                 {name}
                               </div>
                             </div>
@@ -270,10 +273,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                   <>
                     <ArrowRightAltRounded />
                     <div>
-                      <CardMedia
-                        className="evolution-img"
-                        image={imageUrl(name, isShiny)}
-                      />
+                      <CardMedia>
+                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      </CardMedia>
                       {name}
                     </div>
                   </>

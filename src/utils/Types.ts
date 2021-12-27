@@ -1,4 +1,4 @@
-import { Form, Pokemon } from '@erezushi/pokemon-randomizer/dist/types';
+import { Form, Pokemon } from '@erezushi/pokemon-randomizer';
 
 export interface IGenList {
     [id: string]: boolean,

@@ -18,8 +18,12 @@ import React, {
   useMemo,
 } from 'react';
 import _ from 'lodash';
-import { Types, Options } from '@erezushi/pokemon-randomizer/dist/types';
-import { getGenerations, getTypes } from '@erezushi/pokemon-randomizer/dist/data';
+import {
+  Types,
+  Options,
+  getGenerations,
+  getTypes,
+} from '@erezushi/pokemon-randomizer';
 import { GlobalHotKeys } from 'react-hotkeys-ce';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IGenList } from '../../utils/Types';

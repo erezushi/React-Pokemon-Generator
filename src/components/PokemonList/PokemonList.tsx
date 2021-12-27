@@ -1,5 +1,4 @@
-import random from '@erezushi/pokemon-randomizer';
-import { Form, Options } from '@erezushi/pokemon-randomizer/dist/types';
+import random, { Form, Options } from '@erezushi/pokemon-randomizer';
 import { Chance } from 'chance';
 import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';

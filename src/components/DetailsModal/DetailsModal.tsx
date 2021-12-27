@@ -9,9 +9,11 @@ import {
 import { ArrowRightAltRounded, StarRounded } from '@material-ui/icons';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import {
   Evolution,
+  getGeneration,
   imageUrl,
   nextEvos,
   prevEvos,
@@ -83,8 +85,7 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
             )}
           </Typography>
           <Typography variant="h5">
-            #
-            {specie.dexNo!.padStart(3, '0')}
+            {`#${specie.dexNo.padStart(3, '0')} (Gen ${getGeneration(specie.dexNo)})`}
           </Typography>
           <Typography>
             Type:
@@ -95,7 +96,10 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
               return (
                 <>
                   {index === 1 && ' / '}
-                  <Link href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName}_(type)`}>
+                  <Link
+                    key={uuid()}
+                    href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName}_(type)`}
+                  >
                     {formattedName}
                   </Link>
                 </>
@@ -115,6 +119,7 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
                   <>
                     {index === 1 && ' / '}
                     <Link
+                      key={uuid()}
                       href={`https://bulbapedia.bulbagarden.net/wiki/${
                         formattedName.replace(' ', '_')
                       }_(Ability)`}
@@ -144,7 +149,7 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
             const statName = STAT_NAMES[index];
 
             return (
-              <Typography>
+              <Typography key={uuid()}>
                 {`${statName}: ${baseStat}`}
               </Typography>
             );
@@ -156,133 +161,133 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
           <br />
           <Typography>
             Evolution line:
-            <div className="evolution-list">
-              {prevolutions.map((prevo) => {
-                const { specie: prevoSpecie, form: prevoForm } = prevo;
-                const name = `${
-                  prevoSpecie.name
-                }${
-                  prevoForm && prevoForm.name !== 'default' ? `-${prevoForm.name}` : ''
-                }`;
+          </Typography>
+          <div className="evolution-list">
+            {prevolutions.map((prevo) => {
+              const { specie: prevoSpecie, form: prevoForm } = prevo;
+              const name = `${
+                prevoSpecie.name
+              }${
+                prevoForm && prevoForm.name !== 'default' ? `-${prevoForm.name}` : ''
+              }`;
 
-                return (
-                  <>
-                    <div>
-                      <CardMedia>
-                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
-                      </CardMedia>
-                      {name}
-                    </div>
-                    <ArrowRightAltRounded />
-                  </>
-                );
-              })}
-              <div>
-                <CardMedia>
-                  <img alt={fullName} className="evolution-img" src={imageUrl(fullName, isShiny)} />
-                </CardMedia>
-                {fullName}
-              </div>
-              {evolutions.map((evo) => {
-                if (Array.isArray(evo)) {
-                  if (evo.length > 3) {
-                    const cols = Math.ceil(evo.length / 3);
-                    const arr: Evolution[][] = [];
+              return (
+                <>
+                  <div key={uuid()}>
+                    <CardMedia>
+                      <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                    </CardMedia>
+                    {name}
+                  </div>
+                  <ArrowRightAltRounded />
+                </>
+              );
+            })}
+            <div>
+              <CardMedia>
+                <img alt={fullName} className="evolution-img" src={imageUrl(fullName, isShiny)} />
+              </CardMedia>
+              {fullName}
+            </div>
+            {evolutions.map((evo) => {
+              if (Array.isArray(evo)) {
+                if (evo.length > 3) {
+                  const cols = Math.ceil(evo.length / 3);
+                  const arr: Evolution[][] = [];
 
-                    for (let i = 0; i < cols; i += 1) {
-                      arr.push(evo.slice(i * 3, i * 3 + 3));
-                    }
-
-                    return (
-                      arr.map((column, index) => (
-                        <div>
-                          {column.map((splitEvo) => {
-                            const { specie: evoSpecie, form: evoForm } = splitEvo;
-                            const name = `${
-                              evoSpecie.name
-                            }${
-                              evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-                            }`;
-
-                            return name === 'MissingNo.'
-                              ? (
-                                <div className="MissingNo" />
-                              )
-                              : (
-                                <div className="evolution-list">
-                                  {index === 0 && <ArrowRightAltRounded />}
-                                  <div>
-                                    <CardMedia>
-                                      <img
-                                        alt={name}
-                                        className="evolution-img"
-                                        src={imageUrl(name, isShiny)}
-                                      />
-                                    </CardMedia>
-                                    {name}
-                                  </div>
-                                </div>
-                              );
-                          })}
-                        </div>
-                      ))
-                    );
+                  for (let i = 0; i < cols; i += 1) {
+                    arr.push(evo.slice(i * 3, i * 3 + 3));
                   }
 
                   return (
-                    <div>
-                      {evo.map((splitEvo) => {
-                        const { specie: evoSpecie, form: evoForm } = splitEvo;
-                        const name = `${
-                          evoSpecie.name
-                        }${
-                          evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-                        }`;
+                    arr.map((column, index) => (
+                      <div key={uuid()}>
+                        {column.map((splitEvo) => {
+                          const { specie: evoSpecie, form: evoForm } = splitEvo;
+                          const name = `${
+                            evoSpecie.name
+                          }${
+                            evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
+                          }`;
 
-                        return name === 'MissingNo.'
-                          ? (
-                            <div className="MissingNo" />
-                          )
-                          : (
-                            <div className="evolution-list">
-                              <ArrowRightAltRounded />
-                              <div>
-                                <CardMedia>
-                                  <img
-                                    alt={name}
-                                    className="evolution-img"
-                                    src={imageUrl(name, isShiny)}
-                                  />
-                                </CardMedia>
-                                {name}
+                          return name === 'MissingNo.'
+                            ? (
+                              <div key={uuid()} className="MissingNo" />
+                            )
+                            : (
+                              <div key={uuid()} className="evolution-list">
+                                {index === 0 && <ArrowRightAltRounded />}
+                                <div>
+                                  <CardMedia>
+                                    <img
+                                      alt={name}
+                                      className="evolution-img"
+                                      src={imageUrl(name, isShiny)}
+                                    />
+                                  </CardMedia>
+                                  {name}
+                                </div>
                               </div>
-                            </div>
-                          );
-                      })}
-                    </div>
+                            );
+                        })}
+                      </div>
+                    ))
                   );
                 }
-                const { specie: evoSpecie, form: evoForm } = evo;
-                const name = `${
-                  evoSpecie.name
-                }${
-                  evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-                }`;
 
                 return (
-                  <>
-                    <ArrowRightAltRounded />
-                    <div>
-                      <CardMedia>
-                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
-                      </CardMedia>
-                      {name}
-                    </div>
-                  </>
+                  <div>
+                    {evo.map((splitEvo) => {
+                      const { specie: evoSpecie, form: evoForm } = splitEvo;
+                      const name = `${
+                        evoSpecie.name
+                      }${
+                        evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
+                      }`;
+
+                      return name === 'MissingNo.'
+                        ? (
+                          <div key={uuid()} className="MissingNo" />
+                        )
+                        : (
+                          <div key={uuid()} className="evolution-list">
+                            <ArrowRightAltRounded />
+                            <div>
+                              <CardMedia>
+                                <img
+                                  alt={name}
+                                  className="evolution-img"
+                                  src={imageUrl(name, isShiny)}
+                                />
+                              </CardMedia>
+                              {name}
+                            </div>
+                          </div>
+                        );
+                    })}
+                  </div>
                 );
-              })}
-            </div>
-          </Typography>
+              }
+              const { specie: evoSpecie, form: evoForm } = evo;
+              const name = `${
+                evoSpecie.name
+              }${
+                evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
+              }`;
+
+              return (
+                <>
+                  <ArrowRightAltRounded />
+                  <div>
+                    <CardMedia>
+                      <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                    </CardMedia>
+                    {name}
+                  </div>
+                </>
+              );
+            })}
+          </div>
         </CardContent>
       </Card>
     </Modal>

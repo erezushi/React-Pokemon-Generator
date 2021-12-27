@@ -1,7 +1,13 @@
-import { getPokemon } from '@erezushi/pokemon-randomizer/dist/data';
-import { Form, Pokemon } from '@erezushi/pokemon-randomizer/dist/types';
+import {
+  getPokemon,
+  getGenerations,
+  Form,
+  Pokemon,
+  ListPokemon,
+} from '@erezushi/pokemon-randomizer';
 import Swal from 'sweetalert2';
 import Chance from 'chance';
+import { romanize } from 'romans';
 
 import 'animate.css';
 
@@ -191,7 +197,7 @@ export const alcremieForm = (): string => {
 
 // #region Evolutions
 export interface Evolution {
-  specie: Pokemon,
+  specie: ListPokemon|Pokemon,
   form?: Form
 }
 
@@ -204,7 +210,7 @@ const missinoNo: Evolution = {
 
 const extraEvoForms = ['Mega', 'Primal', 'Ash', 'Gigantamax', 'Eternamax'];
 
-export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])[] => {
+export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|Evolution[])[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
@@ -227,7 +233,7 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
       (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
     )
   ) {
-    const dexNo = pokemon.dexNo ?? Object.keys(pokemonList)
+    const dexNo = Object.keys(pokemonList)
       .find((currDexNo) => pokemonList[currDexNo].name === pokemon.name);
     if (evolveTo !== undefined) {
       evolveTo = `${evolveTo} ${pokemon.forms.filter(
@@ -304,7 +310,7 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
 
 const ignoreForms = ['Cherrim', 'Vivllon', 'Aegislash', 'Silvally', 'Toxtricity'];
 
-export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
+export const prevEvos = (pokemon: ListPokemon|Pokemon, form?: Form): Evolution[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
@@ -361,3 +367,14 @@ export const shinyReplacements = new Map<RegExp, string>([
   [/Minior-.+-/g, 'Minior-'],
   [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-'],
 ]);
+
+export const getGeneration = (dexNo: string): string => {
+  const number = Number(dexNo);
+  const generations = getGenerations();
+
+  return romanize(Number(
+    Object
+      .keys(generations)
+      .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
+  ));
+};

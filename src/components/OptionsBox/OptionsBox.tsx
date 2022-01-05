@@ -1,4 +1,10 @@
 import {
+  Types,
+  Options,
+  getGenerations,
+  getTypes,
+} from '@erezushi/pokemon-randomizer';
+import {
   Button,
   FormControl,
   FormControlLabel,
@@ -10,28 +16,20 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import _ from 'lodash';
 import React, {
   useState,
   useCallback,
   useEffect,
-  useReducer,
   useMemo,
 } from 'react';
-import _ from 'lodash';
-import {
-  Types,
-  Options,
-  getGenerations,
-  getTypes,
-} from '@erezushi/pokemon-randomizer';
 import { GlobalHotKeys } from 'react-hotkeys-ce';
+
+import CustomCheckbox from '../../utilComponents/CustomCheckbox';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IGenList } from '../../utils/Types';
 
 import './OptionsBox.css';
-import CustomCheckbox from '../../utilComponents/CustomCheckbox';
-
-const useForceUpdate = () => useReducer((x) => x + 1, 0)[1];
 
 const keyMap = {
   generate: 'Enter',
@@ -53,25 +51,16 @@ const OptionsBox: React.FC = () => {
   const [legendary, setLegendary] = useState(false);
   const [mythical, setMythical] = useState(false);
 
-  const forceUpdate = useForceUpdate();
-
   const fetchTypes = useCallback(async () => {
     const types = await getTypes();
     setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as Types[]);
   }, []);
 
-  const appendGenList = useCallback((data: { [gen: string]: boolean }) => {
-    setGenerationList((prevGenList) => Object.assign(prevGenList, data));
-  }, []);
-
   const fetchGenerations = useCallback(async () => {
     const gens = await getGenerations();
-    Object.keys(gens).forEach((gen) => {
-      appendGenList({ [gen]: true });
-
-      forceUpdate();
-    });
-  }, [appendGenList, forceUpdate]);
+    Object.keys(gens)
+      .forEach((gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })));
+  }, []);
 
   useEffect(() => {
     fetchTypes();

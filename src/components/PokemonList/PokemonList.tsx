@@ -3,6 +3,7 @@ import { Chance } from 'chance';
 import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { v4 as uuid } from 'uuid';
+
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
 import { errorToast } from '../../utils/utils';

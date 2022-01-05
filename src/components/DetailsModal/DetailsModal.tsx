@@ -10,6 +10,7 @@ import { ArrowRightAltRounded, StarRounded } from '@material-ui/icons';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import {
   Evolution,

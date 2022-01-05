@@ -5,9 +5,9 @@ import {
   Pokemon,
   ListPokemon,
 } from '@erezushi/pokemon-randomizer';
-import Swal from 'sweetalert2';
 import Chance from 'chance';
 import { romanize } from 'romans';
+import Swal from 'sweetalert2';
 
 import 'animate.css';
 

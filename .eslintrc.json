@@ -17,7 +17,7 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": ["react", "@typescript-eslint"],
+    "plugins": ["react", "@typescript-eslint", "import"],
     "rules": {
         "linebreak-style": "off",
         "newline-before-return": "error",
@@ -35,6 +35,14 @@
         "@typescript-eslint/no-shadow": "error",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "max-len": ["warn", 100]
+        "max-len": ["warn", 100],
+        "import/order": ["warn", {
+            "groups": ["builtin", "external", "internal", "parent", "sibling"],
+            "newlines-between": "always",
+            "alphabetize": { "order": "asc", "caseInsensitive": true }
+        }],
+        "arrow-parens": "warn",
+        "object-curly-spacing": "warn",
+        "no-multiple-empty-lines": ["error", { "max": 1}]
     }
 }

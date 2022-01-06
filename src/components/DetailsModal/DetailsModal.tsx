@@ -45,6 +45,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
 
   const { specie, form, isShiny } = instance;
   const { abilities, stats, type } = details;
+  const abilityNames = abilities
+    .filter((abilityObj) => !abilityObj.is_hidden)
+    .map((abilityObj) => abilityObj.ability.name);
   const hiddenAbility = abilities.find((abilityObj) => abilityObj.is_hidden)?.ability.name;
 
   useEffect(() => {
@@ -110,11 +113,9 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
           <Typography>
             Abilities:
             {' '}
-            {abilities
-              .filter((abilityObj) => !abilityObj.is_hidden)
-              .map((abilityObj, index) => {
-                const { name } = abilityObj.ability;
-                const formattedName = _.startCase(name);
+            {abilityNames
+              .map((ability, index) => {
+                const formattedName = _.startCase(ability).replace('Soul Heart', 'Soul-Heart');
 
                 return (
                   <>

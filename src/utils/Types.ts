@@ -1,9 +1,5 @@
 import { Form, Pokemon } from '@erezushi/pokemon-randomizer';
 
-export interface IGenList {
-    [id: string]: boolean,
-}
-
 export interface IPokemonInstance {
   specie: Pokemon,
   isShiny: boolean,

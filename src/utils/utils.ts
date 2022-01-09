@@ -17,15 +17,15 @@ const chance = new Chance();
 export const STAT_NAMES = [
   'HP',
   'Attack',
-  'Sp. Atk',
   'Defense',
+  'Sp. Atk',
   'Sp. Def',
   'Speed',
 ];
 // #endregion
 
 // #region imageUrl
-const imgReplacements: {[name: string]: string} = {
+const imgReplacements: Record<string, string> = {
   'Meowstic-M': 'meowstic-male',
   'Meowstic-F': 'meowstic-female',
   'Indeedee-M': 'indeedee-male',
@@ -37,7 +37,7 @@ const imgReplacements: {[name: string]: string} = {
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
 
-const imgStringMap: {[match: string]: string} = {
+const imgStringMap: Record<string, string> = {
   "'": '',
   '.': '',
   ':': '',

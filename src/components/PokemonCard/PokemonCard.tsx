@@ -27,7 +27,7 @@ import './PokemonCard.css';
 
 const specialChars = /[♂ ♀é]/g;
 
-const charMap: {[char: string]: string} = {
+const charMap: Record<string, string> = {
   '♂': 'm',
   ' ': '',
   '♀': 'f',
@@ -91,7 +91,7 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
     }
   }, [details.stats.length, form?.name, specie]);
 
-  const links = useMemo<{[site: string]: string}>(() => {
+  const links = useMemo<Record<string, string>>(() => {
     const { name } = specie;
 
     return ({

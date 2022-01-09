@@ -27,7 +27,6 @@ import { GlobalHotKeys } from 'react-hotkeys-ce';
 
 import CustomCheckbox from '../../utilComponents/CustomCheckbox';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
-import { IGenList } from '../../utils/Types';
 
 import './OptionsBox.css';
 
@@ -43,7 +42,7 @@ const OptionsBox: React.FC = () => {
   const [type, setType] = useState<'all' | Types | 'random'>('all');
   const [allGens, setAllGens] = useState('checked');
   const [shinyChance, setShinyChance] = useState(0);
-  const [generationList, setGenerationList] = useState<IGenList>({});
+  const [generationList, setGenerationList] = useState<Record<string, boolean>>({});
   const [baby, setBaby] = useState(false);
   const [basic, setBasic] = useState(false);
   const [evolved, setEvolved] = useState(false);

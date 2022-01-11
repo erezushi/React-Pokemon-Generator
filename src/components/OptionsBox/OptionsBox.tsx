@@ -26,148 +26,167 @@ import React, {
 import { GlobalHotKeys } from 'react-hotkeys-ce';
 
 import CustomCheckbox from '../../utilComponents/CustomCheckbox';
+import { DEFAULT_SETTINGS } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
+import { checkBoxState } from '../../utils/Types';
 
 import './OptionsBox.css';
 
 const keyMap = {
   generate: 'Enter',
+  reset: 'shift+c',
 };
 
 const OptionsBox: React.FC = () => {
-  const [unique, setUnique] = useState(true);
-  const [forms, setForms] = useState(true);
-  const [amount, setAmount] = useState(6);
   const [typeList, setTypeList] = useState<Types[]>([]);
-  const [type, setType] = useState<'all' | Types | 'random'>('all');
-  const [allGens, setAllGens] = useState('checked');
-  const [shinyChance, setShinyChance] = useState(0);
-  const [generationList, setGenerationList] = useState<Record<string, boolean>>({});
-  const [baby, setBaby] = useState(false);
-  const [basic, setBasic] = useState(false);
-  const [evolved, setEvolved] = useState(false);
-  const [starter, setStarter] = useState(false);
-  const [legendary, setLegendary] = useState(false);
-  const [mythical, setMythical] = useState(false);
+  const [allGens, setAllGens] = useState<checkBoxState>('checked');
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+
+  const setSingleSetting = useCallback((field: string, value: any) => {
+    setSettings((prevSettings) => ({ ...prevSettings, [field]: value }));
+  }, []);
+
+  const setGenerationList = useCallback(
+    (value: Record<string, boolean>
+      |((prevGenList: Record<string, boolean>) => Record<string, boolean>)) => {
+      if (typeof value === 'function') {
+        setSettings((prevSettings) => (
+          { ...prevSettings, generationList: value(prevSettings.generationList) }
+        ));
+      } else {
+        setSingleSetting('generationList', value);
+      }
+    },
+    [setSingleSetting],
+  );
 
   const fetchTypes = useCallback(async () => {
-    const types = await getTypes();
+    const types = getTypes();
     setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as Types[]);
   }, []);
 
   const fetchGenerations = useCallback(async () => {
-    const gens = await getGenerations();
+    const gens = getGenerations();
     Object.keys(gens)
       .forEach((gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })));
-  }, []);
+  }, [setGenerationList]);
 
   useEffect(() => {
     fetchTypes();
     fetchGenerations();
   }, [fetchGenerations, fetchTypes]);
 
-  const uniqueClicked = useCallback((event) => setUnique(event.target.checked), []);
+  const uniqueClicked = useCallback(
+    (event) => setSingleSetting('unique', event.target.checked),
+    [setSingleSetting],
+  );
 
   const changeAmount = useCallback((event) => {
     const { value } = event.target;
 
     if (value > 0) {
-      setAmount(value);
+      setSingleSetting('amount', value);
     } else {
-      setAmount(1);
+      setSingleSetting('amount', 1);
     }
-  }, []);
+  }, [setSingleSetting]);
 
-  const changeType = useCallback((event) => setType(event.target.value), []);
+  const changeType = useCallback(
+    (event) => setSingleSetting('type', event.target.value),
+    [setSingleSetting],
+  );
 
   const allBoxClicked = useCallback(() => {
-    const genListCopy = { ...generationList };
+    const genListCopy = { ...settings.generationList };
     Object.keys(genListCopy).forEach((gen) => { genListCopy[gen] = allGens !== 'checked'; });
     setGenerationList(genListCopy);
     setAllGens(allGens === 'checked' ? 'none' : 'checked');
-  }, [allGens, generationList]);
+  }, [allGens, setGenerationList, settings.generationList]);
 
   const genClicked = useCallback((event) => {
     const { name, checked } = event.target;
 
-    setGenerationList({ ...generationList, [name]: checked });
-  }, [generationList]);
+    setGenerationList((prevGenList) => ({ ...prevGenList, [name]: checked }));
+  }, [setGenerationList]);
 
   useEffect(() => {
-    if (Object.values(generationList).every((gen) => gen)) {
+    if (Object.values(settings.generationList).every((gen) => gen)) {
       setAllGens('checked');
-    } else if (Object.values(generationList).some((gen) => gen)) {
+    } else if (Object.values(settings.generationList).some((gen) => gen)) {
       setAllGens('indeterminate');
     } else {
       setAllGens('none');
     }
-  }, [generationList]);
+  }, [settings.generationList]);
 
   const babyClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setBaby(checked);
+    setSingleSetting('baby', checked);
 
     if (checked) {
-      setBasic(false);
-      setEvolved(false);
+      setSingleSetting('basic', false);
+      setSingleSetting('evolved', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
   const basicClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setBasic(checked);
+    setSingleSetting('basic', checked);
 
     if (checked) {
-      setBaby(false);
+      setSingleSetting('baby', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
   const evolvedClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setEvolved(checked);
+    setSingleSetting('evolved', checked);
 
     if (checked) {
-      setBaby(false);
+      setSingleSetting('baby', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
   const starterClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setStarter(checked);
+    setSingleSetting('starter', checked);
 
     if (checked) {
-      setLegendary(false);
-      setMythical(false);
+      setSingleSetting('legendary', false);
+      setSingleSetting('mythical', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
   const legendaryClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setLegendary(checked);
+    setSingleSetting('legendary', checked);
 
     if (checked) {
-      setStarter(false);
-      setMythical(false);
+      setSingleSetting('starter', false);
+      setSingleSetting('mythical', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
   const mythicalClicked = useCallback((event) => {
     const { checked } = event.target;
 
-    setMythical(checked);
+    setSingleSetting('mythical', checked);
 
     if (checked) {
-      setStarter(false);
-      setLegendary(false);
+      setSingleSetting('starter', false);
+      setSingleSetting('legendary', false);
     }
-  }, []);
+  }, [setSingleSetting]);
 
-  const formsClicked = useCallback((event) => setForms(event.target.checked), []);
+  const formsClicked = useCallback(
+    (event) => setSingleSetting('forms', event.target.checked),
+    [setSingleSetting],
+  );
 
   const changeShinyChance = useCallback((event) => {
     const { value }: {value: string} = event.target;
@@ -175,17 +194,32 @@ const OptionsBox: React.FC = () => {
     const numberValue = parseInt(value, 10);
 
     if (numberValue < 0) {
-      setShinyChance(0);
+      setSingleSetting('shinyChance', 0);
     } else if (numberValue > 100) {
-      setShinyChance(100);
+      setSingleSetting('shinyChance', 100);
     } else {
-      setShinyChance(numberValue);
+      setSingleSetting('shinyChance', numberValue);
     }
-  }, [setShinyChance]);
+  }, [setSingleSetting]);
 
-  const generateClick = useCallback(() => {
+  const handleGenerateClick = useCallback(() => {
+    const {
+      unique,
+      forms,
+      amount,
+      type,
+      generationList,
+      baby,
+      basic,
+      evolved,
+      starter,
+      legendary,
+      mythical,
+    } = settings;
+
     const options: Options = {
       unique,
+      forms,
       number: amount,
       type: (type !== 'all' && type !== 'random') ? type : undefined,
       randomType: type === 'random',
@@ -196,34 +230,31 @@ const OptionsBox: React.FC = () => {
       starter,
       legendary,
       mythical,
-      forms,
     };
 
-    eventEmitter.emit(generate, options, shinyChance);
-  }, [
-    amount,
-    baby,
-    basic,
-    evolved,
-    forms,
-    generationList,
-    legendary,
-    mythical,
-    shinyChance,
-    starter,
-    type,
-    unique,
-  ]);
+    eventEmitter.emit(generate, options, settings.shinyChance);
+  }, [settings]);
 
-  const handlePress = useCallback((event) => {
+  const handleResetClick = useCallback(() => {
+    setSettings(DEFAULT_SETTINGS);
+    fetchGenerations();
+  }, [fetchGenerations]);
+
+  const functionMap = useMemo((): Record<string, () => void> => ({
+    Enter: handleGenerateClick,
+    C: handleResetClick,
+  }), [handleGenerateClick, handleResetClick]);
+
+  const keyboardClick = useCallback((event) => {
     event.preventDefault();
 
-    document.getElementById('generate')!.click();
-  }, []);
+    functionMap[event.key]();
+  }, [functionMap]);
 
   const handlers = useMemo(() => ({
-    generate: handlePress,
-  }), [handlePress]);
+    generate: keyboardClick,
+    reset: keyboardClick,
+  }), [keyboardClick]);
 
   return (
     <div>
@@ -234,12 +265,12 @@ const OptionsBox: React.FC = () => {
         </Typography>
         <div className="options-row">
           <FormControl className="options-control">
-            <FormHelperText>Forms</FormHelperText>
-            <CustomCheckbox checked={forms} onChange={formsClicked} />
+            <FormHelperText>Unique</FormHelperText>
+            <CustomCheckbox checked={settings.unique} onChange={uniqueClicked} />
           </FormControl>
           <FormControl className="options-control">
-            <FormHelperText>Unique</FormHelperText>
-            <CustomCheckbox checked={unique} onChange={uniqueClicked} />
+            <FormHelperText>Forms</FormHelperText>
+            <CustomCheckbox checked={settings.forms} onChange={formsClicked} />
           </FormControl>
           <FormControl className="options-control">
             <FormHelperText>Amount</FormHelperText>
@@ -247,7 +278,7 @@ const OptionsBox: React.FC = () => {
               className="input-field"
               onChange={changeAmount}
               type="number"
-              value={amount}
+              value={settings.amount}
               variant="outlined"
             />
           </FormControl>
@@ -256,7 +287,7 @@ const OptionsBox: React.FC = () => {
             <Select
               className="input-field"
               onChange={changeType}
-              value={type}
+              value={settings.type}
               variant="outlined"
             >
               <MenuItem value="all">All</MenuItem>
@@ -290,13 +321,13 @@ const OptionsBox: React.FC = () => {
                 label="All"
                 labelPlacement="bottom"
               />
-              {Object.keys(generationList).map((gen) => (
+              {Object.keys(settings.generationList).map((gen) => (
                 <FormControlLabel
                   key={gen}
                   className="gen-checkbox"
                   control={(
                     <CustomCheckbox
-                      checked={generationList[gen]}
+                      checked={settings.generationList[gen]}
                       name={gen}
                       onChange={genClicked}
                     />
@@ -313,7 +344,7 @@ const OptionsBox: React.FC = () => {
               className="input-field"
               onChange={changeShinyChance}
               type="number"
-              value={shinyChance}
+              value={settings.shinyChance}
               variant="outlined"
             />
           </FormControl>
@@ -322,44 +353,52 @@ const OptionsBox: React.FC = () => {
           <FormControl className="options-control">
             <FormHelperText>Evolution Stage</FormHelperText>
             <FormControlLabel
-              control={<CustomCheckbox checked={baby} onChange={babyClicked} />}
+              control={<CustomCheckbox checked={settings.baby} onChange={babyClicked} />}
               label="Baby"
             />
             <FormControlLabel
-              control={<CustomCheckbox checked={basic} onChange={basicClicked} />}
+              control={<CustomCheckbox checked={settings.basic} onChange={basicClicked} />}
               label="Basic"
             />
             <FormControlLabel
-              control={<CustomCheckbox checked={evolved} onChange={evolvedClicked} />}
+              control={<CustomCheckbox checked={settings.evolved} onChange={evolvedClicked} />}
               label="Fully Evolved"
             />
           </FormControl>
           <FormControl className="options-control">
             <FormHelperText>Status</FormHelperText>
             <FormControlLabel
-              control={<CustomCheckbox checked={starter} onChange={starterClicked} />}
+              control={<CustomCheckbox checked={settings.starter} onChange={starterClicked} />}
               label="Starter"
             />
             <FormControlLabel
-              control={<CustomCheckbox checked={legendary} onChange={legendaryClicked} />}
+              control={<CustomCheckbox checked={settings.legendary} onChange={legendaryClicked} />}
               label="Legendary/Mythical"
             />
             <FormControlLabel
-              control={<CustomCheckbox checked={mythical} onChange={mythicalClicked} />}
+              control={<CustomCheckbox checked={settings.mythical} onChange={mythicalClicked} />}
               label="Mythical"
             />
           </FormControl>
         </div>
-        <div className="options-row">
+        <div className="buttons-row">
           <Button
-            className="generate"
-            color="primary"
+            className="options-button"
             id="generate"
-            onClick={generateClick}
+            onClick={handleGenerateClick}
             size="large"
             variant="outlined"
           >
             Generate
+          </Button>
+          <Button
+            className="options-button"
+            color="secondary"
+            onClick={handleResetClick}
+            size="large"
+            variant="contained"
+          >
+            Reset
           </Button>
         </div>
       </Paper>

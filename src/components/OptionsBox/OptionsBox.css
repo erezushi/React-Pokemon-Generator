@@ -13,8 +13,8 @@
 
 .options-row {
     width: 90%;
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
@@ -35,12 +35,25 @@
     margin: 0 !important;
 }
 
-.generate {
-    width: 10em !important;
-    margin: 0.5em auto 0 !important;
+.buttons-row {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.options-button {
+    margin: 0.5em 0.5em 0 !important;
     border-radius: 2em !important;
     text-transform: none !important;
-    color: black !important;
     font-weight: bold !important;
+}
+
+#generate {
+    width: 10em !important;
+    color: black !important;
     border: 3px solid black !important;
 }

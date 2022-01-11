@@ -1,4 +1,4 @@
-import { Form, Pokemon } from '@erezushi/pokemon-randomizer';
+import { Form, Pokemon, Types } from '@erezushi/pokemon-randomizer';
 
 export interface IPokemonInstance {
   specie: Pokemon,
@@ -48,4 +48,21 @@ export interface IPokemonResponse {
     types: any[],
     weight: number,
   }
+}
+
+export type checkBoxState = 'checked' | 'indeterminate' | 'none'
+
+export interface ISettings {
+  unique: boolean,
+  forms: boolean,
+  amount: number,
+  type: 'all' | Types | 'random',
+  generationList: Record<string, boolean>,
+  shinyChance: number,
+  baby: boolean,
+  basic: boolean,
+  evolved: boolean,
+  starter: boolean,
+  legendary: boolean,
+  mythical: boolean,
 }

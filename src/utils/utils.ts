@@ -10,6 +10,7 @@ import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
 import 'animate.css';
+import { ISettings } from './Types';
 
 const chance = new Chance();
 
@@ -22,6 +23,21 @@ export const STAT_NAMES = [
   'Sp. Def',
   'Speed',
 ];
+
+export const DEFAULT_SETTINGS: ISettings = {
+  unique: true,
+  forms: true,
+  amount: 6,
+  type: 'all',
+  generationList: {},
+  shinyChance: 0,
+  baby: false,
+  basic: false,
+  evolved: false,
+  starter: false,
+  legendary: false,
+  mythical: false,
+};
 // #endregion
 
 // #region imageUrl

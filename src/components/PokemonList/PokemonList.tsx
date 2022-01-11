@@ -4,9 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { v4 as uuid } from 'uuid';
 
+import { errorToast } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
-import { errorToast } from '../../utils/utils';
 import PokemonCard from '../PokemonCard';
 
 import './PokemonList.css';

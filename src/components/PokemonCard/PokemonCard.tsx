@@ -12,14 +12,14 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
-import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
 import {
   apiUrl,
   errorToast,
   imageUrl,
   alcremieForm,
   shinyReplacements,
-} from '../../utils/utils';
+} from '../../utils';
+import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
 import LoadingSnackbar from '../LoadingSnackbar';
 

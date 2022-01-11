@@ -240,16 +240,16 @@ const OptionsBox: React.FC = () => {
     fetchGenerations();
   }, [fetchGenerations]);
 
-  const functionMap = useMemo((): Record<string, () => void> => ({
-    Enter: handleGenerateClick,
-    C: handleResetClick,
-  }), [handleGenerateClick, handleResetClick]);
+  const idMap = useMemo((): Record<string, string> => ({
+    Enter: 'generate',
+    C: 'reset',
+  }), []);
 
   const keyboardClick = useCallback((event) => {
     event.preventDefault();
 
-    functionMap[event.key]();
-  }, [functionMap]);
+    document.getElementById(idMap[event.key])!.click();
+  }, [idMap]);
 
   const handlers = useMemo(() => ({
     generate: keyboardClick,
@@ -394,6 +394,7 @@ const OptionsBox: React.FC = () => {
           <Button
             className="options-button"
             color="error"
+            id="reset"
             onClick={handleResetClick}
             size="large"
             variant="text"

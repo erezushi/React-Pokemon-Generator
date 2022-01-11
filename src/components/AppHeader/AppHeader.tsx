@@ -1,4 +1,4 @@
-import { Lens, RadioButtonChecked } from '@material-ui/icons';
+import { Lens, RadioButtonChecked } from '@mui/icons-material';
 import React from 'react';
 
 import './AppHeader.css';

@@ -1,5 +1,5 @@
-import { Checkbox, CheckboxProps } from '@material-ui/core';
-import { CheckBox, CheckBoxOutlineBlank, IndeterminateCheckBox } from '@material-ui/icons';
+import { CheckBox, CheckBoxOutlineBlank, IndeterminateCheckBox } from '@mui/icons-material';
+import { Checkbox, CheckboxProps } from '@mui/material';
 import React from 'react';
 
 const CustomCheckbox: React.FC<CheckboxProps> = ({

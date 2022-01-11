@@ -1,4 +1,4 @@
-import { CircularProgress, Snackbar } from '@material-ui/core';
+import { CircularProgress, Snackbar } from '@mui/material';
 import React from 'react';
 
 import SlideTransition from '../../utilComponents/SlideTransition';

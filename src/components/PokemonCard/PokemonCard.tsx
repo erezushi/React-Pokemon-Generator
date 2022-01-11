@@ -1,3 +1,4 @@
+import { StarRounded } from '@mui/icons-material';
 import {
   Card,
   CardActions,
@@ -5,8 +6,7 @@ import {
   CardMedia,
   Typography,
   Button,
-} from '@material-ui/core';
-import { StarRounded } from '@material-ui/icons';
+} from '@mui/material';
 import axios from 'axios';
 import React, {
   useCallback, useEffect, useMemo, useState,

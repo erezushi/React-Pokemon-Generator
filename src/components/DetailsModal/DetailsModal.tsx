@@ -1,3 +1,4 @@
+import { ArrowRightAltRounded, StarRounded } from '@mui/icons-material';
 import {
   Card,
   CardContent,
@@ -5,8 +6,7 @@ import {
   Link,
   Modal,
   Typography,
-} from '@material-ui/core';
-import { ArrowRightAltRounded, StarRounded } from '@material-ui/icons';
+} from '@mui/material';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';

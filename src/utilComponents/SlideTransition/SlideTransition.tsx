@@ -1,6 +1,7 @@
-import { Slide } from '@material-ui/core';
-import { TransitionProps } from '@material-ui/core/transitions/transition';
+import { Slide, SlideProps } from '@mui/material';
 import React from 'react';
+
+type TransitionProps = Omit<SlideProps, 'direction'>
 
 const SlideTransition: React.FC<TransitionProps> = (props: TransitionProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading

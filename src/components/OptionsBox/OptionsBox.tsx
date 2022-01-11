@@ -15,7 +15,7 @@ import {
   Select,
   TextField,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import _ from 'lodash';
 import React, {
   useState,
@@ -393,10 +393,10 @@ const OptionsBox: React.FC = () => {
           </Button>
           <Button
             className="options-button"
-            color="secondary"
+            color="error"
             onClick={handleResetClick}
             size="large"
-            variant="contained"
+            variant="text"
           >
             Reset
           </Button>

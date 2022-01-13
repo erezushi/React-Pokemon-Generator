@@ -13,7 +13,7 @@ const CustomCheckbox: React.FC<CheckboxProps> = ({
     checkedIcon={<CheckBox fontSize="small" style={{ color: 'red' }} />}
     icon={<CheckBoxOutlineBlank fontSize="small" />}
     indeterminate={indeterminate}
-    indeterminateIcon={<IndeterminateCheckBox fontSize="small" />}
+    indeterminateIcon={<IndeterminateCheckBox color="action" fontSize="small" />}
     name={name}
     onChange={onChange}
   />

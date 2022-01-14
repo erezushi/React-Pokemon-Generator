@@ -74,7 +74,16 @@ const OptionsBox: React.FC = () => {
   useEffect(() => {
     fetchTypes();
     fetchGenerations();
+
+    const savedSettings = localStorage.getItem('settings');
+    if (savedSettings) {
+      setSettings(JSON.parse(savedSettings));
+    }
   }, [fetchGenerations, fetchTypes]);
+
+  useEffect(() => {
+    localStorage.setItem('settings', JSON.stringify(settings));
+  }, [settings]);
 
   const uniqueClicked = useCallback(
     (event) => setSingleSetting('unique', event.target.checked),
@@ -399,7 +408,7 @@ const OptionsBox: React.FC = () => {
             size="large"
             variant="text"
           >
-            Reset
+            Reset Settings
           </Button>
         </div>
       </Paper>

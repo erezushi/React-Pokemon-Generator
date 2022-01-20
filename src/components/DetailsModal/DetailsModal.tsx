@@ -13,6 +13,7 @@ import { v4 as uuid } from 'uuid';
 
 import {
   Evolution,
+  fullName,
   getGeneration,
   imageUrl,
   nextEvos,
@@ -24,9 +25,8 @@ import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import './DetailsModal.css';
 
 interface IDetailsModalProps {
-    details: IPokemonDetails
-    fullName: string,
-    instance: IPokemonInstance
+    details: IPokemonDetails,
+    instance: IPokemonInstance,
     isOpen: boolean,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -34,7 +34,6 @@ interface IDetailsModalProps {
 const DetailsModal: React.FC<IDetailsModalProps> = (
   {
     details,
-    fullName,
     instance,
     isOpen,
     setOpen,
@@ -76,11 +75,15 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
     >
       <Card className="details-card">
         <CardMedia>
-          <img alt={fullName} className="details-img" src={imageUrl(fullName, isShiny)} />
+          <img
+            alt={fullName(instance)}
+            className="details-img"
+            src={imageUrl(fullName(instance), isShiny)}
+          />
         </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
-            {fullName}
+            {fullName(instance)}
             {isShiny && (
             <span>
             &nbsp;
@@ -187,9 +190,13 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
             })}
             <div>
               <CardMedia>
-                <img alt={fullName} className="evolution-img" src={imageUrl(fullName, isShiny)} />
+                <img
+                  alt={fullName(instance)}
+                  className="evolution-img"
+                  src={imageUrl(fullName(instance), isShiny)}
+                />
               </CardMedia>
-              {fullName}
+              {fullName(instance)}
             </div>
             {evolutions.map((evo) => {
               if (Array.isArray(evo)) {

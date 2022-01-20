@@ -9,15 +9,14 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useMemo, useState,
 } from 'react';
 
 import {
   apiUrl,
   errorToast,
+  fullName,
   imageUrl,
-  alcremieForm,
-  shinyReplacements,
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
@@ -46,34 +45,18 @@ interface ICardProps {
 
 const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   const { specie, isShiny, form } = instance;
-
-  const [fullName, setFullName] = useState(
-    `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`,
-  );
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [details, setDetails] = useState<IPokemonDetails>(
     { abilities: [], stats: [], type: form?.type ?? specie.type },
   );
   const [isModalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (specie.name === 'Alcremie' && form?.name === 'default') {
-      setFullName((prevFullName) => `${prevFullName}-${alcremieForm()}`);
-    }
-
-    if (isShiny) {
-      shinyReplacements.forEach((value, key) => {
-        setFullName((prevFullName) => prevFullName.replace(key, value));
-      });
-    }
-  }, [form?.name, isShiny, specie.name]);
-
   const handleCardClick = useCallback(() => {
     setSnackbarOpen(true);
 
     if (!details.stats.length) {
-      axios.get(apiUrl(specie, form?.name ?? null))
-        .then((res: IPokemonResponse) => {
+      axios.get<IPokemonResponse>(apiUrl(specie, form?.name ?? null))
+        .then((res) => {
           const { abilities, stats } = res.data;
           setDetails((currDetails) => ({ ...currDetails, abilities, stats }));
           setModalOpen(true);
@@ -114,11 +97,15 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
   return (
     <Card className="pokemon-card" onClick={handleCardClick}>
       <CardMedia>
-        <img alt={fullName} className="card-img" src={imageUrl(fullName, isShiny)} />
+        <img
+          alt={fullName(instance)}
+          className="card-img"
+          src={imageUrl(fullName(instance), isShiny)}
+        />
       </CardMedia>
       <CardContent>
         <Typography variant="h5">
-          {fullName}
+          {fullName(instance)}
           {isShiny && (
           <span>
             &nbsp;
@@ -142,11 +129,10 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
       </CardActions>
       <LoadingSnackbar
         isOpen={isSnackbarOpen}
-        name={fullName}
+        name={fullName(instance)}
       />
       <DetailsModal
         details={details}
-        fullName={fullName}
         instance={instance}
         isOpen={isModalOpen}
         setOpen={setModalOpen}

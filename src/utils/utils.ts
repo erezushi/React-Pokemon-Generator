@@ -10,7 +10,7 @@ import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
 import 'animate.css';
-import { ISettings } from './Types';
+import { IPokemonInstance, ISettings } from './Types';
 
 const chance = new Chance();
 
@@ -393,4 +393,22 @@ export const getGeneration = (dexNo: string): string => {
       .keys(generations)
       .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
   ));
+};
+
+export const fullName = (instance: IPokemonInstance): string => {
+  const { specie, isShiny, form } = instance;
+
+  let name = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
+
+  if (specie.name === 'Alcremie' && form?.name === 'default') {
+    name = `${name}-${alcremieForm()}`;
+  }
+
+  if (isShiny) {
+    shinyReplacements.forEach((value, key) => {
+      name = name.replace(key, value);
+    });
+  }
+
+  return name;
 };

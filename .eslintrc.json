@@ -28,6 +28,7 @@
         "react/jsx-sort-props": "warn",
         "react/jsx-indent-props": "warn",
         "react/function-component-definition": ["error", { "namedComponents": "arrow-function" }],
+        "react/jsx-indent": "warn",
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": "error",
         "no-unused-vars": "off",

@@ -1,4 +1,5 @@
 import random, { Form, Options } from '@erezushi/pokemon-randomizer';
+import { Button } from '@mui/material';
 import { Chance } from 'chance';
 import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -7,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { errorToast } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
+import ExportModal from '../ExportModal';
 import PokemonCard from '../PokemonCard';
 
 import './PokemonList.css';
@@ -20,6 +22,7 @@ const PokemonList: React.FC = () => {
   const [loadedRows, setLoadedRows] = useState<IPokemonInstance[][]>([]);
   const [lastRowPos, setLastRowPos] = useState(0);
   const [currentScroll, setCurrentScroll] = useState(0);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const randomize = useCallback(async (opt: Options, shinyChance: number) => {
     try {
@@ -81,8 +84,23 @@ const PokemonList: React.FC = () => {
     }
   }, [currentScroll, loadedRows.length]);
 
+  const handleExport = useCallback(() => {
+    setModalOpen(true);
+  }, []);
+
   return (
     <div className="pokemon-list">
+      {monList.length > 0
+      && (
+        <Button
+          className="showdown-export"
+          color="primary"
+          onClick={handleExport}
+          variant="contained"
+        >
+          Export to &apos;Showdown!&apos;
+        </Button>
+      )}
       <InfiniteScroll
         hasMore={lastRowPos < splitArray.length}
         loader={<div className="row-loader">loading...</div>}
@@ -96,6 +114,11 @@ const PokemonList: React.FC = () => {
           </div>
         ))}
       </InfiniteScroll>
+      <ExportModal
+        isOpen={isModalOpen}
+        pokemonList={monList}
+        setOpen={setModalOpen}
+      />
     </div>
   );
 };

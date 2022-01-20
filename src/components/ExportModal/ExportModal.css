@@ -1,0 +1,42 @@
+.export-modal {
+    overflow-y: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.export-card {
+    width: 75%;
+    text-align: center;
+    border-radius: 1em !important;
+}
+
+.export-title {
+    margin: 0.5em !important;
+}
+
+.export-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.export-img {
+    width: 100px;
+    height: 100px;
+    margin-right: 25px;
+}
+
+.export-ability {
+    margin: 0 0.5em;
+}
+
+.export-button {
+    border-radius: 2em !important;
+    margin: 0.5em !important;
+}
+
+.export-success {
+    color: green;
+    margin-bottom: 0.5em;
+}

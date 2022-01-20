@@ -1,3 +1,10 @@
+.showdown-export {
+    text-transform: none !important;
+    margin: 0 auto 0.2em !important;
+    width: fit-content;
+    border-radius: 2em !important;
+}
+
 .pokemon-list {
     display: flex;
     flex-direction: column;

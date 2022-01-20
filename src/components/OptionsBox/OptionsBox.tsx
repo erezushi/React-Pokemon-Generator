@@ -408,7 +408,7 @@ const OptionsBox: React.FC = () => {
             size="large"
             variant="text"
           >
-            Reset Settings
+            Reset Options
           </Button>
         </div>
       </Paper>

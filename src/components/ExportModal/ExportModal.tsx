@@ -240,7 +240,7 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
           Export
         </Typography>
         <Typography>
-          Note! Forms are set to default, you can choose a form in &apos;Showdown!&apos
+          Note! Forms are set to default, you can choose a form in &apos;Showdown!&apos;
         </Typography>
         {hasError
         && (

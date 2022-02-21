@@ -217,7 +217,7 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
         }\nLevel: ${
           pokemon.level
         }\nAbility: ${
-          _.startCase(pokemon.ability)
+          _.startCase(pokemon.ability).replace('Soul Heart', 'Soul-Heart')
         }${
           pokemon.isShiny ? '\nShiny: Yes' : ''
         }`)

@@ -13,7 +13,6 @@ import { v4 as uuid } from 'uuid';
 
 import {
   Evolution,
-  fullName,
   getGeneration,
   imageUrl,
   nextEvos,
@@ -76,14 +75,14 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
       <Card className="details-card">
         <CardMedia>
           <img
-            alt={fullName(instance)}
+            alt={instance.fullName}
             className="details-img"
-            src={imageUrl(fullName(instance), isShiny)}
+            src={imageUrl(instance.fullName, isShiny)}
           />
         </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
-            {fullName(instance)}
+            {instance.fullName}
             {isShiny && (
             <span>
             &nbsp;
@@ -191,12 +190,12 @@ const DetailsModal: React.FC<IDetailsModalProps> = (
             <div>
               <CardMedia>
                 <img
-                  alt={fullName(instance)}
+                  alt={instance.fullName}
                   className="evolution-img"
-                  src={imageUrl(fullName(instance), isShiny)}
+                  src={imageUrl(instance.fullName, isShiny)}
                 />
               </CardMedia>
-              {fullName(instance)}
+              {instance.fullName}
             </div>
             {evolutions.map((evo) => {
               if (Array.isArray(evo)) {

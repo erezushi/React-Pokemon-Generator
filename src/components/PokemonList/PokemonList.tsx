@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { v4 as uuid } from 'uuid';
 
-import { errorToast } from '../../utils';
+import { errorToast, fullName } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
 import ExportModal from '../ExportModal';
@@ -29,17 +29,18 @@ const PokemonList: React.FC = () => {
       setCurrentScroll(window.scrollY);
       const results = await random(opt);
 
-      setMonList(results.map((instance) => {
+      setMonList(results.map((specie) => {
         const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
         let form: Form | null = null;
-        if (instance.forms) {
-          form = instance.forms[chance.integer({ min: 0, max: instance.forms.length - 1 })];
+        if (specie.forms) {
+          form = specie.forms[chance.integer({ min: 0, max: specie.forms.length - 1 })];
         }
 
         return ({
-          specie: instance,
-          isShiny,
+          specie,
           form,
+          fullName: fullName(specie, form, isShiny),
+          isShiny,
         });
       }));
     } catch (err: any) {
@@ -108,8 +109,8 @@ const PokemonList: React.FC = () => {
       >
         {loadedRows.map((row) => (
           <div key={uuid()} className="pokemon-row">
-            {row.map((instance) => (
-              <PokemonCard key={uuid()} instance={instance} />
+            {row.map((specie) => (
+              <PokemonCard key={uuid()} instance={specie} />
             ))}
           </div>
         ))}

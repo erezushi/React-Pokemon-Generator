@@ -10,7 +10,7 @@ import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
 import 'animate.css';
-import { IPokemonInstance, ISettings } from './Types';
+import { ISettings } from './Types';
 
 const chance = new Chance();
 
@@ -395,12 +395,10 @@ export const getGeneration = (dexNo: string): string => {
   ));
 };
 
-export const fullName = (instance: IPokemonInstance): string => {
-  const { specie, isShiny, form } = instance;
+export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean): string => {
+  let name = `${instance.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
 
-  let name = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
-
-  if (specie.name === 'Alcremie' && form?.name === 'default') {
+  if (instance.name === 'Alcremie' && form?.name === 'default') {
     name = `${name}-${alcremieForm()}`;
   }
 

@@ -4,6 +4,7 @@ export interface IPokemonInstance {
   specie: Pokemon,
   isShiny: boolean,
   form: Form | null,
+  fullName: string
 }
 
 type abilities = {

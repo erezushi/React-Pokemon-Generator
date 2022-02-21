@@ -15,7 +15,6 @@ import React, {
 import {
   apiUrl,
   errorToast,
-  fullName,
   imageUrl,
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
@@ -98,14 +97,14 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
     <Card className="pokemon-card" onClick={handleCardClick}>
       <CardMedia>
         <img
-          alt={fullName(instance)}
+          alt={instance.fullName}
           className="card-img"
-          src={imageUrl(fullName(instance), isShiny)}
+          src={imageUrl(instance.fullName, isShiny)}
         />
       </CardMedia>
       <CardContent>
         <Typography variant="h5">
-          {fullName(instance)}
+          {instance.fullName}
           {isShiny && (
           <span>
             &nbsp;
@@ -129,7 +128,7 @@ const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
       </CardActions>
       <LoadingSnackbar
         isOpen={isSnackbarOpen}
-        name={fullName(instance)}
+        name={instance.fullName}
       />
       <DetailsModal
         details={details}

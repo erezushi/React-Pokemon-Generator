@@ -18,6 +18,7 @@ import {
   SelectChangeEvent,
   OutlinedInput,
   Checkbox,
+  Pagination,
 } from '@mui/material';
 import axios from 'axios';
 import _ from 'lodash';
@@ -32,6 +33,8 @@ import { apiUrl, fullName, imageUrl } from '../../utils';
 import { IPokemonInstance, IPokemonResponse, IPokemonSpeciesResponse } from '../../utils/Types';
 
 import './ExportModal.css';
+
+const POKEMON_PER_PAGE = 6;
 
 interface IExportModalProps {
     isOpen: boolean,
@@ -56,6 +59,7 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
   const [hasError, setHasError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [exported, setExported] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     if (isOpen) {
@@ -194,6 +198,10 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
     }));
   }, []);
 
+  const handlePageChange = useCallback((event: React.ChangeEvent<unknown>, value: number) => {
+    setPageNumber(value);
+  }, []);
+
   const exportText = useCallback(() => {
     navigator.clipboard.writeText(
       Object.values(exportValues)
@@ -250,124 +258,155 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
             </span>
           </Typography>
         )}
-        {pokemonList.map((instance, index) => (
-          <div
-            key={`row_${index}`}
-            className="export-row"
-          >
-            <FormControlLabel
-              control={(
-                <CustomCheckBox
-                  checked={includedIndices[index]}
-                  name={index.toString()}
-                  onChange={toggleInclusion}
+        <div className="export-list">
+          {pokemonList
+            .slice((pageNumber - 1) * POKEMON_PER_PAGE, pageNumber * POKEMON_PER_PAGE)
+            .map((instance, index) => (
+              <div
+                key={`row_${index + (pageNumber - 1) * POKEMON_PER_PAGE}`}
+                className="export-row"
+              >
+                <FormControlLabel
+                  control={(
+                    <CustomCheckBox
+                      checked={includedIndices[index + (pageNumber - 1) * POKEMON_PER_PAGE]}
+                      name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                      onChange={toggleInclusion}
+                    />
+                )}
+                  label="include?"
+                  labelPlacement="top"
                 />
-                )}
-              label="include?"
-              labelPlacement="top"
-            />
-            <CardMedia>
-              <img
-                alt={fullName({ ...instance, form: null })}
-                className="export-img"
-                src={imageUrl(
-                  fullName({ ...instance, form: null }),
-                  exportValues[index]?.isShiny ?? false,
-                )}
-              />
-            </CardMedia>
-            {includedIndices[index]
-              && (
-                <>
-                    {exportValues[index].genderRate >= 0
-                    && (
-                      <FormControl>
-                        <FormLabel>Gender</FormLabel>
-                        <RadioGroup
-                          name={index.toString()}
-                          onChange={handleGenderChange}
-                          row
-                          value={exportValues[index].gender}
-                        >
-                          {
-                            exportValues[index].genderRate < 8
-                              && <FormControlLabel control={<Radio />} label="Male" value="male" />
-                          }
-                          {
-                            exportValues[index].genderRate > 0
-                              && (
-                                <FormControlLabel
-                                  control={<Radio />}
-                                  label="Female"
-                                  value="female"
-                                />
-                              )
-                          }
-                          {
-                            exportValues[index].genderRate < 8 && exportValues[index].genderRate > 0
-                              && (
-                                <FormControlLabel
-                                  control={<Radio />}
-                                  label="Random"
-                                  value="random"
-                                />
-                              )
-                          }
-                        </RadioGroup>
-                      </FormControl>
+                <CardMedia>
+                  <img
+                    alt={fullName({ ...instance, form: null })}
+                    className="export-img"
+                    src={imageUrl(
+                      fullName({ ...instance, form: null }),
+                      exportValues[index]?.isShiny ?? false,
                     )}
-                  <FormControl>
-                    <TextField
-                      label="Nickname"
-                      name={index.toString()}
-                      onChange={handleNicknameChange}
-                      value={exportValues[index].nickname}
-                      variant="outlined"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <InputLabel id={`ability_${index}`}>Abiliy</InputLabel>
-                    <Select
-                      className="export-ability"
-                      label="Ability"
-                      labelId={`ability_${index}`}
-                      name={index.toString()}
-                      onChange={handleAbilityChange}
-                      value={exportValues[index].ability}
-                    >
-                      {exportValues[index].abilityList.map((abilityName) => (
-                        <MenuItem
-                          key={abilityName}
-                          value={abilityName}
-                        >
-                          {_.startCase(abilityName).replace('Soul Heart', 'Soul-Heart')}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl>
-                    <InputLabel id={`level_${index}`}>Level</InputLabel>
-                    <OutlinedInput
-                      label="Level"
-                      name={index.toString()}
-                      onChange={handleLevelChange}
-                      type="number"
-                      value={exportValues[index].level}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <Checkbox
-                      checked={exportValues[index].isShiny}
-                      checkedIcon={<Star htmlColor="#ee0" />}
-                      icon={<StarBorder />}
-                      name={index.toString()}
-                      onChange={handleShinyChange}
-                    />
-                  </FormControl>
-                </>
-              )}
-          </div>
-        ))}
+                  />
+                </CardMedia>
+                {includedIndices[index + (pageNumber - 1) * POKEMON_PER_PAGE]
+                && (
+                  <>
+                    {exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].genderRate >= 0
+                      && (
+                        <FormControl>
+                          <FormLabel>Gender</FormLabel>
+                          <RadioGroup
+                            name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                            onChange={handleGenderChange}
+                            row
+                            value={exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].gender}
+                          >
+                            {
+                              exportValues[
+                                index + (pageNumber - 1) * POKEMON_PER_PAGE
+                              ].genderRate < 8
+                                && (
+                                  <FormControlLabel
+                                    control={<Radio />}
+                                    label="Male"
+                                    value="male"
+                                  />
+                                )
+                            }
+                            {
+                              exportValues[
+                                index + (pageNumber - 1) * POKEMON_PER_PAGE
+                              ].genderRate > 0
+                                && (
+                                  <FormControlLabel
+                                    control={<Radio />}
+                                    label="Female"
+                                    value="female"
+                                  />
+                                )
+                            }
+                            {
+                              exportValues[
+                                index + (pageNumber - 1) * POKEMON_PER_PAGE
+                              ].genderRate < 8
+                                && exportValues[
+                                  index + (pageNumber - 1) * POKEMON_PER_PAGE
+                                ].genderRate > 0
+                                && (
+                                  <FormControlLabel
+                                    control={<Radio />}
+                                    label="Random"
+                                    value="random"
+                                  />
+                                )
+                          }
+                          </RadioGroup>
+                        </FormControl>
+                      )}
+                    <FormControl>
+                      <TextField
+                        label="Nickname"
+                        name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                        onChange={handleNicknameChange}
+                        value={exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].nickname}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <InputLabel id={`ability_${index + (pageNumber - 1) * POKEMON_PER_PAGE}`}>
+                        Abiliy
+                      </InputLabel>
+                      <Select
+                        className="export-ability"
+                        label="Ability"
+                        labelId={`ability_${index + (pageNumber - 1) * POKEMON_PER_PAGE}`}
+                        name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                        onChange={handleAbilityChange}
+                        value={exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].ability}
+                      >
+                        {exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].abilityList
+                          .map((abilityName) => (
+                            <MenuItem
+                              key={abilityName}
+                              value={abilityName}
+                            >
+                              {_.startCase(abilityName).replace('Soul Heart', 'Soul-Heart')}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl>
+                      <InputLabel id={`level_${index + (pageNumber - 1) * POKEMON_PER_PAGE}`}>
+                        Level
+                      </InputLabel>
+                      <OutlinedInput
+                        label="Level"
+                        name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                        onChange={handleLevelChange}
+                        type="number"
+                        value={exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].level}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <Checkbox
+                        checked={exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE].isShiny}
+                        checkedIcon={<Star htmlColor="#ee0" />}
+                        icon={<StarBorder />}
+                        name={(index + (pageNumber - 1) * POKEMON_PER_PAGE).toString()}
+                        onChange={handleShinyChange}
+                      />
+                    </FormControl>
+                  </>
+                )}
+              </div>
+            ))}
+        </div>
+        {pokemonList.length > POKEMON_PER_PAGE && (
+          <Pagination
+            count={Math.ceil(pokemonList.length / POKEMON_PER_PAGE)}
+            onChange={handlePageChange}
+            page={pageNumber}
+          />
+        )}
         <Button className="export-button" onClick={exportText} variant="contained">Export</Button>
         <br />
         {exported && (

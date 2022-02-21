@@ -29,7 +29,7 @@ import React, {
 } from 'react';
 
 import CustomCheckBox from '../../utilComponents/CustomCheckbox';
-import { apiUrl, fullName, imageUrl } from '../../utils';
+import { apiUrl, imageUrl, showdownName } from '../../utils';
 import { IPokemonInstance, IPokemonResponse, IPokemonSpeciesResponse } from '../../utils/Types';
 
 import './ExportModal.css';
@@ -66,9 +66,9 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
       pokemonList.forEach((pokemon, index) => {
         setIncludedIndices((prevIncluded) => ({ ...prevIncluded, [index]: false }));
 
-        const { specie, isShiny } = pokemon;
+        const { specie, form, isShiny } = pokemon;
         const urls = [
-          apiUrl(specie, null),
+          apiUrl(specie, form?.name ?? null),
           apiUrl(specie, null).replace('pokemon', 'pokemon-species'),
         ];
 
@@ -92,7 +92,7 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
             }
 
             const defaultValues: IExportValues = {
-              name: specie.name,
+              name: pokemon.fullName,
               genderRate,
               gender,
               nickname: '',
@@ -208,8 +208,8 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
         .filter((pokemon, index) => includedIndices[index])
         .map((pokemon) => `${
           pokemon.nickname === ''
-            ? pokemon.name
-            : `${pokemon.nickname} (${pokemon.name})`
+            ? showdownName(pokemon.name)
+            : `${pokemon.nickname} (${showdownName(pokemon.name)})`
         }${
           pokemon.gender === 'random'
             ? ''
@@ -247,9 +247,6 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
         <Typography className="export-title" component="h2" variant="h5">
           Export
         </Typography>
-        <Typography>
-          Note! Forms are set to default, you can choose a form in &apos;Showdown!&apos;
-        </Typography>
         {hasError
         && (
           <Typography>
@@ -279,10 +276,10 @@ const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
                 />
                 <CardMedia>
                   <img
-                    alt={fullName({ ...instance, form: null })}
+                    alt={instance.fullName}
                     className="export-img"
                     src={imageUrl(
-                      fullName({ ...instance, form: null }),
+                      instance.fullName,
                       exportValues[index]?.isShiny ?? false,
                     )}
                   />

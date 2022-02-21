@@ -410,3 +410,30 @@ export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean)
 
   return name;
 };
+
+const showdownReplacements: Record<string, string> = {
+  Alolan: 'Alola',
+  Galrian: 'Galar',
+  Gigantamax: 'Gmax',
+};
+
+const showdownRemovals = new RegExp(`-(${[
+  'M$|F$',
+  '|Normal',
+  '|Standard|Pirouette',
+  '|Blade|Active',
+  '|Solo|School|Core|Busted',
+  '|Gulping|Gorging|Ice|Noice|Hangry|Hero|Single-Strike|Rider',
+].join('')})`, 'g');
+
+export const showdownName = (pokemonName: string) => {
+  let name = pokemonName;
+
+  Object.entries(showdownReplacements).forEach(([key, value]) => {
+    name = name.replace(key, value);
+  });
+
+  name = name.replace(showdownRemovals, '');
+
+  return name;
+};

@@ -115,11 +115,14 @@ const PokemonList: React.FC = () => {
           </div>
         ))}
       </InfiniteScroll>
-      <ExportModal
-        isOpen={isModalOpen}
-        pokemonList={monList}
-        setOpen={setModalOpen}
-      />
+      {monList.length > 0
+      && (
+        <ExportModal
+          isOpen={isModalOpen}
+          pokemonList={monList}
+          setOpen={setModalOpen}
+        />
+      )}
     </div>
   );
 };

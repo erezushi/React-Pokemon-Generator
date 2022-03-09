@@ -108,7 +108,7 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   [/flabébé-.+/g, () => 'flabebe'],
 
   // Specific form names not found in the API
-  [/-(confined|core|mane|wings)/g, () => ''],
+  [/-(confined|core|mane|wings|hero)/g, () => ''],
 
   // Galarian Darmanitan (galar-[form] -> [form]-galar)
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],

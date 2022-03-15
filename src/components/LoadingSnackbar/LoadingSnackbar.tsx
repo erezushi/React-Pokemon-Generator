@@ -19,7 +19,7 @@ const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
       autoHideDuration={1000}
       message={(
         <>
-          <strong>{name}</strong>
+          <strong>{name.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>
           <p>Loading base stats...</p>
           <br />
           <CircularProgress />

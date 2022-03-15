@@ -106,7 +106,7 @@ const PokemonCard = (props: ICardProps) => {
       </CardMedia>
       <CardContent>
         <Typography variant="h5">
-          {instance.fullName}
+          {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
           {isShiny && (
           <span>
             &nbsp;

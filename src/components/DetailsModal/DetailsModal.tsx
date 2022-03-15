@@ -72,14 +72,14 @@ const DetailsModal = (props: IDetailsModalProps) => {
       <Card className="details-card">
         <CardMedia>
           <img
-            alt={instance.fullName}
+            alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             className="details-img"
             src={imageUrl(instance.fullName, isShiny)}
           />
         </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
-            {instance.fullName}
+            {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             {isShiny && (
             <span>
             &nbsp;
@@ -187,12 +187,12 @@ const DetailsModal = (props: IDetailsModalProps) => {
             <div>
               <CardMedia>
                 <img
-                  alt={instance.fullName}
+                  alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
                   className="evolution-img"
                   src={imageUrl(instance.fullName, isShiny)}
                 />
               </CardMedia>
-              {instance.fullName}
+              {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             </div>
             {evolutions.map((evo) => {
               if (Array.isArray(evo)) {

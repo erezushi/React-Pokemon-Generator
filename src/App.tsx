@@ -5,7 +5,7 @@ import Header from './components/AppHeader';
 import OptionsBox from './components/OptionsBox';
 import PokemonList from './components/PokemonList';
 
-const App: React.FC = () => (
+const App = () => (
   <div className="app">
     <Header />
     <OptionsBox />

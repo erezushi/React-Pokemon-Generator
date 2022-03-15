@@ -55,7 +55,9 @@ interface IExportValues {
   isShiny: boolean
 }
 
-const Exportmodal = ({ isOpen, pokemonList, setOpen }: IExportModalProps) => {
+const Exportmodal = (props: IExportModalProps) => {
+  const { isOpen, pokemonList, setOpen } = props;
+
   const [includedIndices, setIncludedIndices] = useState<Record<string, boolean>>({});
   const [exportValues, setExportValues] = useState<Record<string, IExportValues>>({});
   const [hasError, setHasError] = useState(false);

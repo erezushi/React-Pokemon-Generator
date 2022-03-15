@@ -30,14 +30,11 @@ interface IDetailsModalProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const DetailsModal: React.FC<IDetailsModalProps> = (
-  {
-    details,
-    instance,
-    isOpen,
-    setOpen,
-  }: IDetailsModalProps,
-) => {
+const DetailsModal = (props: IDetailsModalProps) => {
+  const {
+    details, instance, isOpen, setOpen,
+  } = props;
+
   const [evolutions, setEvolutions] = useState<(Evolution|Evolution[])[]>([]);
   const [prevolutions, setPrevolutions] = useState<Evolution[]>([]);
 

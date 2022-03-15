@@ -3,7 +3,7 @@ import React from 'react';
 
 type TransitionProps = Omit<SlideProps, 'direction'>
 
-const SlideTransition: React.FC<TransitionProps> = (props: TransitionProps) => (
+const SlideTransition = (props: TransitionProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <Slide {...props} direction="right" />
 );

@@ -2,7 +2,7 @@ import { CheckBox, CheckBoxOutlineBlank, IndeterminateCheckBox } from '@mui/icon
 import { Checkbox, CheckboxProps } from '@mui/material';
 import React from 'react';
 
-const CustomCheckbox: React.FC<CheckboxProps> = ({
+const CustomCheckbox = ({
   checked,
   indeterminate,
   name,

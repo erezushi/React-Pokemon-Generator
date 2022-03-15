@@ -42,7 +42,9 @@ interface ICardProps {
   instance: IPokemonInstance,
 }
 
-const PokemonCard: React.FC<ICardProps> = ({ instance }: ICardProps) => {
+const PokemonCard = (props: ICardProps) => {
+  const { instance } = props;
+
   const { specie, isShiny, form } = instance;
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [details, setDetails] = useState<IPokemonDetails>(

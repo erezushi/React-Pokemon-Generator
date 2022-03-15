@@ -16,7 +16,7 @@ import './PokemonList.css';
 const ROWS_PER_PAGE = 10;
 const chance = new Chance();
 
-const PokemonList: React.FC = () => {
+const PokemonList = () => {
   const [monList, setMonList] = useState<IPokemonInstance[]>([]);
   const [splitArray, setSplitArray] = useState<IPokemonInstance[][]>([]);
   const [loadedRows, setLoadedRows] = useState<IPokemonInstance[][]>([]);

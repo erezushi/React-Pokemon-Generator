@@ -37,7 +37,7 @@ const keyMap = {
   reset: 'shift+c',
 };
 
-const OptionsBox: React.FC = () => {
+const OptionsBox = () => {
   const [typeList, setTypeList] = useState<Types[]>([]);
   const [allGens, setAllGens] = useState<checkBoxState>('checked');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);

@@ -157,6 +157,35 @@ export const apiUrl = (specie: Pokemon, formName: string | null): string => {
 };
 // #endregion
 
+// #region ShowdownName
+const showdownReplacements: Record<string, string> = {
+  Alolan: 'Alola',
+  Galrian: 'Galar',
+  Gigantamax: 'Gmax',
+};
+
+const showdownRemovals = new RegExp(`-(${[
+  'M$|F$',
+  '|Normal',
+  '|Standard|Pirouette',
+  '|Blade|Active',
+  '|Solo|School|Core|Busted',
+  '|Gulping|Gorging|Ice|Noice|Hangry|Hero|Single-Strike|Rider',
+].join('')})`, 'g');
+
+export const showdownName = (pokemonName: string) => {
+  let name = pokemonName;
+
+  Object.entries(showdownReplacements).forEach(([key, value]) => {
+    name = name.replace(key, value);
+  });
+
+  name = name.replace(showdownRemovals, '');
+
+  return name;
+};
+// #endregion
+
 // #region SweetAlert
 export const Toast = Swal.mixin({
   toast: true,
@@ -177,7 +206,7 @@ export const errorToast = Toast.mixin({
 // #endregion
 
 // #region Alcremie
-const randomArrayEntry = <Type>(array: Type[]) => array[
+export const randomArrayEntry = <Type>(array: Type[]) => array[
   chance.integer({ min: 0, max: array.length - 1 })
 ];
 
@@ -379,21 +408,11 @@ export const prevEvos = (pokemon: ListPokemon|Pokemon, form?: Form): Evolution[]
 };
 // #endregion
 
-export const shinyReplacements = new Map<RegExp, string>([
+// #region fullName
+const shinyReplacements = new Map<RegExp, string>([
   [/Minior-.+-/g, 'Minior-'],
   [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-'],
 ]);
-
-export const getGeneration = (dexNo: string): string => {
-  const number = Number(dexNo);
-  const generations = getGenerations();
-
-  return romanize(Number(
-    Object
-      .keys(generations)
-      .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
-  ));
-};
 
 export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean): string => {
   let name = `${instance.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
@@ -410,30 +429,15 @@ export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean)
 
   return name;
 };
+// #endregion
 
-const showdownReplacements: Record<string, string> = {
-  Alolan: 'Alola',
-  Galrian: 'Galar',
-  Gigantamax: 'Gmax',
-};
+export const getGeneration = (dexNo: string): string => {
+  const number = Number(dexNo);
+  const generations = getGenerations();
 
-const showdownRemovals = new RegExp(`-(${[
-  'M$|F$',
-  '|Normal',
-  '|Standard|Pirouette',
-  '|Blade|Active',
-  '|Solo|School|Core|Busted',
-  '|Gulping|Gorging|Ice|Noice|Hangry|Hero|Single-Strike|Rider',
-].join('')})`, 'g');
-
-export const showdownName = (pokemonName: string) => {
-  let name = pokemonName;
-
-  Object.entries(showdownReplacements).forEach(([key, value]) => {
-    name = name.replace(key, value);
-  });
-
-  name = name.replace(showdownRemovals, '');
-
-  return name;
+  return romanize(Number(
+    Object
+      .keys(generations)
+      .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
+  ));
 };

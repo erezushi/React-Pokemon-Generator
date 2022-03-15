@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { v4 as uuid } from 'uuid';
 
-import { errorToast, fullName } from '../../utils';
+import { errorToast, fullName, randomArrayEntry } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IPokemonInstance } from '../../utils/Types';
 import ExportModal from '../ExportModal';
@@ -33,7 +33,7 @@ const PokemonList: React.FC = () => {
         const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
         let form: Form | null = null;
         if (specie.forms) {
-          form = specie.forms[chance.integer({ min: 0, max: specie.forms.length - 1 })];
+          form = randomArrayEntry(specie.forms);
         }
 
         return ({

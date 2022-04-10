@@ -21,9 +21,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
-  useMemo,
 } from 'react';
-import { GlobalHotKeys } from 'react-hotkeys-ce';
 
 import { CustomCheckbox } from '../../utilComponents';
 import { DEFAULT_SETTINGS } from '../../utils';
@@ -32,9 +30,10 @@ import { checkBoxState } from '../../utils/Types';
 
 import './OptionsBox.css';
 
-const keyMap = {
-  generate: 'Enter',
-  reset: 'shift+c',
+const idMap = {
+  Enter: 'generate',
+  NumpadEnter: 'generate',
+  KeyC: 'reset',
 };
 
 const OptionsBox = () => {
@@ -249,25 +248,29 @@ const OptionsBox = () => {
     fetchGenerations();
   }, [fetchGenerations]);
 
-  const idMap = useMemo((): Record<string, string> => ({
-    Enter: 'generate',
-    C: 'reset',
-  }), []);
+  const keyboardClick = useCallback((event: KeyboardEvent) => {
+    const { code: keyCode } = event;
 
-  const keyboardClick = useCallback((event) => {
-    event.preventDefault();
+    if (
+      keyCode === 'Enter'
+      || keyCode === 'NumpadEnter'
+      || (event.shiftKey && keyCode === 'KeyC')
+    ) {
+      event.preventDefault();
+      document.getElementById(idMap[keyCode])!.click();
+    }
+  }, []);
 
-    document.getElementById(idMap[event.key])!.click();
-  }, [idMap]);
+  useEffect(() => {
+    document.addEventListener('keydown', keyboardClick);
 
-  const handlers = useMemo(() => ({
-    generate: keyboardClick,
-    reset: keyboardClick,
-  }), [keyboardClick]);
+    return () => {
+      document.removeEventListener('keydown', keyboardClick);
+    };
+  }, [keyboardClick]);
 
   return (
     <div>
-      <GlobalHotKeys handlers={handlers} keyMap={keyMap} />
       <Paper className="options-box">
         <Typography component="h2" variant="h5">
           Options

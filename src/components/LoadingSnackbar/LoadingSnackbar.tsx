@@ -1,7 +1,7 @@
 import { CircularProgress, Snackbar } from '@mui/material';
 import React from 'react';
 
-import SlideTransition from '../../utilComponents/SlideTransition';
+import { SlideTransition } from '../../utilComponents';
 
 import './LoadingSnackbar.css';
 

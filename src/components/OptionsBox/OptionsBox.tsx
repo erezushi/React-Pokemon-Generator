@@ -25,7 +25,7 @@ import React, {
 } from 'react';
 import { GlobalHotKeys } from 'react-hotkeys-ce';
 
-import CustomCheckbox from '../../utilComponents/CustomCheckbox';
+import { CustomCheckbox } from '../../utilComponents';
 import { DEFAULT_SETTINGS } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { checkBoxState } from '../../utils/Types';

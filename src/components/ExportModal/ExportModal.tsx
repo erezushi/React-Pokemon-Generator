@@ -28,7 +28,7 @@ import React, {
   useState,
 } from 'react';
 
-import CustomCheckBox from '../../utilComponents/CustomCheckbox';
+import { CustomCheckbox } from '../../utilComponents';
 import { apiUrl, imageUrl, showdownName } from '../../utils';
 import { IPokemonInstance, IPokemonResponse, IPokemonSpeciesResponse } from '../../utils/Types';
 
@@ -275,7 +275,7 @@ const Exportmodal = (props: IExportModalProps) => {
                 <div className="static-row">
                   <FormControlLabel
                     control={(
-                      <CustomCheckBox
+                      <CustomCheckbox
                         checked={includedIndices[pageIndex(index, pageNumber)]}
                         name={pageIndex(index, pageNumber).toString()}
                         onChange={toggleInclusion}

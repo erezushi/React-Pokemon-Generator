@@ -1,3 +1,4 @@
+import { Types } from '@erezushi/pokemon-randomizer';
 import { ArrowRightAltRounded, StarRounded } from '@mui/icons-material';
 import {
   Card,
@@ -11,6 +12,7 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
+import TypeIcon from '../../utilComponents/TypeIcon';
 import {
   Evolution,
   getGeneration,
@@ -90,20 +92,19 @@ const DetailsModal = (props: IDetailsModalProps) => {
           <Typography variant="h5">
             {`#${specie.dexNo.padStart(3, '0')} (Gen ${getGeneration(specie.dexNo)})`}
           </Typography>
-          <Typography>
-            Type:
-            {' '}
+          <Typography className="details-typing">
+            Type:&nbsp;
             {type.split(' ').map((currentType, index) => {
               const formattedName = _.startCase(currentType);
 
               return (
                 <>
-                  {index === 1 && ' / '}
+                  {index === 1 && <>&nbsp;/&nbsp;</>}
                   <Link
                     key={uuid()}
                     href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName}_(type)`}
                   >
-                    {formattedName}
+                    <TypeIcon type={currentType as Types} />
                   </Link>
                 </>
               );
@@ -144,7 +145,6 @@ const DetailsModal = (props: IDetailsModalProps) => {
             </Link>
           </Typography>
           )}
-          <br />
           {stats.map((stat, index) => {
             const { base_stat: baseStat } = stat;
             const statName = STAT_NAMES[index];
@@ -159,7 +159,6 @@ const DetailsModal = (props: IDetailsModalProps) => {
             <strong>BST: </strong>
             {calculateBST()}
           </Typography>
-          <br />
           <Typography>
             Evolution line:
           </Typography>

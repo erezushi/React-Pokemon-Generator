@@ -19,6 +19,7 @@ import {
   OutlinedInput,
   Checkbox,
   Pagination,
+  Link,
 } from '@mui/material';
 import _ from 'lodash';
 import React, {
@@ -286,14 +287,18 @@ const Exportmodal = (props: IExportModalProps) => {
                     labelPlacement="top"
                   />
                   <CardMedia>
-                    <img
-                      alt={instance.fullName}
-                      className="export-img"
-                      src={imageUrl(
-                        instance.fullName,
-                        exportValues[pageIndex(index, pageNumber)]?.isShiny ?? false,
-                      )}
-                    />
+                    <Link
+                      href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}
+                    >
+                      <img
+                        alt={instance.fullName}
+                        className="export-img"
+                        src={imageUrl(
+                          instance.fullName,
+                          exportValues[pageIndex(index, pageNumber)]?.isShiny ?? false,
+                        )}
+                      />
+                    </Link>
                   </CardMedia>
                 </div>
                 {exportValues[pageIndex(index, pageNumber)]?.genderRate >= 0

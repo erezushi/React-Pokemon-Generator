@@ -73,11 +73,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
     >
       <Card className="details-card">
         <CardMedia>
-          <img
-            alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
-            className="details-img"
-            src={imageUrl(instance.fullName, isShiny)}
-          />
+          <Link href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}>
+            <img
+              alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
+              className="details-img"
+              src={imageUrl(instance.fullName, isShiny)}
+            />
+          </Link>
         </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
@@ -175,7 +177,9 @@ const DetailsModal = (props: IDetailsModalProps) => {
                 <>
                   <div key={uuid()}>
                     <CardMedia>
-                      <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
+                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      </Link>
                     </CardMedia>
                     {name}
                   </div>
@@ -185,11 +189,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
             })}
             <div>
               <CardMedia>
-                <img
-                  alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
-                  className="evolution-img"
-                  src={imageUrl(instance.fullName, isShiny)}
-                />
+                <Link href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}>
+                  <img
+                    alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
+                    className="evolution-img"
+                    src={imageUrl(instance.fullName, isShiny)}
+                  />
+                </Link>
               </CardMedia>
               {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             </div>
@@ -223,11 +229,15 @@ const DetailsModal = (props: IDetailsModalProps) => {
                                 {index === 0 && <ArrowRightAltRounded />}
                                 <div>
                                   <CardMedia>
-                                    <img
-                                      alt={name}
-                                      className="evolution-img"
-                                      src={imageUrl(name, isShiny)}
-                                    />
+                                    <Link
+                                      href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}
+                                    >
+                                      <img
+                                        alt={name}
+                                        className="evolution-img"
+                                        src={imageUrl(name, isShiny)}
+                                      />
+                                    </Link>
                                   </CardMedia>
                                   {name}
                                 </div>
@@ -258,11 +268,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
                             <ArrowRightAltRounded />
                             <div>
                               <CardMedia>
-                                <img
-                                  alt={name}
-                                  className="evolution-img"
-                                  src={imageUrl(name, isShiny)}
-                                />
+                                <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
+                                  <img
+                                    alt={name}
+                                    className="evolution-img"
+                                    src={imageUrl(name, isShiny)}
+                                  />
+                                </Link>
                               </CardMedia>
                               {name}
                             </div>
@@ -284,7 +296,9 @@ const DetailsModal = (props: IDetailsModalProps) => {
                   <ArrowRightAltRounded />
                   <div>
                     <CardMedia>
-                      <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
+                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
+                      </Link>
                     </CardMedia>
                     {name}
                   </div>

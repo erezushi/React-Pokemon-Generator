@@ -20,7 +20,6 @@ import {
   Checkbox,
   Pagination,
 } from '@mui/material';
-import axios from 'axios';
 import _ from 'lodash';
 import React, {
   useCallback,
@@ -29,7 +28,9 @@ import React, {
 } from 'react';
 
 import { CustomCheckbox } from '../../utilComponents';
-import { apiUrl, imageUrl, showdownName } from '../../utils';
+import {
+  apiRequest, apiUrl, imageUrl, showdownName,
+} from '../../utils';
 import { IPokemonInstance, IPokemonResponse, IPokemonSpeciesResponse } from '../../utils/Types';
 
 import './ExportModal.css';
@@ -77,14 +78,14 @@ const Exportmodal = (props: IExportModalProps) => {
         ];
 
         Promise.all([
-          axios.get<IPokemonResponse>(urls[0]),
-          axios.get<IPokemonSpeciesResponse>(urls[1]),
+          apiRequest<IPokemonResponse>(urls[0]),
+          apiRequest<IPokemonSpeciesResponse>(urls[1]),
         ])
           .then(([pokemonResponse, pokemonSpeciesResponse]) => {
-            const abilityList = pokemonResponse.data.abilities.map(
+            const abilityList = pokemonResponse.abilities.map(
               (ability) => ability.ability.name,
             );
-            const genderRate = pokemonSpeciesResponse.data.gender_rate;
+            const genderRate = pokemonSpeciesResponse.gender_rate;
 
             let gender: 'male' | 'female' | 'random';
             if (genderRate === -1) {

@@ -7,12 +7,12 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import axios from 'axios';
 import React, {
   useCallback, useMemo, useState,
 } from 'react';
 
 import {
+  apiRequest,
   apiUrl,
   errorToast,
   imageUrl,
@@ -56,9 +56,9 @@ const PokemonCard = (props: ICardProps) => {
     setSnackbarOpen(true);
 
     if (!details.stats.length) {
-      axios.get<IPokemonResponse>(apiUrl(specie, form?.name ?? null))
+      apiRequest<IPokemonResponse>(apiUrl(specie, form?.name ?? null))
         .then((res) => {
-          const { abilities, stats } = res.data;
+          const { abilities, stats } = res;
           setDetails((currDetails) => ({ ...currDetails, abilities, stats }));
           setModalOpen(true);
           setSnackbarOpen(false);

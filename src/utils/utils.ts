@@ -6,6 +6,8 @@ import {
   ListPokemon,
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
+// @ts-ignore
+import { Pokedex } from 'pokeapi-js-wrapper';
 import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
@@ -13,6 +15,7 @@ import 'animate.css';
 import { ISettings } from './Types';
 
 const chance = new Chance();
+const pokeAPI = new Pokedex();
 
 // #region Constants
 export const STAT_NAMES = [
@@ -78,7 +81,7 @@ export const imageUrl = (name: string, shiny: boolean): string => (
 );
 // #endregion
 
-// #region apiUrl
+// #region PokéAPI
 type replceFunc = ((match: string) => string)|(() => string)
 
 const apiStringMap = new Map<string | RegExp, replceFunc>([
@@ -147,13 +150,19 @@ const apiName = (name: string, formName: string) => {
   return modifiedName;
 };
 
-export const apiUrl = (specie: Pokemon, formName: string | null): string => {
+export const apiUrl = (specie: Pokemon, formName: string | null) => {
   const baseUrl = 'https://pokeapi.co/api/v2/pokemon';
   if (formName === null || formName === 'default') {
     return `${baseUrl}/${specie.dexNo}`;
   }
 
   return `${baseUrl}/${apiName(specie.name, formName)}`;
+};
+
+export const apiRequest = async <T>(url: string): Promise<T> => {
+  const result = await pokeAPI.resource(url);
+
+  return result;
 };
 // #endregion
 

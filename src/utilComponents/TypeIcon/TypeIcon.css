@@ -11,6 +11,13 @@
     margin: 20%;
 }
 
+.MuiTooltip-popper .MuiTooltip-tooltip {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    font-size: 1.1em;
+}
+
 .bug {
     background-color: #92BC2C;
     box-shadow: 0 0 8px #92BC2C;

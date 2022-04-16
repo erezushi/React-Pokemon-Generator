@@ -1,4 +1,6 @@
 import { Types } from '@erezushi/pokemon-randomizer';
+import { Tooltip } from '@mui/material';
+import _ from 'lodash';
 import React from 'react';
 
 import {
@@ -89,9 +91,16 @@ const TypeIcon = (props: ITypeIconProps) => {
   const { type } = props;
 
   return (
-    <div className={`icon ${type}`}>
-      { renderMap[type]() }
-    </div>
+    <Tooltip
+      arrow
+      enterDelay={500}
+      placement="top"
+      title={_.capitalize(type)}
+    >
+      <div className={`icon ${type}`}>
+        { renderMap[type]() }
+      </div>
+    </Tooltip>
   );
 };
 

@@ -12,7 +12,7 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import TypeIcon from '../../utilComponents/TypeIcon';
+import { TypeIcon } from '../../utilComponents';
 import {
   Evolution,
   getGeneration,

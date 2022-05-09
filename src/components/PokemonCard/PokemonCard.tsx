@@ -89,7 +89,9 @@ const PokemonCard = (props: ICardProps) => {
     });
   }, [specie]);
 
-  const handleButtonClick = useCallback((event) => {
+  const handleButtonClick = useCallback((
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     const { textContent } = event.target as HTMLButtonElement;
     window.open(links[textContent!]);
     event.stopPropagation();

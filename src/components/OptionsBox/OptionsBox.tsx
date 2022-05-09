@@ -13,6 +13,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
@@ -21,6 +22,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  ChangeEvent,
 } from 'react';
 
 import { CustomCheckbox } from '../../utilComponents';
@@ -85,14 +87,14 @@ const OptionsBox = () => {
   }, [settings]);
 
   const uniqueClicked = useCallback(
-    (event) => setSingleSetting('unique', event.target.checked),
+    (event: ChangeEvent<HTMLInputElement>) => setSingleSetting('unique', event.target.checked),
     [setSingleSetting],
   );
 
-  const changeAmount = useCallback((event) => {
+  const changeAmount = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    if (value > 0) {
+    if (parseInt(value, 10) > 0) {
       setSingleSetting('amount', value);
     } else {
       setSingleSetting('amount', 1);
@@ -100,7 +102,9 @@ const OptionsBox = () => {
   }, [setSingleSetting]);
 
   const changeType = useCallback(
-    (event) => setSingleSetting('type', event.target.value),
+    (event: SelectChangeEvent<'all' | Types | 'random'>) => {
+      setSingleSetting('type', event.target.value);
+    },
     [setSingleSetting],
   );
 
@@ -111,7 +115,7 @@ const OptionsBox = () => {
     setAllGens(allGens === 'checked' ? 'none' : 'checked');
   }, [allGens, setGenerationList, settings.generationList]);
 
-  const genClicked = useCallback((event) => {
+  const genClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
 
     setGenerationList((prevGenList) => ({ ...prevGenList, [name]: checked }));
@@ -127,7 +131,7 @@ const OptionsBox = () => {
     }
   }, [settings.generationList]);
 
-  const babyClicked = useCallback((event) => {
+  const babyClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('baby', checked);
@@ -138,7 +142,7 @@ const OptionsBox = () => {
     }
   }, [setSingleSetting]);
 
-  const basicClicked = useCallback((event) => {
+  const basicClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('basic', checked);
@@ -148,7 +152,7 @@ const OptionsBox = () => {
     }
   }, [setSingleSetting]);
 
-  const evolvedClicked = useCallback((event) => {
+  const evolvedClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('evolved', checked);
@@ -158,7 +162,7 @@ const OptionsBox = () => {
     }
   }, [setSingleSetting]);
 
-  const starterClicked = useCallback((event) => {
+  const starterClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('starter', checked);
@@ -169,7 +173,7 @@ const OptionsBox = () => {
     }
   }, [setSingleSetting]);
 
-  const legendaryClicked = useCallback((event) => {
+  const legendaryClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('legendary', checked);
@@ -180,7 +184,7 @@ const OptionsBox = () => {
     }
   }, [setSingleSetting]);
 
-  const mythicalClicked = useCallback((event) => {
+  const mythicalClicked = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
     setSingleSetting('mythical', checked);
@@ -192,11 +196,11 @@ const OptionsBox = () => {
   }, [setSingleSetting]);
 
   const formsClicked = useCallback(
-    (event) => setSingleSetting('forms', event.target.checked),
+    (event: ChangeEvent<HTMLInputElement>) => setSingleSetting('forms', event.target.checked),
     [setSingleSetting],
   );
 
-  const changeShinyChance = useCallback((event) => {
+  const changeShinyChance = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value }: {value: string} = event.target;
 
     const numberValue = parseInt(value, 10);

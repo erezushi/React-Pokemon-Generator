@@ -12,9 +12,9 @@ const App = () => (
     <PokemonList />
     <div className="footer">
       Site powered by
-      {' '}
+      &nbsp;
       <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">this</a>
-      {' '}
+      &nbsp;
       NPM library
     </div>
   </div>

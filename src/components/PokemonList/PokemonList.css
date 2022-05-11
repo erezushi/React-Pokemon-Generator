@@ -14,12 +14,12 @@
     background-color: white;
 }
 
-.pokemon-row {
+.list-virtualizer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.row-loader {
-    width: 100%;
-    text-align: center;
+.list-placeholder {
+    height: 220px;
 }

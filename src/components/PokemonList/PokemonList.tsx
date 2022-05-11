@@ -2,8 +2,7 @@ import random, { Form, Options } from '@erezushi/pokemon-randomizer';
 import { Button } from '@mui/material';
 import { Chance } from 'chance';
 import React, { useState, useEffect, useCallback } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
-import { v4 as uuid } from 'uuid';
+import { VirtuosoGrid } from 'react-virtuoso';
 
 import { errorToast, fullName, randomArrayEntry } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
@@ -13,20 +12,14 @@ import PokemonCard from '../PokemonCard';
 
 import './PokemonList.css';
 
-const ROWS_PER_PAGE = 10;
 const chance = new Chance();
 
 const PokemonList = () => {
   const [monList, setMonList] = useState<IPokemonInstance[]>([]);
-  const [splitArray, setSplitArray] = useState<IPokemonInstance[][]>([]);
-  const [loadedRows, setLoadedRows] = useState<IPokemonInstance[][]>([]);
-  const [lastRowPos, setLastRowPos] = useState(0);
-  const [currentScroll, setCurrentScroll] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const randomize = useCallback(async (opt: Options, shinyChance: number) => {
     try {
-      setCurrentScroll(window.scrollY);
       const results = await random(opt);
 
       setMonList(results.map((specie) => {
@@ -58,36 +51,14 @@ const PokemonList = () => {
     };
   }, [randomize]);
 
-  useEffect(() => {
-    setLoadedRows([]);
-    setLastRowPos(0);
-    const rows = Math.ceil(monList.length / 3);
-    const arr: IPokemonInstance[][] = [];
-
-    for (let i = 0; i < rows; i += 1) {
-      arr.push(monList.slice(i * 3, i * 3 + 3));
-    }
-
-    setSplitArray(arr);
-  }, [monList]);
-
-  const loadMore = useCallback(() => {
-    setLoadedRows((currentRows) => currentRows.concat(
-      splitArray.slice(lastRowPos, lastRowPos + ROWS_PER_PAGE),
-    ));
-
-    setLastRowPos((value) => value + ROWS_PER_PAGE);
-  }, [lastRowPos, splitArray]);
-
-  useEffect(() => {
-    if (loadedRows.length <= ROWS_PER_PAGE) {
-      window.scroll(0, currentScroll);
-    }
-  }, [currentScroll, loadedRows.length]);
-
   const handleExport = useCallback(() => {
     setModalOpen(true);
   }, []);
+
+  const createCard = useCallback(
+    (index: number) => <PokemonCard instance={monList[index]} />,
+    [monList],
+  );
 
   return (
     <div className="pokemon-list">
@@ -102,19 +73,13 @@ const PokemonList = () => {
           Export to &apos;Showdown!&apos;
         </Button>
       )}
-      <InfiniteScroll
-        hasMore={lastRowPos < splitArray.length}
-        loader={<div className="row-loader">loading...</div>}
-        loadMore={loadMore}
-      >
-        {loadedRows.map((row) => (
-          <div key={uuid()} className="pokemon-row">
-            {row.map((specie) => (
-              <PokemonCard key={uuid()} instance={specie} />
-            ))}
-          </div>
-        ))}
-      </InfiniteScroll>
+      <VirtuosoGrid
+        itemContent={(index) => createCard(index)}
+        listClassName="list-virtualizer"
+        overscan={500}
+        totalCount={monList.length}
+        useWindowScroll
+      />
       {monList.length > 0
       && (
         <ExportModal

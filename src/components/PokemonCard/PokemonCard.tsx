@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material';
 import React, {
-  useCallback, useMemo, useState,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
 
 import {
@@ -51,6 +51,10 @@ const PokemonCard = (props: ICardProps) => {
     { abilities: [], stats: [], type: form?.type ?? specie.type },
   );
   const [isModalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    setDetails({ abilities: [], stats: [], type: form?.type ?? specie.type });
+  }, [specie, form]);
 
   const handleCardClick = useCallback(() => {
     if (!details.stats.length) {

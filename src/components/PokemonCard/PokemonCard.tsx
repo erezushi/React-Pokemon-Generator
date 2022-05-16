@@ -25,7 +25,7 @@ import './PokemonCard.css';
 
 const specialChars = /[♂ ♀é]/g;
 
-const charMap: Record<string, string> = {
+const specialCharMap: Record<string, string> = {
   '♂': 'm',
   ' ': '',
   '♀': 'f',
@@ -44,8 +44,8 @@ interface ICardProps {
 
 const PokemonCard = (props: ICardProps) => {
   const { instance } = props;
-
   const { specie, isShiny, form } = instance;
+
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [details, setDetails] = useState<IPokemonDetails>(
     { abilities: [], stats: [], type: form?.type ?? specie.type },
@@ -53,9 +53,8 @@ const PokemonCard = (props: ICardProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleCardClick = useCallback(() => {
-    setSnackbarOpen(true);
-
     if (!details.stats.length) {
+      setSnackbarOpen(true);
       apiRequest<IPokemonResponse>(apiUrl(specie, form?.name ?? null))
         .then((res) => {
           const { abilities, stats } = res;
@@ -71,7 +70,6 @@ const PokemonCard = (props: ICardProps) => {
         });
     } else {
       setModalOpen(true);
-      setSnackbarOpen(false);
     }
   }, [details.stats.length, form?.name, specie]);
 
@@ -81,10 +79,10 @@ const PokemonCard = (props: ICardProps) => {
     return ({
       bulbapedia: `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`,
       serebii: `https://www.serebii.net/pokemon/${
-        name.toLowerCase().replace(specialChars, (match) => charMap[match])
+        name.toLowerCase().replace(specialChars, (match) => specialCharMap[match])
       }/`,
       smogon: `https://www.smogon.com/dex/ss/pokemon/${
-        name.replace(specialChars, (match) => charMap[match])
+        name.replace(specialChars, (match) => specialCharMap[match])
       }/`,
     });
   }, [specie]);

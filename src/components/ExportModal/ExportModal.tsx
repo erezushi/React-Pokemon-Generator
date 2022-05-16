@@ -1,5 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-import { Done, Star, StarBorder } from '@mui/icons-material';
+import Done from '@mui/icons-material/Done';
+import Star from '@mui/icons-material/Star';
+import StarBorder from '@mui/icons-material/StarBorder';
 import {
   Button,
   Paper,

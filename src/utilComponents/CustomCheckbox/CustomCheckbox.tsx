@@ -1,4 +1,6 @@
-import { CheckBox, CheckBoxOutlineBlank, IndeterminateCheckBox } from '@mui/icons-material';
+import CheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import IndeterminateCheckBox from '@mui/icons-material/IndeterminateCheckBox';
 import { Checkbox, CheckboxProps } from '@mui/material';
 import React from 'react';
 

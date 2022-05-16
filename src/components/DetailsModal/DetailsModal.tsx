@@ -1,5 +1,6 @@
 import { Types } from '@erezushi/pokemon-randomizer';
-import { ArrowRightAltRounded, StarRounded } from '@mui/icons-material';
+import ArrowRightAltRounded from '@mui/icons-material/ArrowRightAltRounded';
+import StarRounded from '@mui/icons-material/StarRounded';
 import {
   Card,
   CardContent,

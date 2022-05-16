@@ -1,4 +1,4 @@
-import { StarRounded } from '@mui/icons-material';
+import StarRounded from '@mui/icons-material/StarRounded';
 import {
   Card,
   CardActions,

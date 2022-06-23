@@ -45,6 +45,8 @@ export const DEFAULT_SETTINGS: ISettings = {
 
 // #region imageUrl
 const imgReplacements: Record<string, string> = {
+  'Dialga-Altered': 'dialga',
+  'Palkia-Altered': 'palkia',
   'Meowstic-M': 'meowstic-male',
   'Meowstic-F': 'meowstic-female',
   'Indeedee-M': 'indeedee-male',
@@ -52,6 +54,8 @@ const imgReplacements: Record<string, string> = {
   Urshifu: 'urshifu-single-strike',
   Zacian: 'zacian-hero',
   Zamazenta: 'zamazenta-hero',
+  'Basculegion-M': 'basculegion-male',
+  'Basculegion-F': 'basculegion-female',
 };
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
@@ -85,21 +89,25 @@ export const imageUrl = (name: string, shiny: boolean): string => (
 type replceFunc = ((match: string) => string)|(() => string)
 
 const apiStringMap = new Map<string | RegExp, replceFunc>([
-  // 'Static' functions put into place as TypeScript won't accept a
-  // union type for the second parameter of String.Prototype.replace()
+  /*
+    'Static' functions put into place as TypeScript won't accept a
+    union type for the second parameter of String.Prototype.replace()
+  */
 
   // Single character changes
   [/['.]/g, () => ''],
   [' ', () => '-'],
 
-  // Alolan forms
+  // Regional variants
   ['alolan', () => 'alola'],
-
-  // Galarian forms
   ['galarian', () => 'galar'],
+  ['hisuian', () => 'hisui'],
 
   // Gigantamax forms
   ['gigantamax', () => 'gmax'],
+
+  // Altered Dialga & Palkia
+  [/(dialga|palkia)-altered/g, ((match) => match.substring(0, match.indexOf('-')))],
 
   // Oricorio Meteor form
   ['meteor', () => 'red-meteor'],
@@ -117,7 +125,7 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
 
   // Meowstic & Indeedee
-  [/(?<=(meowstic|indeedee)-).+/g, (match) => {
+  [/(?<=(meowstic|indeedee|basculegion)-).+/g, (match) => {
     if (match === 'f') return 'female';
 
     return 'male';

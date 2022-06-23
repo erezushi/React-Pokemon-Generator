@@ -178,6 +178,7 @@ export const apiRequest = async <T>(url: string): Promise<T> => {
 const showdownReplacements: Record<string, string> = {
   Alolan: 'Alola',
   Galrian: 'Galar',
+  Hisuian: 'Hisui',
   Gigantamax: 'Gmax',
 };
 

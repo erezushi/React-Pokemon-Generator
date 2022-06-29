@@ -7,6 +7,7 @@ import {
   CardMedia,
   Link,
   Modal,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import _ from 'lodash';
@@ -43,10 +44,10 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
   const { specie, form, isShiny } = instance;
   const { abilities, stats, type } = details;
-  const abilityNames = abilities
-    .filter((abilityObj) => !abilityObj.is_hidden)
-    .map((abilityObj) => abilityObj.ability.name);
-  const hiddenAbility = abilities.find((abilityObj) => abilityObj.is_hidden)?.ability.name;
+  const normalAbilities = abilities
+    .filter((abilityObj) => !abilityObj.isHidden)
+    .map((abilityObj) => abilityObj);
+  const hiddenAbility = abilities.find((abilityObj) => abilityObj.isHidden);
 
   useEffect(() => {
     setEvolutions(nextEvos(specie, form ?? undefined));
@@ -114,38 +115,40 @@ const DetailsModal = (props: IDetailsModalProps) => {
             })}
           </Typography>
           <Typography>
-            Abilities:
-            {' '}
-            {abilityNames
+            Abilities:&nbsp;
+            {normalAbilities
               .map((ability, index) => {
-                const formattedName = _.startCase(ability).replace('Soul Heart', 'Soul-Heart');
+                const formattedName = _.startCase(ability.name).replace('Soul Heart', 'Soul-Heart');
 
                 return (
                   <>
                     {index === 1 && ' / '}
-                    <Link
-                      key={uuid()}
-                      href={`https://bulbapedia.bulbagarden.net/wiki/${
-                        formattedName.replace(' ', '_')
-                      }_(Ability)`}
-                    >
-                      {formattedName}
-                    </Link>
+                    <Tooltip arrow disableInteractive placement="top" title={ability.flavorText}>
+                      <Link
+                        key={uuid()}
+                        href={`https://bulbapedia.bulbagarden.net/wiki/${
+                          formattedName.replace(' ', '_')
+                        }_(Ability)`}
+                      >
+                        {formattedName}
+                      </Link>
+                    </Tooltip>
                   </>
                 );
               })}
           </Typography>
           {hiddenAbility && (
           <Typography>
-            Hidden Ability:
-            {' '}
-            <Link
-              href={`https://bulbapedia.bulbagarden.net/wiki/${
-                _.startCase(hiddenAbility).replace(' ', '_')
-              }_(Ability)`}
-            >
-              {_.startCase(hiddenAbility)}
-            </Link>
+            Hidden Ability:&nbsp;
+            <Tooltip arrow disableInteractive title={hiddenAbility.flavorText}>
+              <Link
+                href={`https://bulbapedia.bulbagarden.net/wiki/${
+                  _.startCase(hiddenAbility.name).replace(' ', '_')
+                }_(Ability)`}
+              >
+                {_.startCase(hiddenAbility.name)}
+              </Link>
+            </Tooltip>
           </Typography>
           )}
           {stats.map((stat, index) => {

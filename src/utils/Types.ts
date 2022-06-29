@@ -8,8 +8,8 @@ export interface IPokemonInstance {
 }
 
 type pokeApiGeneric = {
-    name: string,
-    url: string
+  name: string,
+  url: string
 };
 
 type abilities = {
@@ -18,6 +18,12 @@ type abilities = {
   slot: number,
 }[];
 
+type abilityFlavorText = {
+  flavor_text: string,
+  language: pokeApiGeneric,
+  version_group: pokeApiGeneric
+};
+
 type stats = {
   base_stat: number,
   effort: number,
@@ -25,7 +31,11 @@ type stats = {
 }[];
 
 export interface IPokemonDetails {
-  abilities: abilities,
+  abilities: {
+    name: string,
+    flavorText: string,
+    isHidden: boolean
+  }[],
   stats: stats,
   type: string
 }
@@ -79,6 +89,31 @@ export interface IPokemonSpeciesResponse {
   pokedex_numbers: any[],
   shape: any,
   varieties: any[]
+}
+
+export interface IAbilityResponse {
+  effect_changes: any[],
+  effect_entries: any[],
+  flavor_text_entries: abilityFlavorText[],
+  generation: pokeApiGeneric,
+  id: number,
+  is_main_series: boolean,
+  name: string,
+  names: {
+    name: string,
+    language: {
+      name: string,
+      url: string
+    }
+  }[],
+  pokemon: {
+    pokemon: {
+      name: string,
+      url: string
+    },
+    slot: number,
+    is_hidden: boolean
+  }[]
 }
 
 export type checkBoxState = 'checked' | 'indeterminate' | 'none';

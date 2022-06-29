@@ -17,7 +17,9 @@ import {
   errorToast,
   imageUrl,
 } from '../../utils';
-import { IPokemonDetails, IPokemonInstance, IPokemonResponse } from '../../utils/Types';
+import {
+  IAbilityResponse, IPokemonDetails, IPokemonInstance, IPokemonResponse,
+} from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
 import LoadingSnackbar from '../LoadingSnackbar';
 
@@ -56,22 +58,42 @@ const PokemonCard = (props: ICardProps) => {
     setDetails({ abilities: [], stats: [], type: form?.type ?? specie.type });
   }, [specie, form]);
 
-  const handleCardClick = useCallback(() => {
+  const handleCardClick = useCallback(async () => {
     if (!details.stats.length) {
       setSnackbarOpen(true);
-      apiRequest<IPokemonResponse>(apiUrl(specie, form?.name ?? null))
-        .then((res) => {
-          const { abilities, stats } = res;
-          setDetails((currDetails) => ({ ...currDetails, abilities, stats }));
-          setModalOpen(true);
-          setSnackbarOpen(false);
-        })
-        .catch(() => {
-          setSnackbarOpen(false);
-          errorToast.fire({
-            text: 'error fetching base stats',
-          });
+      try {
+        const pokemonResponse = await apiRequest<IPokemonResponse>(
+          apiUrl(specie, form?.name ?? null),
+        );
+        const { abilities, stats } = pokemonResponse;
+
+        const abilityResponses = await Promise.all(abilities.map(
+          ((ability) => apiRequest<IAbilityResponse>(ability.ability.url)),
+        ));
+
+        setDetails((currDetails) => ({
+          ...currDetails,
+          abilities: abilityResponses.map((res) => {
+            const enFlavorTexts = res.flavor_text_entries
+              .filter((entry) => entry.language.name === 'en');
+            const flavorText = enFlavorTexts[enFlavorTexts.length - 1].flavor_text;
+
+            return {
+              name: res.name,
+              flavorText,
+              isHidden: abilities.find((ability) => ability.ability.name === res.name)!.is_hidden,
+            };
+          }),
+          stats,
+        }));
+        setModalOpen(true);
+        setSnackbarOpen(false);
+      } catch (error) {
+        setSnackbarOpen(false);
+        errorToast.fire({
+          text: 'error fetching details',
         });
+      }
     } else {
       setModalOpen(true);
     }

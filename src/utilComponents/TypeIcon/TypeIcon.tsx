@@ -93,7 +93,6 @@ const TypeIcon = (props: ITypeIconProps) => {
   return (
     <Tooltip
       arrow
-      enterDelay={500}
       placement="top"
       title={_.capitalize(type)}
     >

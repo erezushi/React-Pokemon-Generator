@@ -1,7 +1,10 @@
-export * from './AppHeader';
-export * from './DetailsModal';
-export * from './ExportModal';
-export * from './LoadingSnackbar';
-export * from './OptionsBox';
-export * from './PokemonCard';
-export * from './PokemonList';
+import AppHeader from './AppHeader';
+import DetailsModal from './DetailsModal';
+import ExportModal from './ExportModal';
+import OptionsBox from './OptionsBox';
+import PokemonCard from './PokemonCard';
+import PokemonList from './PokemonList';
+
+export {
+  AppHeader, DetailsModal, ExportModal, OptionsBox, PokemonCard, PokemonList,
+};

@@ -1,3 +1,8 @@
-export { default as CustomCheckbox } from './CustomCheckbox';
-export { default as SlideTransition } from './SlideTransition';
-export { default as TypeIcon } from './TypeIcon';
+import CustomCheckbox from './CustomCheckbox';
+import LoadingSnackbar from './LoadingSnackbar';
+import SlideTransition from './SlideTransition';
+import TypeIcon from './TypeIcon';
+
+export {
+  CustomCheckbox, LoadingSnackbar, SlideTransition, TypeIcon,
+};

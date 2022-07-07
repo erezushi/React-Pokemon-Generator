@@ -11,6 +11,7 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
+import { LoadingSnackbar } from '../../utilComponents';
 import {
   apiRequest,
   apiUrl,
@@ -21,7 +22,6 @@ import {
   IAbilityResponse, IPokemonDetails, IPokemonInstance, IPokemonResponse,
 } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
-import LoadingSnackbar from '../LoadingSnackbar';
 
 import './PokemonCard.css';
 

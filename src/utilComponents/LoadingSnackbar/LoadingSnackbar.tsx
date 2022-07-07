@@ -20,7 +20,7 @@ const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
       message={(
         <>
           <strong>{name.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>
-          <p>Loading base stats...</p>
+          <p>Fetching details...</p>
           <br />
           <CircularProgress />
         </>

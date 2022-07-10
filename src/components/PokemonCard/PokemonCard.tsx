@@ -56,6 +56,7 @@ const PokemonCard = (props: ICardProps) => {
 
   useEffect(() => {
     setDetails({ abilities: [], stats: [], type: form?.type ?? specie.type });
+    setModalOpen(false);
   }, [specie, form]);
 
   const handleCardClick = useCallback(async () => {

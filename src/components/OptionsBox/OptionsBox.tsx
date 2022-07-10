@@ -274,40 +274,39 @@ const OptionsBox = () => {
   }, [keyboardClick]);
 
   return (
-    <div>
-      <Paper className="options-box">
-        <Typography component="h2" variant="h5">
-          Options
-        </Typography>
-        <div className="options-row">
-          <FormControl className="options-control">
-            <FormHelperText>Unique</FormHelperText>
-            <CustomCheckbox checked={settings.unique} onChange={uniqueClicked} />
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Forms</FormHelperText>
-            <CustomCheckbox checked={settings.forms} onChange={formsClicked} />
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Amount</FormHelperText>
-            <TextField
-              className="input-field"
-              onChange={changeAmount}
-              type="number"
-              value={settings.amount}
-              variant="outlined"
-            />
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Type</FormHelperText>
-            <Select
-              className="input-field"
-              onChange={changeType}
-              value={settings.type}
-              variant="outlined"
-            >
-              <MenuItem value="all">All</MenuItem>
-              {
+    <Paper className="options-box">
+      <Typography component="h2" variant="h5">
+        Options
+      </Typography>
+      <div className="options-row">
+        <FormControl className="options-control">
+          <FormHelperText>Unique</FormHelperText>
+          <CustomCheckbox checked={settings.unique} onChange={uniqueClicked} />
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Forms</FormHelperText>
+          <CustomCheckbox checked={settings.forms} onChange={formsClicked} />
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Amount</FormHelperText>
+          <TextField
+            className="input-field"
+            onChange={changeAmount}
+            type="number"
+            value={settings.amount}
+            variant="outlined"
+          />
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Type</FormHelperText>
+          <Select
+            className="input-field"
+            onChange={changeType}
+            value={settings.type}
+            variant="outlined"
+          >
+            <MenuItem value="all">All</MenuItem>
+            {
           typeList.map(
             (listType) => (
               <MenuItem
@@ -319,107 +318,106 @@ const OptionsBox = () => {
             ),
           )
           }
-              <MenuItem value="random">Random</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Generations</FormHelperText>
-            <FormGroup row>
+            <MenuItem value="random">Random</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Generations</FormHelperText>
+          <FormGroup row>
+            <FormControlLabel
+              className="gen-checkbox"
+              control={(
+                <CustomCheckbox
+                  checked={allGens === 'checked'}
+                  indeterminate={allGens === 'indeterminate'}
+                  onChange={allBoxClicked}
+                />
+              )}
+              label="All"
+              labelPlacement="bottom"
+            />
+            {Object.keys(settings.generationList).map((gen) => (
               <FormControlLabel
+                key={gen}
                 className="gen-checkbox"
                 control={(
                   <CustomCheckbox
-                    checked={allGens === 'checked'}
-                    indeterminate={allGens === 'indeterminate'}
-                    onChange={allBoxClicked}
+                    checked={settings.generationList[gen]}
+                    name={gen}
+                    onChange={genClicked}
                   />
-              )}
-                label="All"
+                )}
+                label={gen}
                 labelPlacement="bottom"
               />
-              {Object.keys(settings.generationList).map((gen) => (
-                <FormControlLabel
-                  key={gen}
-                  className="gen-checkbox"
-                  control={(
-                    <CustomCheckbox
-                      checked={settings.generationList[gen]}
-                      name={gen}
-                      onChange={genClicked}
-                    />
-                )}
-                  label={gen}
-                  labelPlacement="bottom"
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Shiny Chance (%)</FormHelperText>
-            <TextField
-              className="input-field"
-              onChange={changeShinyChance}
-              type="number"
-              value={settings.shinyChance}
-              variant="outlined"
-            />
-          </FormControl>
-        </div>
-        <div className="options-row">
-          <FormControl className="options-control">
-            <FormHelperText>Evolution Stage</FormHelperText>
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.baby} onChange={babyClicked} />}
-              label="Baby"
-            />
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.basic} onChange={basicClicked} />}
-              label="Basic"
-            />
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.evolved} onChange={evolvedClicked} />}
-              label="Fully Evolved"
-            />
-          </FormControl>
-          <FormControl className="options-control">
-            <FormHelperText>Status</FormHelperText>
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.starter} onChange={starterClicked} />}
-              label="Starter"
-            />
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.legendary} onChange={legendaryClicked} />}
-              label="Legendary/Mythical"
-            />
-            <FormControlLabel
-              control={<CustomCheckbox checked={settings.mythical} onChange={mythicalClicked} />}
-              label="Mythical"
-            />
-          </FormControl>
-        </div>
-        <div className="buttons-row">
-          <Button
-            className="options-button"
-            id="generate"
-            onClick={handleGenerateClick}
-            size="large"
+            ))}
+          </FormGroup>
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Shiny Chance (%)</FormHelperText>
+          <TextField
+            className="input-field"
+            onChange={changeShinyChance}
+            type="number"
+            value={settings.shinyChance}
             variant="outlined"
-          >
-            Generate
-          </Button>
-          <Button
-            className="options-button"
-            color="error"
-            id="reset"
-            onClick={handleResetClick}
-            size="large"
-            variant="text"
-          >
-            Reset Options
-          </Button>
-        </div>
-      </Paper>
-    </div>
+          />
+        </FormControl>
+      </div>
+      <div className="options-row">
+        <FormControl className="options-control">
+          <FormHelperText>Evolution Stage</FormHelperText>
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.baby} onChange={babyClicked} />}
+            label="Baby"
+          />
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.basic} onChange={basicClicked} />}
+            label="Basic"
+          />
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.evolved} onChange={evolvedClicked} />}
+            label="Fully Evolved"
+          />
+        </FormControl>
+        <FormControl className="options-control">
+          <FormHelperText>Status</FormHelperText>
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.starter} onChange={starterClicked} />}
+            label="Starter"
+          />
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.legendary} onChange={legendaryClicked} />}
+            label="Legendary/Mythical"
+          />
+          <FormControlLabel
+            control={<CustomCheckbox checked={settings.mythical} onChange={mythicalClicked} />}
+            label="Mythical"
+          />
+        </FormControl>
+      </div>
+      <div className="buttons-row">
+        <Button
+          className="options-button"
+          id="generate"
+          onClick={handleGenerateClick}
+          size="large"
+          variant="outlined"
+        >
+          Generate
+        </Button>
+        <Button
+          className="options-button"
+          color="error"
+          id="reset"
+          onClick={handleResetClick}
+          size="large"
+          variant="text"
+        >
+          Reset Options
+        </Button>
+      </div>
+    </Paper>
   );
 };
 

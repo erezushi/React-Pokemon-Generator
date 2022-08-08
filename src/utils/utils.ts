@@ -45,6 +45,7 @@ export const DEFAULT_SETTINGS: ISettings = {
 
 // #region imageUrl
 const imgReplacements: Record<string, string> = {
+  Combee: 'combee-f',
   'Dialga-Altered': 'dialga',
   'Palkia-Altered': 'palkia',
   'Meowstic-M': 'meowstic-male',

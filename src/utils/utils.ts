@@ -265,7 +265,7 @@ export interface Evolution {
   form?: Form
 }
 
-const missinoNo: Evolution = {
+const missingNo: Evolution = {
   specie: {
     name: 'MissingNo.',
     type: 'bird normal',
@@ -346,7 +346,7 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
         evolutions,
         evolutions
           .map(
-            (evolution) => nextEvos(evolution.specie, evolution.form)[0] as Evolution ?? missinoNo,
+            (evolution) => nextEvos(evolution.specie, evolution.form)[0] as Evolution ?? missingNo,
           ),
       ]
       : [evolutions];

@@ -44,7 +44,7 @@
 }
 
 .MissingNo {
-    height: 75px;
+    height: 100px;
     background-image: url(https://www.serebii.net/pokearth/sprites/rb/000.png);
     opacity: 0;
     background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 import {
-  Types,
+  PokemonType,
   Options,
   getGenerations,
   getTypes,
@@ -39,7 +39,7 @@ const idMap = {
 };
 
 const OptionsBox = () => {
-  const [typeList, setTypeList] = useState<Types[]>([]);
+  const [typeList, setTypeList] = useState<PokemonType[]>([]);
   const [allGens, setAllGens] = useState<checkBoxState>('checked');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
@@ -63,7 +63,7 @@ const OptionsBox = () => {
 
   const fetchTypes = useCallback(async () => {
     const types = getTypes();
-    setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as Types[]);
+    setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as PokemonType[]);
   }, []);
 
   const fetchGenerations = useCallback(async () => {
@@ -102,7 +102,7 @@ const OptionsBox = () => {
   }, [setSingleSetting]);
 
   const changeType = useCallback(
-    (event: SelectChangeEvent<'all' | Types | 'random'>) => {
+    (event: SelectChangeEvent<'all' | PokemonType | 'random'>) => {
       setSingleSetting('type', event.target.value);
     },
     [setSingleSetting],

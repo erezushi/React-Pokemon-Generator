@@ -1,4 +1,4 @@
-import { Types } from '@erezushi/pokemon-randomizer';
+import { PokemonType } from '@erezushi/pokemon-randomizer';
 import ArrowRightAltRounded from '@mui/icons-material/ArrowRightAltRounded';
 import StarRounded from '@mui/icons-material/StarRounded';
 import {
@@ -108,7 +108,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                     key={uuid()}
                     href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName}_(type)`}
                   >
-                    <TypeIcon type={currentType as Types} />
+                    <TypeIcon type={currentType as PokemonType} />
                   </Link>
                 </>
               );

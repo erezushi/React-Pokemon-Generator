@@ -1,4 +1,4 @@
-import { Types } from '@erezushi/pokemon-randomizer';
+import { PokemonType } from '@erezushi/pokemon-randomizer';
 import { Tooltip } from '@mui/material';
 import _ from 'lodash';
 import React from 'react';
@@ -84,7 +84,7 @@ const renderMap = {
 };
 
 interface ITypeIconProps {
-    type: Types;
+    type: PokemonType;
 }
 
 const TypeIcon = (props: ITypeIconProps) => {

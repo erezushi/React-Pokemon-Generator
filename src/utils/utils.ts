@@ -450,6 +450,58 @@ export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean)
 };
 // #endregion
 
+// #region Site Links
+const siteSpecialChars = /[♂ ♀é]/g;
+
+const siteSpecialCharMap: Record<string, string> = {
+  '♂': 'm',
+  ' ': '',
+  '♀': 'f',
+  é: 'e',
+};
+
+const pokeDbSpecialChars = /[. ♂♀é:']/g;
+
+const pokeDbSpecialCharMap: Record<string, string> = {
+  '.': '',
+  ' ': '-',
+  '♂': '-m',
+  '♀': '-f',
+  é: 'e',
+  ':': '',
+  "'": '',
+};
+
+export const siteLinks: Record<string, string> = {
+  bulbapedia: 'https://bulbapedia.bulbagarden.net/wiki/_pkmn__(Pokémon)',
+  serebii: 'https://www.serebii.net/pokemon/_pkmnlc_/',
+  smogon: 'https://www.smogon.com/dex/ss/pokemon/_pkmnc_/',
+  pokeDB: 'https://pokemondb.net/pokedex/_pkmns_/',
+};
+
+export const generateLink = (baseLink: string, name: string) => {
+  let formattedName = name;
+
+  return baseLink.replace(/_pkmn[lcs]{0,2}_/g, (match) => {
+    if (match.includes('l')) {
+      formattedName = formattedName.toLocaleLowerCase();
+    }
+
+    if (match.includes('c')) {
+      formattedName = formattedName
+        .replace(siteSpecialChars, (charMatch) => siteSpecialCharMap[charMatch]);
+    }
+
+    if (match.includes('s')) {
+      formattedName = formattedName
+        .replace(pokeDbSpecialChars, (charMatch) => pokeDbSpecialCharMap[charMatch]);
+    }
+
+    return formattedName;
+  });
+};
+// #endregion
+
 export const getGeneration = (dexNo: string): string => {
   const number = Number(dexNo);
   const generations = getGenerations();

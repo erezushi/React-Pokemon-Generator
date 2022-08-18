@@ -16,24 +16,43 @@
     margin-right: auto;
 }
 
-.card-link {
-    text-transform: capitalize !important;
-    border-radius: 2em !important;
-    color: white !important;
-    width: 7vw !important;
-    min-width: 7vw !important;
+button.card-link {
+    text-transform: capitalize;
+    border-radius: 2em;
+    color: white;
+    width: 6vw;
 }
 
-.bulbapedia {
-    background-color: #0CAA38 !important;
+.card-link.bulbapedia {
+    background-color: #0CAA38;
 }
 
-.serebii {
-    background-color: #8DC76D !important;
+.card-link.bulbapedia:hover {
+    background-color: #0a8a2e;
 }
 
-.smogon {
-    background-color: #C184FF !important;
+.card-link.serebii {
+    background-color: #8DC76D;
+}
+
+.card-link.serebii:hover {
+    background-color: #7abe54;
+}
+
+.card-link.smogon {
+    background-color: #C184FF;
+}
+
+.card-link.smogon:hover {
+    background-color: #b062ff;
+}
+
+.card-link.pokeDB {
+    background-color: #727272;
+}
+
+.card-link.pokeDB:hover {
+    background-color: #616161;
 }
 
 .stats-loader {

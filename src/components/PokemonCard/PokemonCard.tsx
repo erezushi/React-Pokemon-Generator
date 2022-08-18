@@ -7,16 +7,16 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import React, {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { LoadingSnackbar } from '../../utilComponents';
 import {
   apiRequest,
   apiUrl,
   errorToast,
+  generateLink,
   imageUrl,
+  siteLinks,
 } from '../../utils';
 import {
   IAbilityResponse, IPokemonDetails, IPokemonInstance, IPokemonResponse,
@@ -24,21 +24,6 @@ import {
 import DetailsModal from '../DetailsModal';
 
 import './PokemonCard.css';
-
-const specialChars = /[♂ ♀é]/g;
-
-const specialCharMap: Record<string, string> = {
-  '♂': 'm',
-  ' ': '',
-  '♀': 'f',
-  é: 'e',
-};
-
-const sites = [
-  'bulbapedia',
-  'serebii',
-  'smogon',
-];
 
 interface ICardProps {
   instance: IPokemonInstance,
@@ -100,27 +85,13 @@ const PokemonCard = (props: ICardProps) => {
     }
   }, [details.stats.length, form?.name, specie]);
 
-  const links = useMemo<Record<string, string>>(() => {
-    const { name } = specie;
-
-    return ({
-      bulbapedia: `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`,
-      serebii: `https://www.serebii.net/pokemon/${
-        name.toLowerCase().replace(specialChars, (match) => specialCharMap[match])
-      }/`,
-      smogon: `https://www.smogon.com/dex/ss/pokemon/${
-        name.replace(specialChars, (match) => specialCharMap[match])
-      }/`,
-    });
-  }, [specie]);
-
   const handleButtonClick = useCallback((
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    const { textContent } = event.target as HTMLButtonElement;
-    window.open(links[textContent!]);
+    const { classList } = event.target as HTMLButtonElement;
+    window.open(generateLink(siteLinks[classList.item(7)!], specie.name));
     event.stopPropagation();
-  }, [links]);
+  }, [specie.name]);
 
   return (
     <Card className="pokemon-card" onClick={handleCardClick}>
@@ -143,15 +114,14 @@ const PokemonCard = (props: ICardProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        {sites.map((site) => (
+        {Object.keys(siteLinks).map((site) => (
           <Button
             key={site}
-            className={`card-link
-            ${site}`}
+            className={`card-link ${site}`}
             onClick={handleButtonClick}
             variant="contained"
           >
-            {site}
+            {site.replace('poke', 'poké')}
           </Button>
         ))}
       </CardActions>

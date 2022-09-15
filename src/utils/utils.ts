@@ -6,8 +6,7 @@ import {
   ListPokemon,
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
-// @ts-ignore
-import { Pokedex } from 'pokeapi-js-wrapper';
+import Pokedex from 'pokedex-promise-v2';
 import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
@@ -169,7 +168,7 @@ export const apiUrl = (specie: Pokemon, formName: string | null) => {
 };
 
 export const apiRequest = async <T>(url: string): Promise<T> => {
-  const result = await pokeAPI.resource(url);
+  const result = await pokeAPI.getResource(url);
 
   return result;
 };

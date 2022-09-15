@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import { Ability as AbilityResponse, Pokemon as PokemonResponse } from 'pokedex-promise-v2';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { LoadingSnackbar } from '../../utilComponents';
@@ -18,9 +19,7 @@ import {
   imageUrl,
   siteLinks,
 } from '../../utils';
-import {
-  IAbilityResponse, IPokemonDetails, IPokemonInstance, IPokemonResponse,
-} from '../../utils/Types';
+import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
 
 import './PokemonCard.css';
@@ -48,13 +47,13 @@ const PokemonCard = (props: ICardProps) => {
     if (!details.stats.length) {
       setSnackbarOpen(true);
       try {
-        const pokemonResponse = await apiRequest<IPokemonResponse>(
+        const pokemonResponse = await apiRequest<PokemonResponse>(
           apiUrl(specie, form?.name ?? null),
         );
         const { abilities, stats } = pokemonResponse;
 
         const abilityResponses = await Promise.all(abilities.map(
-          ((ability) => apiRequest<IAbilityResponse>(ability.ability.url)),
+          ((ability) => apiRequest<AbilityResponse>(ability.ability.url)),
         ));
 
         setDetails((currDetails) => ({

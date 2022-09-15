@@ -24,6 +24,10 @@ import {
   Link,
 } from '@mui/material';
 import _ from 'lodash';
+import {
+  Pokemon as PokemonResponse,
+  PokemonSpecies as PokemonSpeciesResponse,
+} from 'pokedex-promise-v2';
 import React, {
   useCallback,
   useEffect,
@@ -34,7 +38,7 @@ import { CustomCheckbox } from '../../utilComponents';
 import {
   apiRequest, apiUrl, imageUrl, showdownName,
 } from '../../utils';
-import { IPokemonInstance, IPokemonResponse, IPokemonSpeciesResponse } from '../../utils/Types';
+import { IPokemonInstance } from '../../utils/Types';
 
 import './ExportModal.css';
 
@@ -81,8 +85,8 @@ const Exportmodal = (props: IExportModalProps) => {
         ];
 
         Promise.all([
-          apiRequest<IPokemonResponse>(urls[0]),
-          apiRequest<IPokemonSpeciesResponse>(urls[1]),
+          apiRequest<PokemonResponse>(urls[0]),
+          apiRequest<PokemonSpeciesResponse>(urls[1]),
         ])
           .then(([pokemonResponse, pokemonSpeciesResponse]) => {
             const abilityList = pokemonResponse.abilities.map(

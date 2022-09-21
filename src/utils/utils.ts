@@ -118,9 +118,6 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // Flabébé
   [/flabébé-.+/g, () => 'flabebe'],
 
-  // Specific form names not found in the API
-  [/-(confined|core|mane|wings|hero)/g, () => ''],
-
   // Galarian Darmanitan (galar-[form] -> [form]-galar)
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
 
@@ -131,15 +128,18 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
     return 'male';
   }],
 
+  // Specific form names not found in the API
+  [/-(confined|core|mane|wings|hero|rider)/g, () => ''],
+
   // Pokémon with consistant stats througout their forms
   [new RegExp(
     [
-      '(unown',
-      '|burmy|cherrim|shellos|gastrodon|arceus',
-      '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect',
-      '|vivillon|pyroar|floette|florges|furfrou|xerneas',
-      '|silvally',
-      '|cramorant|morpeko|zarude)-.+',
+      '(unown', // Gen II
+      '|burmy|cherrim|shellos|gastrodon|arceus', // Gen IV
+      '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect', // Gen V
+      '|vivillon|pyroar|floette|florges|furfrou|xerneas', // Gen VI
+      '|silvally', // Gen VII
+      '|cramorant|morpeko|zarude)-.+', // Gen VIII
     ].join(''),
     'g',
   ),

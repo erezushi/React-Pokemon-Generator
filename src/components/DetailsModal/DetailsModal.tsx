@@ -118,7 +118,9 @@ const DetailsModal = (props: IDetailsModalProps) => {
             Abilities:&nbsp;
             {normalAbilities
               .map((ability, index) => {
-                const formattedName = _.startCase(ability.name).replace('Soul Heart', 'Soul-Heart');
+                const formattedName = _.startCase(ability.name)
+                  .replace('Soul Heart', 'Soul-Heart')
+                  .replace(/As One.*/, 'As One');
 
                 return (
                   <>

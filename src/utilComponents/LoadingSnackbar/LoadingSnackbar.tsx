@@ -7,11 +7,11 @@ import './LoadingSnackbar.css';
 
 interface ILoadingSnackbarProps {
     isOpen: boolean,
-    name: string,
+    title: string,
 }
 
 const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
-  const { isOpen, name } = props;
+  const { isOpen, title } = props;
 
   return (
     <Snackbar
@@ -19,7 +19,7 @@ const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
       autoHideDuration={1000}
       message={(
         <>
-          <strong>{name.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>
+          <strong>{title.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>
           <p>Fetching details...</p>
           <br />
           <CircularProgress />

@@ -73,10 +73,10 @@ const PokemonCard = (props: ICardProps) => {
         }));
         setModalOpen(true);
         setSnackbarOpen(false);
-      } catch (error) {
+      } catch (error: any) {
         setSnackbarOpen(false);
         errorToast.fire({
-          text: 'error fetching details',
+          html: `Couldn't fetch details<br />${error.message}`,
         });
       }
     } else {
@@ -126,7 +126,7 @@ const PokemonCard = (props: ICardProps) => {
       </CardActions>
       <LoadingSnackbar
         isOpen={isSnackbarOpen}
-        name={instance.fullName}
+        title={instance.fullName}
       />
       <DetailsModal
         details={details}

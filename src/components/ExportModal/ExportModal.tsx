@@ -24,10 +24,6 @@ import {
   Link,
 } from '@mui/material';
 import _ from 'lodash';
-import {
-  Pokemon as PokemonResponse,
-  PokemonSpecies as PokemonSpeciesResponse,
-} from 'pokedex-promise-v2';
 import React, {
   useCallback,
   useEffect,
@@ -36,9 +32,9 @@ import React, {
 
 import { CustomCheckbox } from '../../utilComponents';
 import {
-  apiRequest, apiUrl, imageUrl, showdownName,
+  imageUrl, showdownName,
 } from '../../utils';
-import { IPokemonInstance } from '../../utils/Types';
+import { IExportDetails, IPokemonInstance } from '../../utils/Types';
 
 import './ExportModal.css';
 
@@ -46,28 +42,29 @@ const POKEMON_PER_PAGE = 6;
 
 const pageIndex = (index: number, page: number) => index + (page - 1) * POKEMON_PER_PAGE;
 
-interface IExportModalProps {
-    isOpen: boolean,
-    pokemonList: IPokemonInstance[],
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
 interface IExportValues {
   name: string,
-  genderRate: number,
   gender: 'male' | 'female' | 'random',
   nickname: string,
-  abilityList: string[],
   ability: string,
   level: number,
   isShiny: boolean
 }
 
-const Exportmodal = (props: IExportModalProps) => {
-  const { isOpen, pokemonList, setOpen } = props;
+interface IExportModalProps {
+    isOpen: boolean,
+    pokemonDetails: Record<number, IExportDetails>,
+    pokemonList: IPokemonInstance[],
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-  const [includedIndices, setIncludedIndices] = useState<Record<string, boolean>>({});
-  const [exportValues, setExportValues] = useState<Record<string, IExportValues>>({});
+const Exportmodal = (props: IExportModalProps) => {
+  const {
+    isOpen, pokemonDetails, pokemonList, setOpen,
+  } = props;
+
+  const [includedIndices, setIncludedIndices] = useState<Record<number, boolean>>({});
+  const [exportValues, setExportValues] = useState<Record<number, IExportValues>>({});
   const [hasError, setHasError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [exported, setExported] = useState(false);
@@ -78,51 +75,32 @@ const Exportmodal = (props: IExportModalProps) => {
       pokemonList.forEach((pokemon, index) => {
         setIncludedIndices((prevIncluded) => ({ ...prevIncluded, [index]: false }));
 
-        const { specie, form, isShiny } = pokemon;
-        const urls = [
-          apiUrl(specie, form?.name ?? null),
-          apiUrl(specie, null).replace('pokemon', 'pokemon-species'),
-        ];
+        const { isShiny } = pokemon;
 
-        Promise.all([
-          apiRequest<PokemonResponse>(urls[0]),
-          apiRequest<PokemonSpeciesResponse>(urls[1]),
-        ])
-          .then(([pokemonResponse, pokemonSpeciesResponse]) => {
-            const abilityList = pokemonResponse.abilities.map(
-              (ability) => ability.ability.name,
-            );
-            const genderRate = pokemonSpeciesResponse.gender_rate;
+        const { abilityList, genderRate } = pokemonDetails[index];
 
-            let gender: 'male' | 'female' | 'random';
-            if (genderRate === -1) {
-              gender = 'random';
-            } else if (genderRate > 4) {
-              gender = 'female';
-            } else {
-              gender = 'male';
-            }
+        let gender: 'male' | 'female' | 'random';
+        if (genderRate === -1) {
+          gender = 'random';
+        } else if (genderRate > 4) {
+          gender = 'female';
+        } else {
+          gender = 'male';
+        }
 
-            const defaultValues: IExportValues = {
-              name: pokemon.fullName,
-              genderRate,
-              gender,
-              nickname: '',
-              abilityList,
-              ability: abilityList[0],
-              level: 100,
-              isShiny: isShiny ?? false,
-            };
-            setExportValues((prevValues) => ({ ...prevValues, [index]: defaultValues }));
-            setPageNumber(1);
-          })
-          .catch(() => {
-            setHasError(true);
-            setErrorText('Error fetching details. Please try changing the included Pokémon.');
-          });
+        const defaultValues: IExportValues = {
+          name: pokemon.fullName,
+          gender,
+          nickname: '',
+          ability: abilityList[0],
+          level: 100,
+          isShiny: isShiny ?? false,
+        };
+        setExportValues((prevValues) => ({ ...prevValues, [index]: defaultValues }));
+        setPageNumber(1);
       });
     }
-  }, [isOpen, pokemonList]);
+  }, [isOpen, pokemonDetails, pokemonList]);
 
   const closeModal = useCallback(() => {
     setOpen(false);
@@ -148,7 +126,9 @@ const Exportmodal = (props: IExportModalProps) => {
   }, []);
 
   const handleGenderChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name: index, value } = event.target;
+    const { name, value } = event.target;
+
+    const index = Number(name);
 
     setExportValues((prevValues) => ({
       ...prevValues,
@@ -160,7 +140,9 @@ const Exportmodal = (props: IExportModalProps) => {
   }, []);
 
   const handleNicknameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name: index, value } = event.target;
+    const { name, value } = event.target;
+
+    const index = Number(name);
 
     setExportValues((prevValues) => ({
       ...prevValues,
@@ -172,7 +154,9 @@ const Exportmodal = (props: IExportModalProps) => {
   }, []);
 
   const handleAbilityChange = useCallback((event: SelectChangeEvent) => {
-    const { name: index, value } = event.target;
+    const { name, value } = event.target;
+
+    const index = Number(name);
 
     setExportValues((prevValues) => ({
       ...prevValues,
@@ -184,8 +168,9 @@ const Exportmodal = (props: IExportModalProps) => {
   }, []);
 
   const handleLevelChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name: index, value } = event.target;
+    const { name, value } = event.target;
 
+    const index = Number(name);
     const level = Number(value);
 
     if (level > 0 && level <= 100) {
@@ -200,7 +185,9 @@ const Exportmodal = (props: IExportModalProps) => {
   }, []);
 
   const handleShinyChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name: index, checked } = event.target;
+    const { name, checked } = event.target;
+
+    const index = Number(name);
 
     setExportValues((prevValues) => ({
       ...prevValues,
@@ -307,7 +294,7 @@ const Exportmodal = (props: IExportModalProps) => {
                     </Link>
                   </CardMedia>
                 </div>
-                {exportValues[pageIndex(index, pageNumber)]?.genderRate >= 0
+                {pokemonDetails[pageIndex(index, pageNumber)]?.genderRate >= 0
                   && (
                     <FormControl>
                       <FormLabel>Gender</FormLabel>
@@ -318,7 +305,7 @@ const Exportmodal = (props: IExportModalProps) => {
                         value={exportValues[pageIndex(index, pageNumber)]?.gender ?? 'random'}
                       >
                         {
-                          exportValues[pageIndex(index, pageNumber)]?.genderRate < 8
+                          pokemonDetails[pageIndex(index, pageNumber)]?.genderRate < 8
                             && (
                               <FormControlLabel
                                 control={(
@@ -332,7 +319,7 @@ const Exportmodal = (props: IExportModalProps) => {
                             )
                         }
                         {
-                          exportValues[pageIndex(index, pageNumber)]?.genderRate > 0
+                          pokemonDetails[pageIndex(index, pageNumber)]?.genderRate > 0
                             && (
                               <FormControlLabel
                                 control={(
@@ -346,8 +333,8 @@ const Exportmodal = (props: IExportModalProps) => {
                             )
                         }
                         {
-                          exportValues[pageIndex(index, pageNumber)]?.genderRate < 8
-                            && exportValues[pageIndex(index, pageNumber)]?.genderRate > 0
+                          pokemonDetails[pageIndex(index, pageNumber)]?.genderRate < 8
+                            && pokemonDetails[pageIndex(index, pageNumber)]?.genderRate > 0
                             && (
                               <FormControlLabel
                                 control={(
@@ -386,7 +373,7 @@ const Exportmodal = (props: IExportModalProps) => {
                     onChange={handleAbilityChange}
                     value={exportValues[pageIndex(index, pageNumber)]?.ability ?? ''}
                   >
-                    {exportValues[pageIndex(index, pageNumber)]?.abilityList
+                    {pokemonDetails[pageIndex(index, pageNumber)]?.abilityList
                       .map((abilityName) => (
                         <MenuItem
                           key={abilityName}

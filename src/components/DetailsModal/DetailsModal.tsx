@@ -217,7 +217,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
                   return (
                     arr.map((column, index) => (
-                      <div key={uuid()}>
+                      <>
                         {column.map((splitEvo) => {
                           const { specie: evoSpecie, form: evoForm } = splitEvo;
                           const name = `${
@@ -250,7 +250,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                               </div>
                             );
                         })}
-                      </div>
+                      </>
                     ))
                   );
                 }

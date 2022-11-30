@@ -18,6 +18,11 @@ export interface IPokemonDetails {
   type: string
 }
 
+export interface IExportDetails {
+  genderRate: number,
+  abilityList: string[],
+}
+
 export type checkBoxState = 'checked' | 'indeterminate' | 'none';
 
 export interface ISettings {

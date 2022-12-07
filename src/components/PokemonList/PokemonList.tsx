@@ -74,9 +74,9 @@ const PokemonList = () => {
     [pokemonList],
   );
 
-  const randomize = useCallback(async (opt: Options, shinyChance: number) => {
+  const randomize = useCallback((opt: Options, shinyChance: number) => {
     try {
-      const results = await random(opt);
+      const results = random(opt);
 
       setPokemonList(results.map((specie) => {
         const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;

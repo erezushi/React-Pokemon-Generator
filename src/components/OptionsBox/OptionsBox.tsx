@@ -4,18 +4,22 @@ import {
   getGenerations,
   getTypes,
 } from '@erezushi/pokemon-randomizer';
+import DownloadIcon from '@mui/icons-material/DownloadRounded';
+import UploadIcon from '@mui/icons-material/UploadRounded';
 import {
   Button,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormHelperText,
+  IconButton,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
   TextField,
   Typography,
+  Tooltip,
 } from '@mui/material';
 import _ from 'lodash';
 import React, {
@@ -26,9 +30,9 @@ import React, {
 } from 'react';
 
 import { CustomCheckbox } from '../../utilComponents';
-import { DEFAULT_SETTINGS } from '../../utils';
+import { DEFAULT_SETTINGS, errorToast, isType } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
-import { checkBoxState } from '../../utils/Types';
+import { checkBoxState, ISettings } from '../../utils/Types';
 
 import './OptionsBox.css';
 
@@ -42,8 +46,9 @@ const OptionsBox = () => {
   const [typeList, setTypeList] = useState<PokemonType[]>([]);
   const [allGens, setAllGens] = useState<checkBoxState>('checked');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [generationCount, setGenerationCount] = useState(0);
 
-  const setSingleSetting = useCallback((field: string, value: any) => {
+  const setSingleSetting = useCallback((field: keyof ISettings, value: any) => {
     setSettings((prevSettings) => ({ ...prevSettings, [field]: value }));
   }, []);
 
@@ -61,15 +66,18 @@ const OptionsBox = () => {
     [setSingleSetting],
   );
 
-  const fetchTypes = useCallback(async () => {
+  const fetchTypes = useCallback(() => {
     const types = getTypes();
     setTypeList(Object.keys(types).sort((a, b) => a.localeCompare(b)) as PokemonType[]);
   }, []);
 
-  const fetchGenerations = useCallback(async () => {
+  const fetchGenerations = useCallback(() => {
     const gens = getGenerations();
-    Object.keys(gens)
-      .forEach((gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })));
+    const genNumbers = Object.keys(gens);
+    setGenerationCount(genNumbers.length);
+    genNumbers.forEach(
+      (gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })),
+    );
   }, [setGenerationList]);
 
   useEffect(() => {
@@ -93,12 +101,9 @@ const OptionsBox = () => {
 
   const changeAmount = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    const numberValue = parseInt(value, 10);
 
-    if (parseInt(value, 10) > 0) {
-      setSingleSetting('amount', value);
-    } else {
-      setSingleSetting('amount', 1);
-    }
+    setSingleSetting('amount', numberValue > 0 ? numberValue : 1);
   }, [setSingleSetting]);
 
   const changeType = useCallback(
@@ -265,6 +270,120 @@ const OptionsBox = () => {
     }
   }, []);
 
+  const handleExport = useCallback(() => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(settings, null, 4)]));
+
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'settings.json';
+    anchor.style.display = 'none';
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    URL.revokeObjectURL(url);
+  }, [settings]);
+
+  const handleFileReaderLoadEnd = useCallback((readerResult: string) => {
+    try {
+      const importObject = JSON.parse(readerResult);
+      const {
+        unique,
+        forms,
+        amount,
+        type,
+        generationList,
+        shinyChance,
+        baby,
+        basic,
+        evolved,
+        starter,
+        legendary,
+        mythical,
+      } = importObject;
+
+      if (_.isBoolean(unique)) {
+        setSingleSetting('unique', unique);
+      }
+
+      if (_.isBoolean(forms)) {
+        setSingleSetting('forms', forms);
+      }
+
+      if (_.isNumber(amount) && amount > 0) {
+        setSingleSetting('amount', amount);
+      }
+
+      if (_.isString(type) && isType(type)) {
+        setSingleSetting('type', type);
+      }
+
+      if (
+        _.isObject(generationList)
+        && Object.keys(generationList).length === generationCount
+        && Object.entries(generationList).every(
+          ([key, value]) => Number(key) > 0 && Number(key) <= generationCount && _.isBoolean(value),
+        )
+      ) {
+        setSingleSetting('generationList', generationList);
+      }
+
+      if (_.isNumber(shinyChance) && shinyChance >= 0 && shinyChance <= 100) {
+        setSingleSetting('shinyChance', shinyChance);
+      }
+
+      if (_.isBoolean(baby)) {
+        setSingleSetting('baby', baby);
+      }
+
+      if (_.isBoolean(basic)) {
+        setSingleSetting('basic', basic);
+      }
+
+      if (_.isBoolean(evolved)) {
+        setSingleSetting('evolved', evolved);
+      }
+
+      if (_.isBoolean(starter)) {
+        setSingleSetting('starter', starter);
+      }
+
+      if (_.isBoolean(legendary)) {
+        setSingleSetting('legendary', legendary);
+      }
+
+      if (_.isBoolean(mythical)) {
+        setSingleSetting('mythical', mythical);
+      }
+    } catch (error: unknown) {
+      errorToast.fire(
+        'Failed to parse',
+        "Couldn't parse file text.\nMake sure to select a JSON file",
+      );
+    }
+  }, [generationCount, setSingleSetting]);
+
+  const handleExportFileChange = useCallback((event: Event) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      handleFileReaderLoadEnd(reader.result as string);
+    };
+    reader.readAsText((event.target as HTMLInputElement).files![0]);
+  }, [handleFileReaderLoadEnd]);
+
+  const handleImport = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.style.display = 'none';
+    input.onchange = handleExportFileChange;
+
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+  }, [handleExportFileChange]);
+
   useEffect(() => {
     document.addEventListener('keydown', keyboardClick);
 
@@ -416,6 +535,16 @@ const OptionsBox = () => {
         >
           Reset Options
         </Button>
+        <IconButton onClick={handleExport}>
+          <Tooltip title="export settings">
+            <DownloadIcon />
+          </Tooltip>
+        </IconButton>
+        <IconButton onClick={handleImport}>
+          <Tooltip title="import settings">
+            <UploadIcon />
+          </Tooltip>
+        </IconButton>
       </div>
     </Paper>
   );

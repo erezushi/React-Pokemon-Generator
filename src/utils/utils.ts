@@ -4,6 +4,7 @@ import {
   Form,
   Pokemon,
   ListPokemon,
+  getTypes,
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
 import Pokedex from 'pokedex-promise-v2';
@@ -501,6 +502,7 @@ export const generateLink = (baseLink: string, name: string) => {
 };
 // #endregion
 
+// #region General utils
 export const getGeneration = (dexNo: string): string => {
   const number = Number(dexNo);
   const generations = getGenerations();
@@ -511,3 +513,11 @@ export const getGeneration = (dexNo: string): string => {
       .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
   ));
 };
+
+export const isType = (input: string) => {
+  const allTypes = Object.keys(getTypes());
+  const optionalSettings = [...allTypes, 'all', 'random'];
+
+  return optionalSettings.includes(input);
+};
+// #endregion

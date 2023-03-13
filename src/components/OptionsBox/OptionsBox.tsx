@@ -86,9 +86,35 @@ const OptionsBox = () => {
 
     const savedSettings = localStorage.getItem('settings');
     if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
+      const {
+        unique,
+        forms,
+        amount,
+        type,
+        generationList,
+        shinyChance,
+        baby,
+        basic,
+        evolved,
+        starter,
+        legendary,
+        mythical,
+      } = JSON.parse(savedSettings) as ISettings;
+
+      setSingleSetting('unique', unique);
+      setSingleSetting('forms', forms);
+      setSingleSetting('amount', amount);
+      setSingleSetting('type', type);
+      setSingleSetting('shinyChance', shinyChance);
+      setSingleSetting('baby', baby);
+      setSingleSetting('basic', basic);
+      setSingleSetting('evolved', evolved);
+      setSingleSetting('starter', starter);
+      setSingleSetting('legendary', legendary);
+      setSingleSetting('mythical', mythical);
+      setGenerationList((prevList) => ({ ...prevList, ...generationList }));
     }
-  }, [fetchGenerations, fetchTypes]);
+  }, [fetchGenerations, fetchTypes, setGenerationList, setSingleSetting]);
 
   useEffect(() => {
     localStorage.setItem('settings', JSON.stringify(settings));

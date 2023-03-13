@@ -94,7 +94,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
             )}
           </Typography>
           <Typography variant="h5">
-            {`#${specie.dexNo.padStart(3, '0')} (Gen ${getGeneration(specie.dexNo)})`}
+            {`#${specie.dexNo.toString().padStart(3, '0')} (Gen ${getGeneration(specie.dexNo)})`}
           </Typography>
           <Typography className="details-typing">
             Type:&nbsp;

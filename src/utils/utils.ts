@@ -503,14 +503,13 @@ export const generateLink = (baseLink: string, name: string) => {
 // #endregion
 
 // #region General utils
-export const getGeneration = (dexNo: string): string => {
-  const number = Number(dexNo);
+export const getGeneration = (dexNo: number): string => {
   const generations = getGenerations();
 
   return romanize(Number(
     Object
       .keys(generations)
-      .find((gen) => number >= generations[gen].first && number <= generations[gen].last),
+      .find((gen) => dexNo >= generations[gen].first && dexNo <= generations[gen].last),
   ));
 };
 

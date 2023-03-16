@@ -10,7 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@erezushi/pokemon-randomizer": "^1.11.3",
+    "@erezushi/pokemon-randomizer": "^1.11.6",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
     "animate.css": "^4.1.1",

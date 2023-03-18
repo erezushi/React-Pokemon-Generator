@@ -46,8 +46,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
   const { specie, form, isShiny } = instance;
   const { abilities, stats, type } = details;
   const normalAbilities = abilities
-    .filter((abilityObj) => !abilityObj.isHidden)
-    .map((abilityObj) => abilityObj);
+    .filter((abilityObj, index, arr) => {
+      if (index > 0 && arr[index - 1].name === abilityObj.name) {
+        return false;
+      }
+
+      return !abilityObj.isHidden;
+    });
   const hiddenAbility = abilities.find((abilityObj) => abilityObj.isHidden);
 
   useEffect(() => {

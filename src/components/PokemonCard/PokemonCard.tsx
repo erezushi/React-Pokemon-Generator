@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import StarRounded from '@mui/icons-material/StarRounded';
 import {
   Card,
@@ -8,7 +9,6 @@ import {
   Button,
 } from '@mui/material';
 import { Ability as AbilityResponse, Pokemon as PokemonResponse } from 'pokedex-promise-v2';
-import React, { useCallback, useEffect, useState } from 'react';
 
 import { LoadingSnackbar } from '../../utilComponents';
 import {

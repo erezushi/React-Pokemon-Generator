@@ -1,3 +1,9 @@
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  ChangeEvent,
+} from 'react';
 import {
   PokemonType,
   Options,
@@ -22,12 +28,6 @@ import {
   Tooltip,
 } from '@mui/material';
 import _ from 'lodash';
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  ChangeEvent,
-} from 'react';
 
 import { CustomCheckbox } from '../../utilComponents';
 import { DEFAULT_SETTINGS, errorToast, isType } from '../../utils';

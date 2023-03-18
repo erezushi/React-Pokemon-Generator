@@ -1,7 +1,7 @@
+import React from 'react';
 import { PokemonType } from '@erezushi/pokemon-randomizer';
 import { Tooltip } from '@mui/material';
 import _ from 'lodash';
-import React from 'react';
 
 import {
   BugIcon,

@@ -61,7 +61,9 @@ const PokemonCard = (props: ICardProps) => {
           abilities: abilityResponses.map((res) => {
             const enFlavorTexts = res.flavor_text_entries
               .filter((entry) => entry.language.name === 'en');
-            const flavorText = enFlavorTexts[enFlavorTexts.length - 1].flavor_text;
+            const flavorText = enFlavorTexts.length > 0
+              ? enFlavorTexts[enFlavorTexts.length - 1].flavor_text
+              : 'No flavor text found';
 
             return {
               name: res.name,

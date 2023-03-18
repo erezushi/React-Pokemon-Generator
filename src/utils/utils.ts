@@ -86,9 +86,9 @@ export const imageUrl = (name: string, shiny: boolean): string => (
 // #endregion
 
 // #region PokéAPI
-type replceFunc = ((match: string) => string)|(() => string)
+type replacerFunc = ((match: string, ...args: any[]) => string)|(() => string)
 
-const apiStringMap = new Map<string | RegExp, replceFunc>([
+const apiStringMap = new Map<string | RegExp, replacerFunc>([
   /*
     'Static' functions put into place as TypeScript won't accept a
     union type for the second parameter of String.Prototype.replace()
@@ -102,6 +102,7 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   ['alolan', () => 'alola'],
   ['galarian', () => 'galar'],
   ['hisuian', () => 'hisui'],
+  ['paldean', () => 'paldea'],
 
   // Gigantamax forms
   ['gigantamax', () => 'gmax'],
@@ -121,15 +122,18 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
   // Galarian Darmanitan (galar-[form] -> [form]-galar)
   [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
 
-  // Meowstic & Indeedee
-  [/(?<=(meowstic|indeedee|basculegion)-).+/g, (match) => {
-    if (match === 'f') return 'female';
+  // Male & Female forms with differing stats
+  [/(indeedee|basculegion|oinkologne)-(.+)/g, (_, specie, gender) => {
+    if (gender === 'f') return `${specie}-female`;
 
-    return 'male';
+    return specie === 'oinkologne' ? 'oinkologne' : 'male';
   }],
 
+  // Zacian & Zamazenta Hero forms (not in next group because of Palafin)
+  [/(zacian|zamazenta)-hero/g, () => ''],
+
   // Specific form names not found in the API
-  [/-(confined|core|mane|wings|hero|rider)/g, () => ''],
+  [/-(confined|core|mane|wings|rider|zero|chest)/g, () => ''],
 
   // Pokémon with consistant stats througout their forms
   [new RegExp(
@@ -137,9 +141,10 @@ const apiStringMap = new Map<string | RegExp, replceFunc>([
       '(unown', // Gen II
       '|burmy|cherrim|shellos|gastrodon|arceus', // Gen IV
       '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect', // Gen V
-      '|vivillon|pyroar|floette|florges|furfrou|xerneas', // Gen VI
+      '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas', // Gen VI
       '|silvally', // Gen VII
-      '|cramorant|morpeko|zarude)-.+', // Gen VIII
+      '|cramorant|morpeko|zarude', // Gen VIII
+      '|maushold|squawkabilly|tatsugiri|dudunsparce)-.+', // Gen IX
     ].join(''),
     'g',
   ),
@@ -374,7 +379,16 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
   return [];
 };
 
-const ignoreForms = ['Cherrim', 'Vivllon', 'Aegislash', 'Silvally', 'Toxtricity'];
+const ignoreForms = [
+  'Cherrim',
+  'Vivllon',
+  'Aegislash',
+  'Silvally',
+  'Toxtricity',
+  'Maushold',
+  'Palafin',
+  'Dudunsparce',
+];
 
 export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   const pokemonList = getPokemon();

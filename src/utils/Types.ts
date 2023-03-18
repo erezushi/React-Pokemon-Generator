@@ -4,7 +4,7 @@ import { StatElement } from 'pokedex-promise-v2';
 export interface IPokemonInstance {
   specie: Pokemon,
   isShiny: boolean,
-  form: Form | null,
+  form?: Form,
   fullName: string
 }
 

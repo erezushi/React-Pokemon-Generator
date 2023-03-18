@@ -3,7 +3,6 @@ import {
   getGenerations,
   Form,
   Pokemon,
-  ListPokemon,
   getTypes,
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
@@ -261,7 +260,7 @@ export const alcremieForm = (): string => {
 
 // #region Evolutions
 export interface Evolution {
-  specie: ListPokemon|Pokemon,
+  specie: Pokemon,
   form?: Form
 }
 
@@ -269,12 +268,13 @@ const missingNo: Evolution = {
   specie: {
     name: 'MissingNo.',
     type: 'bird normal',
+    dexNo: 0,
   },
 };
 
 const extraEvoForms = ['Mega', 'Primal', 'Ash', 'Gigantamax', 'Eternamax'];
 
-export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|Evolution[])[] => {
+export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
@@ -313,10 +313,11 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
   if (evolveTo?.includes(' ')) {
     const evolutions = evolveTo.split(' ').map((evoString) => {
       if (evoString.includes('-')) {
-        const evolution = pokemonList[evoString.substring(0, evoString.indexOf('-'))];
+        const dexNo = Number(evoString.substring(0, evoString.indexOf('-')));
+        const evolution = pokemonList[dexNo];
 
         return {
-          specie: evolution,
+          specie: { ...evolution, dexNo } as Pokemon,
           form: evolution.forms!.find(
             (evoForm) => evoForm.name === evoString.substring(
               evoString.indexOf('-') + 1,
@@ -325,7 +326,7 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
         };
       }
 
-      return { specie: pokemonList[evoString] };
+      return { specie: { ...pokemonList[evoString], dexNo: Number(evoString) } as Pokemon };
     });
 
     return evolutions.some((evolution) => {
@@ -354,7 +355,8 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
 
   if (evolveTo) {
     if (evolveTo.includes('-')) {
-      const evolution = pokemonList[evolveTo.substring(0, evolveTo.indexOf('-'))];
+      const dexNo = Number(evolveTo.substring(0, evolveTo.indexOf('-')));
+      const evolution = { ...pokemonList[dexNo], dexNo } as Pokemon;
       const evoForm = evolution.forms!.find(
         (currentForm) => currentForm.name === evolveTo!.substring(evolveTo!.indexOf('-') + 1),
       );
@@ -364,7 +366,7 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
         form: evoForm,
       }, ...nextEvos(evolution, evoForm)];
     }
-    const evolution = pokemonList[evolveTo];
+    const evolution = { ...pokemonList[evolveTo], dexNo: Number(evolveTo) } as Pokemon;
 
     return [{ specie: evolution }, ...nextEvos(evolution)];
   }
@@ -374,11 +376,11 @@ export const nextEvos = (pokemon: ListPokemon|Pokemon, form?: Form): (Evolution|
 
 const ignoreForms = ['Cherrim', 'Vivllon', 'Aegislash', 'Silvally', 'Toxtricity'];
 
-export const prevEvos = (pokemon: ListPokemon|Pokemon, form?: Form): Evolution[] => {
+export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
-    const prevolutions: Evolution[] = [{ specie: pokemonList['891'] }];
+    const prevolutions: Evolution[] = [{ specie: { ...pokemonList['891'], dexNo: 891 } }];
 
     if (form?.name.includes('Gigantamax')) {
       prevolutions.push({
@@ -398,16 +400,15 @@ export const prevEvos = (pokemon: ListPokemon|Pokemon, form?: Form): Evolution[]
 
     return [...prevEvos(pokemon, prevoForm), { specie: pokemon, form: prevoForm }];
   }
-  const wantedEvoString = `${Object
-    .keys(pokemonList)
-    .find((dexNo) => pokemonList[dexNo].name === pokemon.name)}${
+  const wantedEvoString = `${pokemon.dexNo}${
     form?.name && form.name !== 'default' && !ignoreForms.includes(pokemon.name)
       ? `-${form.name}`
       : ''
   }`;
 
   let prevoForm: Form | undefined;
-  const prevolution = Object.values(pokemonList).find((listMon) => {
+  let prevoDexNo = 0;
+  const prevolution = Object.entries(pokemonList).find(([dexNo, listMon]) => {
     prevoForm = listMon.forms?.find(
       (currForm) => currForm.evolveTo?.split(' ').some(
         (evoString) => evoString === wantedEvoString,
@@ -415,14 +416,27 @@ export const prevEvos = (pokemon: ListPokemon|Pokemon, form?: Form): Evolution[]
     );
 
     if (prevoForm) {
+      prevoDexNo = Number(dexNo);
+
       return true;
     }
 
-    return listMon.evolveTo?.split(' ').some((evoString) => evoString === wantedEvoString);
+    const isMatching = listMon.evolveTo
+      ?.split(' ')
+      .some((evoString) => evoString === wantedEvoString);
+
+    if (isMatching) {
+      prevoDexNo = Number(dexNo);
+    }
+
+    return isMatching;
   });
 
   return prevolution
-    ? [...prevEvos(prevolution, prevoForm), { specie: prevolution, form: prevoForm }]
+    ? [
+      ...prevEvos({ ...prevolution[1], dexNo: prevoDexNo }, prevoForm),
+      { specie: { ...prevolution[1], dexNo: prevoDexNo }, form: prevoForm },
+    ]
     : [];
 };
 // #endregion
@@ -433,10 +447,10 @@ const shinyReplacements = new Map<RegExp, string>([
   [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-'],
 ]);
 
-export const fullName = (instance: Pokemon, form: Form | null, isShiny: boolean): string => {
-  let name = `${instance.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
+export const fullName = (specie: Pokemon, isShiny: boolean, form?: Form): string => {
+  let name = `${specie.name}${(form && form.name !== 'default') ? `-${form.name}` : ''}`;
 
-  if (instance.name === 'Alcremie' && form?.name === 'default') {
+  if (specie.name === 'Alcremie' && form?.name === 'default') {
     name = `${name}-${alcremieForm()}`;
   }
 

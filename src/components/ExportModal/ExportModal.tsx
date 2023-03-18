@@ -26,14 +26,12 @@ import {
   OutlinedInput,
   Checkbox,
   Pagination,
-  Link,
 } from '@mui/material';
 import _ from 'lodash';
 
 import { CustomCheckbox } from '../../utilComponents';
-import {
-  imageUrl, showdownName,
-} from '../../utils';
+import PokemonImage from '../../utilComponents/PokemonImage';
+import { showdownName } from '../../utils';
 import { IExportDetails, IPokemonInstance } from '../../utils/Types';
 
 import './ExportModal.css';
@@ -280,18 +278,11 @@ const Exportmodal = (props: IExportModalProps) => {
                     labelPlacement="top"
                   />
                   <CardMedia>
-                    <Link
-                      href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}
-                    >
-                      <img
-                        alt={instance.fullName}
-                        className="export-img"
-                        src={imageUrl(
-                          instance.fullName,
-                          exportValues[pageIndex(index, pageNumber)]?.isShiny ?? false,
-                        )}
-                      />
-                    </Link>
+                    <PokemonImage
+                      className="export-img"
+                      instance={instance}
+                      isLinking
+                    />
                   </CardMedia>
                 </div>
                 {pokemonDetails[pageIndex(index, pageNumber)]?.genderRate >= 0

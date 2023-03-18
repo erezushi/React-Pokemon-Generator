@@ -11,12 +11,12 @@ import {
 import { Ability as AbilityResponse, Pokemon as PokemonResponse } from 'pokedex-promise-v2';
 
 import { LoadingSnackbar } from '../../utilComponents';
+import PokemonImage from '../../utilComponents/PokemonImage';
 import {
   apiRequest,
   apiUrl,
   errorToast,
   generateLink,
-  imageUrl,
   siteLinks,
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
@@ -95,10 +95,10 @@ const PokemonCard = (props: ICardProps) => {
   return (
     <Card className="pokemon-card" onClick={handleCardClick}>
       <CardMedia>
-        <img
-          alt={instance.fullName}
+        <PokemonImage
           className="card-img"
-          src={imageUrl(instance.fullName, isShiny)}
+          instance={instance}
+          isLinking={false}
         />
       </CardMedia>
       <CardContent>

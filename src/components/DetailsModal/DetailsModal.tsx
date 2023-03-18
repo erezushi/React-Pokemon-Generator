@@ -15,10 +15,11 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 import { TypeIcon } from '../../utilComponents';
+import PokemonImage from '../../utilComponents/PokemonImage';
 import {
   Evolution,
+  fullName,
   getGeneration,
-  imageUrl,
   nextEvos,
   prevEvos,
   STAT_NAMES,
@@ -75,13 +76,11 @@ const DetailsModal = (props: IDetailsModalProps) => {
     >
       <Card className="details-card">
         <CardMedia>
-          <Link href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}>
-            <img
-              alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
-              className="details-img"
-              src={imageUrl(instance.fullName, isShiny)}
-            />
-          </Link>
+          <PokemonImage
+            className="details-img"
+            instance={instance}
+            isLinking
+          />
         </CardMedia>
         <CardContent className="details-content">
           <Typography variant="h5">
@@ -172,22 +171,19 @@ const DetailsModal = (props: IDetailsModalProps) => {
           </Typography>
           <div className="evolution-list">
             {prevolutions.map((prevo) => {
-              const { specie: prevoSpecie, form: prevoForm } = prevo;
-              const name = `${
-                prevoSpecie.name
-              }${
-                prevoForm && prevoForm.name !== 'default' ? `-${prevoForm.name}` : ''
-              }`;
+              const prevoInstance: IPokemonInstance = {
+                ...prevo,
+                fullName: fullName(prevo.specie, isShiny, prevo.form),
+                isShiny,
+              };
 
               return (
                 <>
                   <div key={uuid()}>
                     <CardMedia>
-                      <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
-                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
-                      </Link>
+                      <PokemonImage className="evolution-img" instance={prevoInstance} isLinking />
                     </CardMedia>
-                    {name}
+                    {prevoInstance.fullName}
                   </div>
                   <ArrowRightAltRounded />
                 </>
@@ -195,13 +191,11 @@ const DetailsModal = (props: IDetailsModalProps) => {
             })}
             <div>
               <CardMedia>
-                <Link href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}>
-                  <img
-                    alt={instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
-                    className="evolution-img"
-                    src={imageUrl(instance.fullName, isShiny)}
-                  />
-                </Link>
+                <PokemonImage
+                  className="evolution-img"
+                  instance={instance}
+                  isLinking
+                />
               </CardMedia>
               {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             </div>
@@ -219,12 +213,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
                     arr.map((column, index) => (
                       <>
                         {column.map((splitEvo) => {
-                          const { specie: evoSpecie, form: evoForm } = splitEvo;
-                          const name = `${
-                            evoSpecie.name
-                          }${
-                            evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-                          }`;
+                          const { name } = splitEvo.specie;
+
+                          const splitEvoInstance: IPokemonInstance = {
+                            ...splitEvo,
+                            fullName: fullName(splitEvo.specie, isShiny, splitEvo.form),
+                            isShiny,
+                          };
 
                           return name === 'MissingNo.'
                             ? (
@@ -235,15 +230,11 @@ const DetailsModal = (props: IDetailsModalProps) => {
                                 {index === 0 && <ArrowRightAltRounded />}
                                 <div>
                                   <CardMedia>
-                                    <Link
-                                      href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}
-                                    >
-                                      <img
-                                        alt={name}
-                                        className="evolution-img"
-                                        src={imageUrl(name, isShiny)}
-                                      />
-                                    </Link>
+                                    <PokemonImage
+                                      className="evolution-img"
+                                      instance={splitEvoInstance}
+                                      isLinking
+                                    />
                                   </CardMedia>
                                   {name}
                                 </div>
@@ -258,12 +249,13 @@ const DetailsModal = (props: IDetailsModalProps) => {
                 return (
                   <div>
                     {evo.map((splitEvo) => {
-                      const { specie: evoSpecie, form: evoForm } = splitEvo;
-                      const name = `${
-                        evoSpecie.name
-                      }${
-                        evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-                      }`;
+                      const { name } = splitEvo.specie;
+
+                      const splitEvoInstance: IPokemonInstance = {
+                        ...splitEvo,
+                        fullName: fullName(splitEvo.specie, isShiny, splitEvo.form),
+                        isShiny,
+                      };
 
                       return name === 'MissingNo.'
                         ? (
@@ -274,13 +266,11 @@ const DetailsModal = (props: IDetailsModalProps) => {
                             <ArrowRightAltRounded />
                             <div>
                               <CardMedia>
-                                <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
-                                  <img
-                                    alt={name}
-                                    className="evolution-img"
-                                    src={imageUrl(name, isShiny)}
-                                  />
-                                </Link>
+                                <PokemonImage
+                                  className="evolution-img"
+                                  instance={splitEvoInstance}
+                                  isLinking
+                                />
                               </CardMedia>
                               {name}
                             </div>
@@ -290,23 +280,20 @@ const DetailsModal = (props: IDetailsModalProps) => {
                   </div>
                 );
               }
-              const { specie: evoSpecie, form: evoForm } = evo;
-              const name = `${
-                evoSpecie.name
-              }${
-                evoForm && evoForm.name !== 'default' ? `-${evoForm.name}` : ''
-              }`;
+              const evoInstance: IPokemonInstance = {
+                ...evo,
+                fullName: fullName(evo.specie, isShiny, evo.form),
+                isShiny,
+              };
 
               return (
                 <>
                   <ArrowRightAltRounded />
                   <div>
                     <CardMedia>
-                      <Link href={`https://pokemondb.net/pokedex/${name.toLowerCase()}`}>
-                        <img alt={name} className="evolution-img" src={imageUrl(name, isShiny)} />
-                      </Link>
+                      <PokemonImage className="evolution-img" instance={evoInstance} isLinking />
                     </CardMedia>
-                    {name}
+                    {evo.specie.name}
                   </div>
                 </>
               );

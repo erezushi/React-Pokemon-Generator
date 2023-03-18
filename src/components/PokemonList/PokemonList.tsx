@@ -80,7 +80,7 @@ const PokemonList = () => {
 
       setPokemonList(results.map((specie) => {
         const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
-        let form: Form | null = null;
+        let form: Form | undefined;
         if (specie.forms) {
           form = randomArrayEntry(specie.forms);
         }
@@ -88,7 +88,7 @@ const PokemonList = () => {
         return ({
           specie,
           form,
-          fullName: fullName(specie, form, isShiny),
+          fullName: fullName(specie, isShiny, form),
           isShiny,
         });
       }));

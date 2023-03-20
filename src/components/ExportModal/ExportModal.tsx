@@ -279,7 +279,10 @@ const Exportmodal = (props: IExportModalProps) => {
                   <CardMedia>
                     <PokemonImage
                       className="export-img"
-                      instance={instance}
+                      instance={{
+                        ...instance,
+                        isShiny: exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE]?.isShiny,
+                      }}
                       isLinking
                     />
                   </CardMedia>

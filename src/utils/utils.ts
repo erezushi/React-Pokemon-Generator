@@ -119,9 +119,6 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   // Flabébé
   [/flabébé-.+/g, () => 'flabebe'],
 
-  // Galarian Darmanitan (galar-[form] -> [form]-galar)
-  [/galar-.+/g, (match) => match.split('-').reverse().join('-')],
-
   // Male & Female forms with differing stats
   [/(indeedee|basculegion|oinkologne)-(.+)/g, (_, specie, gender) => {
     if (gender === 'f') return `${specie}-female`;

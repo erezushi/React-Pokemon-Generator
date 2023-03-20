@@ -14,8 +14,7 @@ import {
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
-import { TypeIcon } from '../../utilComponents';
-import PokemonImage from '../../utilComponents/PokemonImage';
+import { TypeIcon, PokemonImage } from '../../utilComponents';
 import {
   Evolution,
   fullName,

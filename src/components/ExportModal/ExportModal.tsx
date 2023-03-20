@@ -29,8 +29,7 @@ import {
 } from '@mui/material';
 import _ from 'lodash';
 
-import { CustomCheckbox } from '../../utilComponents';
-import PokemonImage from '../../utilComponents/PokemonImage';
+import { CustomCheckbox, PokemonImage } from '../../utilComponents';
 import { showdownName } from '../../utils';
 import { IExportDetails, IPokemonInstance } from '../../utils/Types';
 

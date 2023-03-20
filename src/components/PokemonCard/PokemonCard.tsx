@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import { Ability as AbilityResponse, Pokemon as PokemonResponse } from 'pokedex-promise-v2';
 
-import { LoadingSnackbar } from '../../utilComponents';
-import PokemonImage from '../../utilComponents/PokemonImage';
+import { LoadingSnackbar, PokemonImage } from '../../utilComponents';
 import {
   apiRequest,
   apiUrl,

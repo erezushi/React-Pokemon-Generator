@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   ChangeEvent,
+  useRef,
 } from 'react';
 import {
   PokemonType,
@@ -46,7 +47,7 @@ const OptionsBox = () => {
   const [typeList, setTypeList] = useState<PokemonType[]>([]);
   const [allGens, setAllGens] = useState<checkBoxState>('checked');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [generationCount, setGenerationCount] = useState(0);
+  const generationCount = useRef(0);
 
   const setSingleSetting = useCallback((field: keyof ISettings, value: any) => {
     setSettings((prevSettings) => ({ ...prevSettings, [field]: value }));
@@ -74,7 +75,7 @@ const OptionsBox = () => {
   const fetchGenerations = useCallback(() => {
     const gens = getGenerations();
     const genNumbers = Object.keys(gens);
-    setGenerationCount(genNumbers.length);
+    generationCount.current = genNumbers.length;
     genNumbers.forEach(
       (gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })),
     );
@@ -347,10 +348,11 @@ const OptionsBox = () => {
 
       if (
         _.isObject(generationList)
-        && Object.keys(generationList).length === generationCount
-        && Object.entries(generationList).every(
-          ([key, value]) => Number(key) > 0 && Number(key) <= generationCount && _.isBoolean(value),
-        )
+          && Object.keys(generationList).length === generationCount.current
+          && Object.entries(generationList).every(
+            ([key, value]) => Number(key) > 0
+              && Number(key) <= generationCount.current && _.isBoolean(value),
+          )
       ) {
         setSingleSetting('generationList', generationList);
       }

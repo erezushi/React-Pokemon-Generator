@@ -11,7 +11,7 @@ const App = () => (
     <OptionsBox />
     <PokemonList />
     <div className="footer">
-      Site Made by Erez Bracha, aka&nbsp;
+      Site made by Erez Bracha, aka&nbsp;
       <a href="https://linktr.ee/erezushi">PokéErez</a>
       , powered by&nbsp;
       <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">this</a>

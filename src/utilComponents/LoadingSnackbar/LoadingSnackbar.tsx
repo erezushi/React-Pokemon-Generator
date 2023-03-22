@@ -17,6 +17,7 @@ const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       autoHideDuration={1000}
+      className="loading-snackbar"
       message={(
         <>
           <strong>{title.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>

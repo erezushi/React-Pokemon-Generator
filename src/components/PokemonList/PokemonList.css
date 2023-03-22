@@ -1,8 +1,8 @@
-.showdown-export {
-    text-transform: none !important;
-    margin: 0 auto 0.2em !important;
+button.showdown-export {
+    text-transform: none;
+    margin: 0 auto 0.2em;
     width: fit-content;
-    border-radius: 2em !important;
+    border-radius: 2em;
 }
 
 .pokemon-list {

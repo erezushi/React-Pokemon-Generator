@@ -1,4 +1,4 @@
-.options-box {
+div.options-box {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-radius: 2em !important;
+    border-radius: 2em;
     margin-top: 9em;
 }
 
@@ -21,18 +21,22 @@
     margin-bottom: 0.5em;
 }
 
-.options-control {
-    margin-left: auto !important;
-    margin-right: auto !important;
+.options-row > a {
+    width: 100%;
 }
 
-.input-field {
-    width: 7em !important;
+div.options-control {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.input-field {
+    width: 7em;
     text-align: start;
 }
 
-.gen-checkbox {
-    margin: 0 !important;
+label.gen-checkbox {
+    margin: 0;
 }
 
 .buttons-row {
@@ -45,15 +49,20 @@
     margin-bottom: 0.5em;
 }
 
-.options-button {
-    margin: 0.5em 0.5em 0 !important;
-    border-radius: 2em !important;
-    text-transform: none !important;
-    font-weight: bold !important;
+button.options-button {
+    margin: 0.5em 0.5em 0;
+    border-radius: 2em;
+    text-transform: none;
+    font-weight: bold;
 }
 
-#generate {
-    width: 10em !important;
-    color: black !important;
-    border: 3px solid black !important;
+button#generate {
+    width: 10em;
+    color: black;
+    border: 3px solid black;
+}
+
+.options-mode-labels {
+    display: flex;
+    align-items: center;
 }

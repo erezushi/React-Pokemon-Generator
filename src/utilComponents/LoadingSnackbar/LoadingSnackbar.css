@@ -1,4 +1,4 @@
-.MuiSnackbarContent-root {
-    color: black !important;
-    background-color: white !important;
+.loading-snackbar > div {
+    color: black;
+    background-color: white;
 }

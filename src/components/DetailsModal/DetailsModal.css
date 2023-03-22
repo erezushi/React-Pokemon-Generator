@@ -4,12 +4,12 @@
     justify-content: center;
 }
 
-.details-card {
+div.details-card {
     width: 50%;
     min-width: 30vw;
     display: flex;
     flex-direction: column;
-    border-radius: 1em !important;
+    border-radius: 1em;
     align-items: center;
 }
 

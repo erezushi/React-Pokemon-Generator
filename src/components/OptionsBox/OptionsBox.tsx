@@ -10,6 +10,7 @@ import {
   Options,
   getGenerations,
   getTypes,
+  getPokemon,
 } from '@erezushi/pokemon-randomizer';
 import DownloadIcon from '@mui/icons-material/DownloadRounded';
 import UploadIcon from '@mui/icons-material/UploadRounded';
@@ -27,8 +28,10 @@ import {
   TextField,
   Typography,
   Tooltip,
+  Switch,
 } from '@mui/material';
 import _ from 'lodash';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CustomCheckbox } from '../../utilComponents';
 import { DEFAULT_SETTINGS, errorToast, isType } from '../../utils';
@@ -47,7 +50,11 @@ const OptionsBox = () => {
   const [typeList, setTypeList] = useState<PokemonType[]>([]);
   const [allGens, setAllGens] = useState<checkBoxState>('checked');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [customList, setCustomList] = useState<Record<string, boolean>>({});
   const generationCount = useRef(0);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const setSingleSetting = useCallback((field: keyof ISettings, value: any) => {
     setSettings((prevSettings) => ({ ...prevSettings, [field]: value }));
@@ -81,10 +88,28 @@ const OptionsBox = () => {
     );
   }, [setGenerationList]);
 
+  const fetchPokemon = useCallback(() => {
+    const pokemonList = getPokemon();
+    let newCustomList: Record<string, boolean> = {};
+
+    if (location.state) {
+      newCustomList = location.state;
+    } else {
+      Object.values(pokemonList).forEach((pokemon) => {
+        newCustomList[pokemon.name] = false;
+      });
+    }
+
+    setCustomList(newCustomList);
+  }, [location.state]);
+
   useEffect(() => {
     fetchTypes();
     fetchGenerations();
+    fetchPokemon();
+  }, [fetchGenerations, fetchPokemon, fetchTypes]);
 
+  useEffect(() => {
     const savedSettings = localStorage.getItem('settings');
     if (savedSettings) {
       const {
@@ -100,6 +125,7 @@ const OptionsBox = () => {
         starter,
         legendary,
         mythical,
+        listMode,
       } = JSON.parse(savedSettings) as ISettings;
 
       setSingleSetting('unique', unique);
@@ -113,9 +139,10 @@ const OptionsBox = () => {
       setSingleSetting('starter', starter);
       setSingleSetting('legendary', legendary);
       setSingleSetting('mythical', mythical);
+      setSingleSetting('listMode', listMode);
       setGenerationList((prevList) => ({ ...prevList, ...generationList }));
     }
-  }, [fetchGenerations, fetchTypes, setGenerationList, setSingleSetting]);
+  }, [setGenerationList, setSingleSetting]);
 
   useEffect(() => {
     localStorage.setItem('settings', JSON.stringify(settings));
@@ -276,26 +303,18 @@ const OptionsBox = () => {
       mythical,
     };
 
+    if (settings.listMode) {
+      options.customList = Object.keys(customList)
+        .filter((pokemonName) => customList[pokemonName]);
+    }
+
     eventEmitter.emit(generate, options, settings.shinyChance);
-  }, [settings]);
+  }, [customList, settings]);
 
   const handleResetClick = useCallback(() => {
     setSettings(DEFAULT_SETTINGS);
     fetchGenerations();
   }, [fetchGenerations]);
-
-  const keyboardClick = useCallback((event: KeyboardEvent) => {
-    const { code: keyCode } = event;
-
-    if (
-      keyCode === 'Enter'
-      || keyCode === 'NumpadEnter'
-      || (event.shiftKey && keyCode === 'KeyC')
-    ) {
-      event.preventDefault();
-      document.getElementById(idMap[keyCode])!.click();
-    }
-  }, []);
 
   const handleExport = useCallback(() => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(settings, null, 4)]));
@@ -412,6 +431,27 @@ const OptionsBox = () => {
     document.body.removeChild(input);
   }, [handleExportFileChange]);
 
+  const handleModeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleSetting('listMode', event.target.checked);
+  }, [setSingleSetting]);
+
+  const keyboardClick = useCallback((event: KeyboardEvent) => {
+    const { code: keyCode } = event;
+
+    if (
+      keyCode === 'Enter'
+      || keyCode === 'NumpadEnter'
+      || (event.shiftKey && keyCode === 'KeyC')
+    ) {
+      event.preventDefault();
+      document.getElementById(idMap[keyCode])!.click();
+    }
+  }, []);
+
+  const editList = useCallback(() => {
+    navigate('/list', { state: customList });
+  }, [customList, navigate]);
+
   useEffect(() => {
     document.addEventListener('keydown', keyboardClick);
 
@@ -444,62 +484,66 @@ const OptionsBox = () => {
             variant="outlined"
           />
         </FormControl>
-        <FormControl className="options-control">
-          <FormHelperText>Type</FormHelperText>
-          <Select
-            className="input-field"
-            onChange={changeType}
-            value={settings.type}
-            variant="outlined"
-          >
-            <MenuItem value="all">All</MenuItem>
-            {
-          typeList.map(
-            (listType) => (
-              <MenuItem
-                key={listType}
-                value={listType}
+        {!settings.listMode && (
+          <>
+            <FormControl className="options-control">
+              <FormHelperText>Type</FormHelperText>
+              <Select
+                className="input-field"
+                onChange={changeType}
+                value={settings.type}
+                variant="outlined"
               >
-                {_.capitalize(listType)}
-              </MenuItem>
-            ),
-          )
-          }
-            <MenuItem value="random">Random</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl className="options-control">
-          <FormHelperText>Generations</FormHelperText>
-          <FormGroup row>
-            <FormControlLabel
-              className="gen-checkbox"
-              control={(
-                <CustomCheckbox
-                  checked={allGens === 'checked'}
-                  indeterminate={allGens === 'indeterminate'}
-                  onChange={allBoxClicked}
-                />
-              )}
-              label="All"
-              labelPlacement="bottom"
-            />
-            {Object.keys(settings.generationList).map((gen) => (
-              <FormControlLabel
-                key={gen}
-                className="gen-checkbox"
-                control={(
-                  <CustomCheckbox
-                    checked={settings.generationList[gen]}
-                    name={gen}
-                    onChange={genClicked}
-                  />
+                <MenuItem value="all">All</MenuItem>
+                {
+                  typeList.map(
+                    (listType) => (
+                      <MenuItem
+                        key={listType}
+                        value={listType}
+                      >
+                        {_.capitalize(listType)}
+                      </MenuItem>
+                    ),
+                  )
+                }
+                <MenuItem value="random">Random</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className="options-control">
+              <FormHelperText>Generations</FormHelperText>
+              <FormGroup row>
+                <FormControlLabel
+                  className="gen-checkbox"
+                  control={(
+                    <CustomCheckbox
+                      checked={allGens === 'checked'}
+                      indeterminate={allGens === 'indeterminate'}
+                      onChange={allBoxClicked}
+                    />
                 )}
-                label={gen}
-                labelPlacement="bottom"
-              />
-            ))}
-          </FormGroup>
-        </FormControl>
+                  label="All"
+                  labelPlacement="bottom"
+                />
+                {Object.keys(settings.generationList).map((gen) => (
+                  <FormControlLabel
+                    key={gen}
+                    className="gen-checkbox"
+                    control={(
+                      <CustomCheckbox
+                        checked={settings.generationList[gen]}
+                        name={gen}
+                        onChange={genClicked}
+                      />
+                  )}
+                    label={gen}
+                    labelPlacement="bottom"
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+          </>
+        )}
         <FormControl className="options-control">
           <FormHelperText>Shiny Chance (%)</FormHelperText>
           <TextField
@@ -511,38 +555,46 @@ const OptionsBox = () => {
           />
         </FormControl>
       </div>
-      <div className="options-row">
-        <FormControl className="options-control">
-          <FormHelperText>Evolution Stage</FormHelperText>
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.baby} onChange={babyClicked} />}
-            label="Baby"
-          />
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.basic} onChange={basicClicked} />}
-            label="Basic"
-          />
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.evolved} onChange={evolvedClicked} />}
-            label="Fully Evolved"
-          />
-        </FormControl>
-        <FormControl className="options-control">
-          <FormHelperText>Status</FormHelperText>
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.starter} onChange={starterClicked} />}
-            label="Starter"
-          />
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.legendary} onChange={legendaryClicked} />}
-            label="Legendary/Mythical"
-          />
-          <FormControlLabel
-            control={<CustomCheckbox checked={settings.mythical} onChange={mythicalClicked} />}
-            label="Mythical"
-          />
-        </FormControl>
-      </div>
+      {settings.listMode ? (
+        <div className="options-row">
+          <Button className="options-control" onClick={editList} variant="contained">
+            Edit list
+          </Button>
+        </div>
+      ) : (
+        <div className="options-row">
+          <FormControl className="options-control">
+            <FormHelperText>Evolution Stage</FormHelperText>
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.baby} onChange={babyClicked} />}
+              label="Baby"
+            />
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.basic} onChange={basicClicked} />}
+              label="Basic"
+            />
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.evolved} onChange={evolvedClicked} />}
+              label="Fully Evolved"
+            />
+          </FormControl>
+          <FormControl className="options-control">
+            <FormHelperText>Status</FormHelperText>
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.starter} onChange={starterClicked} />}
+              label="Starter"
+            />
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.legendary} onChange={legendaryClicked} />}
+              label="Legendary/Mythical"
+            />
+            <FormControlLabel
+              control={<CustomCheckbox checked={settings.mythical} onChange={mythicalClicked} />}
+              label="Mythical"
+            />
+          </FormControl>
+        </div>
+      )}
       <div className="buttons-row">
         <Button
           className="options-button"
@@ -573,6 +625,17 @@ const OptionsBox = () => {
             <UploadIcon />
           </Tooltip>
         </IconButton>
+        <FormControlLabel
+          control={(
+            <div className="options-mode-labels">
+              <Typography>Filters</Typography>
+              <Switch checked={settings.listMode} onChange={handleModeChange} />
+              <Typography>Custom list</Typography>
+            </div>
+          )}
+          label="Mode"
+          labelPlacement="top"
+        />
       </div>
     </Paper>
   );

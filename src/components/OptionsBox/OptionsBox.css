@@ -25,9 +25,16 @@ div.options-box {
     width: 100%;
 }
 
-div.options-control {
+div.options-control,
+button.options-control {
     margin-left: auto;
     margin-right: auto;
+}
+
+button.options-control {
+    text-transform: none;
+    border-radius: 1.5em;
+    width: 10em;
 }
 
 div.input-field {

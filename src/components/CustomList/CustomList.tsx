@@ -64,7 +64,7 @@ const CustomList = () => {
 
         return (isGenerationFilterEmpty || generationFilter[Number(generation)])
           && (isTypeFilterEmpty || types.some((type) => typeFilter[type]))
-          && (isSearchFilterEmpty || pokemonName.includes(searchTerm));
+          && (isSearchFilterEmpty || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()));
       })),
     );
   }, [filters, fullList]);

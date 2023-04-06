@@ -1,15 +1,32 @@
 import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import {
+  AppHeader, CustomList, OptionsBox, PokemonList,
+} from './components';
 
 import './App.css';
-import Header from './components/AppHeader';
-import OptionsBox from './components/OptionsBox';
-import PokemonList from './components/PokemonList';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <>
+        <OptionsBox />
+        <PokemonList />
+      </>
+    ),
+  },
+  {
+    path: '/list',
+    element: <CustomList />,
+  },
+]);
 
 const App = () => (
   <div className="app">
-    <Header />
-    <OptionsBox />
-    <PokemonList />
+    <AppHeader />
+    <RouterProvider router={router} />
     <div className="footer">
       Site made by Erez Bracha, aka&nbsp;
       <a href="https://linktr.ee/erezushi">PokéErez</a>

@@ -38,4 +38,11 @@ export interface ISettings {
   starter: boolean,
   legendary: boolean,
   mythical: boolean,
+  listMode: boolean,
+}
+
+export interface ICustomListFilters {
+  generations: Record<number, boolean>;
+  types: Record<PokemonType, boolean>;
+  searchTerm: string;
 }

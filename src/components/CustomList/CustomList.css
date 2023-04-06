@@ -1,0 +1,27 @@
+.custom-list-container {
+    margin-top: 9em;
+    margin-bottom: 1.5em;
+    background-color: white;
+}
+
+.custom-list-actions {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+button.custom-list-button {
+    border-radius: 1.5em;
+    margin: 0.5em;
+    text-transform: none;
+}
+
+label.custom-list-pokemon {
+    width: 10vw;
+    height: 165px;
+    margin: 0;
+}
+
+.custom-list-label {
+    text-align: center;
+}

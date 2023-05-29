@@ -215,7 +215,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
                   return (
                     arr.map((column, index) => (
-                      <>
+                      <div className="evolution-column">
                         {column.map((splitEvo) => {
                           const { name } = splitEvo.specie;
 
@@ -240,12 +240,12 @@ const DetailsModal = (props: IDetailsModalProps) => {
                                       isLinking
                                     />
                                   </CardMedia>
-                                  {name}
+                                  {splitEvoInstance.fullName}
                                 </div>
                               </div>
                             );
                         })}
-                      </>
+                      </div>
                     ))
                   );
                 }
@@ -276,7 +276,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                                   isLinking
                                 />
                               </CardMedia>
-                              {name}
+                              {splitEvoInstance.fullName}
                             </div>
                           </div>
                         );
@@ -297,7 +297,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                     <CardMedia>
                       <PokemonImage className="evolution-img" instance={evoInstance} isLinking />
                     </CardMedia>
-                    {evo.specie.name}
+                    {evoInstance.fullName}
                   </div>
                 </>
               );

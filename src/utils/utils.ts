@@ -82,6 +82,17 @@ const imgReplacements: Record<string, string> = {
   Zamazenta: 'zamazenta-hero',
   'Basculegion-M': 'basculegion-male',
   'Basculegion-F': 'basculegion-female',
+  'Oinkologne-M': 'oinkologne-male',
+  'Oinkologne-F': 'oinkologne-female',
+  'Maushold-Family-Of-Three': 'maushold-family3',
+  'Maushold-Family-Of-Four': 'maushold-family4',
+  'Squawkabilly-Green-Plumage': 'squawkabilly-green',
+  'Squawkabilly-Blue-Plumage': 'squawkabilly-blue',
+  'Squawkabilly-Yellow-Plumage': 'squawkabilly-yellow',
+  'Squawkabilly-White-Plumage': 'squawkabilly-white',
+  Tinkatink: 'tinkatink-f',
+  Tinkatuff: 'tinkatuff-f',
+  Tinkaton: 'tinkaton-f',
 };
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;

@@ -67,17 +67,17 @@ const PokemonImage = (props: IPokemonImageProps) => {
 
   return isLinking ? (
     <Link
-      href={`https://pokemondb.net/pokedex/${instance.specie.name.toLowerCase()}`}
+      href={`https://pokemondb.net/pokedex/${specie.name.toLowerCase()}`}
     >
       <img
-        alt={instance.fullName}
+        alt={fullName}
         className={className}
         src={imageSrc}
       />
     </Link>
   ) : (
     <img
-      alt={instance.fullName}
+      alt={fullName}
       className={className}
       src={imageSrc}
     />

@@ -1,7 +1,7 @@
 {
   "name": "react-randomizer",
   "version": "1.1.0",
-  "description": "Web tool to generate random lists of Pokémon according to a veriety of filters",
+  "description": "Web tool to generate random lists of Pokémon according to a variety of filters",
   "license": "MIT",
   "repository": {
     "type": "git",

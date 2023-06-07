@@ -88,8 +88,8 @@ const PokemonCard = (props: ICardProps) => {
   const handleButtonClick = useCallback((
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    const { classList } = event.target as HTMLButtonElement;
-    window.open(generateLink(siteLinks[classList.item(7)!], specie.name));
+    const { id } = event.target as HTMLButtonElement;
+    window.open(generateLink(siteLinks[id], specie.name));
     event.stopPropagation();
   }, [specie.name]);
 
@@ -118,6 +118,7 @@ const PokemonCard = (props: ICardProps) => {
           <Button
             key={site}
             className={`card-link ${site}`}
+            id={site}
             onClick={handleButtonClick}
             variant="contained"
           >

@@ -158,7 +158,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   // Specific form names not found in the API
   [/-(confined|core|mane|wings|rider|zero|chest)/g, () => ''],
 
-  // Pokémon with consistant stats througout their forms
+  // Pokémon with consistent stats throughout their forms
   [new RegExp(
     [
       '(unown', // Gen II
@@ -205,7 +205,7 @@ export const apiRequest = async <T>(url: string): Promise<T> => {
 // #region ShowdownName
 const showdownReplacements: Record<string, string> = {
   Alolan: 'Alola',
-  Galrian: 'Galar',
+  Galarian: 'Galar',
   Hisuian: 'Hisui',
   Gigantamax: 'Gmax',
 };
@@ -404,7 +404,7 @@ export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution|Evolution[])
 
 const ignoreForms = [
   'Cherrim',
-  'Vivllon',
+  'Vivillon',
   'Aegislash',
   'Silvally',
   'Toxtricity',
@@ -524,7 +524,7 @@ const pokeDbSpecialCharMap: Record<string, string> = {
 };
 
 export const siteLinks: Record<string, string> = {
-  bulbapedia: 'https://bulbapedia.bulbagarden.net/wiki/_pkmn__(Pokémon)',
+  bulbapedia: 'https://bulbapedia.bulbagarden.net/wiki/_pkmnu__(Pokémon)',
   serebii: 'https://www.serebii.net/pokemon/_pkmnlc_/',
   smogon: 'https://www.smogon.com/dex/ss/pokemon/_pkmnc_/',
   pokeDB: 'https://pokemondb.net/pokedex/_pkmns_/',
@@ -533,19 +533,23 @@ export const siteLinks: Record<string, string> = {
 export const generateLink = (baseLink: string, name: string) => {
   let formattedName = name;
 
-  return baseLink.replace(/_pkmn[lcs]{0,2}_/g, (match) => {
-    if (match.includes('l')) {
-      formattedName = formattedName.toLocaleLowerCase();
-    }
-
+  return baseLink.replace(/_pkmn[clsu]{0,2}_/g, (match) => {
     if (match.includes('c')) {
       formattedName = formattedName
         .replace(siteSpecialChars, (charMatch) => siteSpecialCharMap[charMatch]);
     }
 
+    if (match.includes('l')) {
+      formattedName = formattedName.toLocaleLowerCase();
+    }
+
     if (match.includes('s')) {
       formattedName = formattedName
         .replace(pokeDbSpecialChars, (charMatch) => pokeDbSpecialCharMap[charMatch]);
+    }
+
+    if (match.includes('u')) {
+      formattedName = formattedName.replace(' ', '_');
     }
 
     return formattedName;

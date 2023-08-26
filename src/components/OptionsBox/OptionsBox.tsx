@@ -616,12 +616,12 @@ const OptionsBox = () => {
           Reset Options
         </Button>
         <IconButton onClick={handleExport}>
-          <Tooltip title="export settings">
+          <Tooltip title="Export settings">
             <DownloadIcon />
           </Tooltip>
         </IconButton>
         <IconButton onClick={handleImport}>
-          <Tooltip title="import settings">
+          <Tooltip title="Import settings">
             <UploadIcon />
           </Tooltip>
         </IconButton>

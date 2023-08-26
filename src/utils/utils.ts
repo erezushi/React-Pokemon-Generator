@@ -537,7 +537,7 @@ const pokeDbSpecialCharMap: Record<string, string> = {
 export const siteLinks: Record<string, string> = {
   bulbapedia: 'https://bulbapedia.bulbagarden.net/wiki/_pkmnu__(Pokémon)',
   serebii: 'https://www.serebii.net/pokemon/_pkmnlc_/',
-  smogon: 'https://www.smogon.com/dex/ss/pokemon/_pkmnc_/',
+  smogon: 'https://www.smogon.com/dex/sv/pokemon/_pkmnc_/',
   pokeDB: 'https://pokemondb.net/pokedex/_pkmns_/',
 };
 

@@ -126,6 +126,55 @@ const CustomList = () => {
     navigate('/', { state: fullList });
   }, [fullList, navigate]);
 
+  const handleExport = useCallback(() => {
+    const textList = Object.keys(fullList).filter((name) => fullList[name]).join('\n');
+
+    const url = URL.createObjectURL(new Blob([textList]));
+
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'Custom List.txt';
+    anchor.style.display = 'none';
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    URL.revokeObjectURL(url);
+  }, [fullList]);
+
+  const handleFileReaderLoadEnd = useCallback((readerResult: string) => {
+    const importedList = readerResult.split('\n');
+
+    setFullList((prevFullList) => {
+      const fullListCopy = { ...prevFullList };
+
+      return Object.fromEntries(
+        Object.entries(fullListCopy).map(([name]) => [name, importedList.includes(name)]),
+      );
+    });
+  }, []);
+
+  const handleExportFileChange = useCallback((event: Event) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      handleFileReaderLoadEnd(reader.result as string);
+    };
+    reader.readAsText((event.target as HTMLInputElement).files![0]);
+  }, [handleFileReaderLoadEnd]);
+
+  const handleImport = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'text/plain';
+    input.style.display = 'none';
+    input.onchange = handleExportFileChange;
+
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+  }, [handleExportFileChange]);
+
   const createCheckBox = useCallback((index: number) => {
     const [pokemonName, isSelected] = Object.entries(visibleList)[index];
     const dexNo = getPokedexNumber(pokemonName);
@@ -163,8 +212,10 @@ const CustomList = () => {
   return (
     <div className="custom-list-container">
       <CustomListFilters
+        exportList={handleExport}
         fetchGenerations={fetchGenerations}
         filters={filters}
+        importList={handleImport}
         saveList={returnHome}
         setFilters={setFilters}
       />

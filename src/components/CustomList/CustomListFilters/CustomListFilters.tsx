@@ -1,6 +1,17 @@
 import React, { useCallback } from 'react';
+import DownloadIcon from '@mui/icons-material/DownloadRounded';
+import UploadIcon from '@mui/icons-material/UploadRounded';
 import {
-  Paper, Typography, FormControl, FormControlLabel, FormGroup, FormHelperText, TextField, Button,
+  Paper,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
+  TextField,
+  Button,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import _ from 'lodash';
 
@@ -15,11 +26,13 @@ interface ICustomListFiltersProps {
     setFilters: React.Dispatch<React.SetStateAction<ICustomListFilters>>;
     fetchGenerations: () => void;
     saveList: () => void;
+    exportList: () => void;
+    importList: () => void;
 }
 
 const CustomListFilters = (props: ICustomListFiltersProps) => {
   const {
-    filters, setFilters, fetchGenerations, saveList,
+    filters, setFilters, fetchGenerations, saveList, exportList, importList,
   } = props;
   const { generations, types, searchTerm } = filters;
 
@@ -155,6 +168,16 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
           >
             Clear Filters
           </Button>
+          <IconButton onClick={exportList}>
+            <Tooltip title="Export selected">
+              <DownloadIcon />
+            </Tooltip>
+          </IconButton>
+          <IconButton onClick={importList}>
+            <Tooltip title="Import selected">
+              <UploadIcon />
+            </Tooltip>
+          </IconButton>
         </div>
       </>
     </Paper>

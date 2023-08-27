@@ -169,12 +169,12 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
             Clear Filters
           </Button>
           <IconButton onClick={exportList}>
-            <Tooltip title="Export selected">
+            <Tooltip title="Export selection">
               <DownloadIcon />
             </Tooltip>
           </IconButton>
           <IconButton onClick={importList}>
-            <Tooltip title="Import selected">
+            <Tooltip title="Import selection">
               <UploadIcon />
             </Tooltip>
           </IconButton>

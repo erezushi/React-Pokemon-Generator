@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PokemonType, getGenerations, getPokemon } from '@erezushi/pokemon-randomizer';
 import { Button, FormControlLabel } from '@mui/material';
+import { Pokedex } from 'pokedex-promise-v2';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { CustomCheckbox } from '../../utilComponents';
-import { DEFAULT_FILTERS, getPokedexNumber } from '../../utils';
+import { DEFAULT_FILTERS, apiRequest, getPokedexNumber } from '../../utils';
+import PokedexSelectionModal from '../PokedexSelectionModal';
 
 import CustomListFilters from './CustomListFilters';
 
@@ -17,6 +19,7 @@ const CustomList = () => {
   const [fullList, setFullList] = useState<Record<string, boolean>>({});
   const [visibleList, setVisibleList] = useState<Record<string, boolean>>(fullList);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [isPokedexModalOpen, setIsPokedexModalOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -106,13 +109,6 @@ const CustomList = () => {
   const changeSinglePokemon = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
 
-    setVisibleList((prevVisibleList) => {
-      const listCopy = { ...prevVisibleList };
-
-      listCopy[name] = checked;
-
-      return listCopy;
-    });
     setFullList((prevFullList) => {
       const listCopy = { ...prevFullList };
 
@@ -150,7 +146,10 @@ const CustomList = () => {
       const fullListCopy = { ...prevFullList };
 
       return Object.fromEntries(
-        Object.entries(fullListCopy).map(([name]) => [name, importedList.includes(name)]),
+        Object.entries(fullListCopy).map(([name]) => [
+          name,
+          importedList.includes(name),
+        ]),
       );
     });
   }, []);
@@ -174,6 +173,43 @@ const CustomList = () => {
     input.click();
     document.body.removeChild(input);
   }, [handleExportFileChange]);
+
+  const openPokedexModal = useCallback(() => {
+    setIsPokedexModalOpen(true);
+  }, []);
+
+  const selectPokedex = useCallback(async (pokedex: string) => {
+    let natDexNumbers: string[] = [];
+
+    const pokedexResponses = await Promise.all(
+      pokedex
+        .split(' ')
+        .map((pokedexPart) => apiRequest<Pokedex>(
+          `https://pokeapi.co/api/v2/pokedex/${pokedexPart}/`,
+        )),
+    );
+
+    pokedexResponses.forEach((response) => {
+      natDexNumbers = natDexNumbers.concat(
+        response.pokemon_entries.map(
+          (pokemon) => pokemon.pokemon_species.url.split('/').at(-2) ?? '',
+        ),
+      );
+    });
+
+    setFullList((prevFullList) => {
+      const fullListCopy = { ...prevFullList };
+
+      return Object.fromEntries(
+        Object.entries(fullListCopy).map(([name], index) => [
+          name,
+          natDexNumbers.includes((index + 1).toString()),
+        ]),
+      );
+    });
+
+    setIsPokedexModalOpen(false);
+  }, []);
 
   const createCheckBox = useCallback((index: number) => {
     const [pokemonName, isSelected] = Object.entries(visibleList)[index];
@@ -220,11 +256,26 @@ const CustomList = () => {
         setFilters={setFilters}
       />
       <div className="custom-list-actions">
-        <Button className="custom-list-button" onClick={selectAllVisible} variant="contained">
+        <Button
+          className="custom-list-button"
+          onClick={selectAllVisible}
+          variant="contained"
+        >
           Select all filtered
         </Button>
-        <Button className="custom-list-button" onClick={deselectAllVisible} variant="contained">
+        <Button
+          className="custom-list-button"
+          onClick={deselectAllVisible}
+          variant="contained"
+        >
           Deselect all filtered
+        </Button>
+        <Button
+          className="custom-list-button"
+          onClick={openPokedexModal}
+          variant="contained"
+        >
+          Select Pokédex
         </Button>
       </div>
       <VirtuosoGrid
@@ -233,6 +284,11 @@ const CustomList = () => {
         listClassName="list-virtualizer"
         overscan={500}
         useWindowScroll
+      />
+      <PokedexSelectionModal
+        isOpen={isPokedexModalOpen}
+        selectPokedex={selectPokedex}
+        setOpen={setIsPokedexModalOpen}
       />
     </div>
   );

@@ -70,6 +70,7 @@ export const DEFAULT_FILTERS: ICustomListFilters = {
 
 // #region imageUrl
 const imgReplacements: Record<string, string> = {
+  'Tauros-Combat': 'tauros-paldean',
   Combee: 'combee-f',
   'Dialga-Altered': 'dialga',
   'Palkia-Altered': 'palkia',
@@ -143,6 +144,9 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
 
   // Gigantamax forms
   ['gigantamax', () => 'gmax'],
+
+  // Paldean Tauros
+  [/(combat|blaze|aqua)/, ((match) => `paldea-${match}-breed`)],
 
   // Altered Dialga & Palkia
   [/(dialga|palkia)-altered/g, ((match) => match.substring(0, match.indexOf('-')))],

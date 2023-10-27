@@ -91,9 +91,6 @@ const imgReplacements: Record<string, string> = {
   'Squawkabilly-Blue-Plumage': 'squawkabilly-blue',
   'Squawkabilly-Yellow-Plumage': 'squawkabilly-yellow',
   'Squawkabilly-White-Plumage': 'squawkabilly-white',
-  Tinkatink: 'tinkatink-f',
-  Tinkatuff: 'tinkatuff-f',
-  Tinkaton: 'tinkaton-f',
 };
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
@@ -171,7 +168,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   [/(zacian|zamazenta)-hero/g, () => ''],
 
   // Specific form names not found in the API
-  [/-(confined|core|mane|wings|rider|zero|chest)/g, () => ''],
+  [/-(confined|core|mane|wings|rider|zero|chest|teal-mask)/g, () => ''],
 
   // Pokémon with consistent stats throughout their forms
   [new RegExp(

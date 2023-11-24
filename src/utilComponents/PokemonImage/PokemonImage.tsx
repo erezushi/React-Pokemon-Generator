@@ -5,6 +5,7 @@ import { imageUrl } from '../../utils';
 import { IPokemonInstance } from '../../utils/Types';
 
 const lastIdOnPokeDB = 1010;
+const missingFromDB: string[] = ['Ursaluna-Bloodmoon'];
 const defaultForms: string[] = ['Teal Mask'];
 
 interface IPokemonImageProps {
@@ -22,7 +23,7 @@ const PokemonImage = (props: IPokemonImageProps) => {
     specie, fullName, isShiny, form,
   } = instance;
 
-  if (specie.dexNo <= lastIdOnPokeDB) {
+  if (specie.dexNo <= lastIdOnPokeDB && !missingFromDB.includes(fullName)) {
     return isLinking ? (
       <Link
         href={`https://pokemondb.net/pokedex/${specie.name.toLowerCase()}`}

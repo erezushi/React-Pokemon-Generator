@@ -91,6 +91,10 @@ const imgReplacements: Record<string, string> = {
   'Squawkabilly-Blue-Plumage': 'squawkabilly-blue',
   'Squawkabilly-Yellow-Plumage': 'squawkabilly-yellow',
   'Squawkabilly-White-Plumage': 'squawkabilly-white',
+  'Ogerpon-Teal-Mask': 'ogerpon-teal',
+  'Ogerpon-Cornerstone-Mask': 'ogerpon-cornerstone',
+  'Ogerpon-Hearthflame-Mask': 'ogerpon-hearthflame',
+  'Ogerpon-Wellspring-Mask': 'ogerpon-wellspring',
 };
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
@@ -168,7 +172,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   [/(zacian|zamazenta)-hero/g, () => ''],
 
   // Specific form names not found in the API
-  [/-(confined|core|mane|wings|rider|zero|chest|teal-mask)/g, () => ''],
+  [/-(confined|core|mane|wings|rider|zero|chest)/g, () => ''],
 
   // Pokémon with consistent stats throughout their forms
   [new RegExp(
@@ -179,7 +183,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
       '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas', // Gen VI
       '|silvally', // Gen VII
       '|cramorant|morpeko|zarude', // Gen VIII
-      '|maushold|squawkabilly|tatsugiri|dudunsparce)-.+', // Gen IX
+      '|maushold|squawkabilly|tatsugiri|dudunsparce|ogerpon)-.+', // Gen IX
     ].join(''),
     'g',
   ),

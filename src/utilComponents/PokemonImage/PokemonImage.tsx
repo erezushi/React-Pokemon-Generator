@@ -4,9 +4,9 @@ import { Link } from '@mui/material';
 import { imageUrl } from '../../utils';
 import { IPokemonInstance } from '../../utils/Types';
 
-const lastIdOnPokeDB = 1010;
-const missingFromDB: string[] = ['Ursaluna-Bloodmoon'];
-const defaultForms: string[] = ['Teal Mask'];
+const lastIdOnPokeDB = 1024;
+const missingFromDB: string[] = [''];
+const defaultForms: string[] = [''];
 
 interface IPokemonImageProps {
     className: string;

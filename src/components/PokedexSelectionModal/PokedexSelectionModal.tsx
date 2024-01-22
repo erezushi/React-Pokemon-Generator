@@ -10,7 +10,7 @@ import { CustomCheckbox } from '../../utilComponents';
 type PokedexObject = {
   games: string;
   apiName: string;
-  DLCs?: string[]
+  DLCs?: Record<string, string>;
 };
 
 const pokedexes: Record<string, PokedexObject[]> = {
@@ -84,7 +84,10 @@ const pokedexes: Record<string, PokedexObject[]> = {
     {
       games: 'Sword / Shield',
       apiName: 'galar',
-      DLCs: ['isle-of-armor', 'crown-tundra'],
+      DLCs: {
+        'isle-of-armor': 'isle-of-armor',
+        'crown-tundra': 'crown-tundra',
+      },
     },
   ],
   Hisui: [
@@ -97,7 +100,10 @@ const pokedexes: Record<string, PokedexObject[]> = {
     {
       games: 'Scarlet / Violet',
       apiName: 'paldea',
-      DLCs: ['teal-mask', 'indigo-disk'],
+      DLCs: {
+        'teal-mask': 'kitakami',
+        'indigo-disk': 'blueberry',
+      },
     },
   ],
 };
@@ -186,17 +192,17 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
                     >
                       {pokedex.games}
                     </Button>
-                    {pokedex.DLCs?.map((dlc) => (
+                    {pokedex.DLCs && Object.entries(pokedex.DLCs).map(([dlcName, pokedexName]) => (
                       <FormControlLabel
-                        key={dlc}
+                        key={dlcName}
                         control={(
                           <CustomCheckbox
-                            checked={selectedDLCs.includes(dlc)}
-                            name={dlc}
+                            checked={selectedDLCs.includes(pokedexName)}
+                            name={pokedexName}
                             onChange={handleDLCCheckboxChange}
                           />
                         )}
-                        label={`Include the ${_.startCase(dlc)} DLC`}
+                        label={`Include the ${_.startCase(dlcName)} DLC`}
                       />
                     ))}
                   </div>

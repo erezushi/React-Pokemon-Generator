@@ -4,7 +4,7 @@ import { Link } from '@mui/material';
 import { imageUrl } from '../../utils';
 import { IPokemonInstance } from '../../utils/Types';
 
-const lastIdOnPokeDB = 1024;
+const lastIdOnPokeDB = 1025;
 const missingFromDB: string[] = [''];
 const defaultForms: string[] = [''];
 

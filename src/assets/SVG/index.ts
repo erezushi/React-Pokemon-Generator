@@ -1,7 +1,7 @@
 import { ReactComponent as BugIcon } from './bug.svg';
 import { ReactComponent as DarkIcon } from './dark.svg';
 import { ReactComponent as DragonIcon } from './dragon.svg';
-import { ReactComponent as ElecticIcon } from './electric.svg';
+import { ReactComponent as ElectricIcon } from './electric.svg';
 import { ReactComponent as FairyIcon } from './fairy.svg';
 import { ReactComponent as FightingIcon } from './fighting.svg';
 import { ReactComponent as FireIcon } from './fire.svg';
@@ -21,7 +21,7 @@ export {
   BugIcon,
   DarkIcon,
   DragonIcon,
-  ElecticIcon,
+  ElectricIcon,
   FairyIcon,
   FightingIcon,
   FireIcon,

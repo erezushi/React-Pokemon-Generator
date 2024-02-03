@@ -7,7 +7,7 @@ import {
   BugIcon,
   DarkIcon,
   DragonIcon,
-  ElecticIcon,
+  ElectricIcon,
   FairyIcon,
   FightingIcon,
   FireIcon,
@@ -37,7 +37,7 @@ const renderMap = {
     <DragonIcon />
   ),
   electric: () => (
-    <ElecticIcon />
+    <ElectricIcon />
   ),
   fairy: () => (
     <FairyIcon />

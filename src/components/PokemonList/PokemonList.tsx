@@ -2,15 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import random, { Form, Options } from '@erezushi/pokemon-randomizer';
 import { Button } from '@mui/material';
 import { Chance } from 'chance';
-import {
-  Pokemon as PokemonResponse,
-  PokemonSpecies as PokemonSpeciesResponse,
-} from 'pokedex-promise-v2';
+import PokeAPI from 'pokedex-promise-v2';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { LoadingSnackbar } from '../../utilComponents';
 import {
-  apiRequest, apiUrl, errorToast, fullName, randomArrayEntry,
+  apiName,
+  errorToast,
+  fullName,
+  randomArrayEntry,
 } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IExportDetails, IPokemonInstance } from '../../utils/Types';
@@ -20,6 +20,7 @@ import PokemonCard from '../PokemonCard';
 import './PokemonList.css';
 
 const chance = new Chance();
+const pokeAPI = new PokeAPI();
 
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState<IPokemonInstance[]>([]);
@@ -34,18 +35,18 @@ const PokemonList = () => {
       setSnackbarOpen(true);
 
       try {
-        const responses = await Promise.all(pokemonList.map((pokemon) => {
-          const { specie, form } = pokemon;
-          const urls = [
-            apiUrl(specie, form?.name ?? null),
-            apiUrl(specie, null).replace('pokemon', 'pokemon-species'),
-          ];
+        const responses = await Promise.all(
+          pokemonList.map((pokemon) => {
+            const { specie, form } = pokemon;
+            const name = apiName(specie, form?.name ?? null);
+            const specieName = apiName(specie, null);
 
-          return Promise.all([
-            apiRequest<PokemonResponse>(urls[0]),
-            apiRequest<PokemonSpeciesResponse>(urls[1]),
-          ]);
-        }));
+            return Promise.all([
+              pokeAPI.getPokemonByName(name),
+              pokeAPI.getPokemonSpeciesByName(specieName),
+            ]);
+          }),
+        );
 
         responses.forEach(([pokemon, specie], index) => {
           const abilityList = pokemon.abilities.map(

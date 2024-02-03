@@ -6,7 +6,6 @@ import {
   getTypes,
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
-import Pokedex from 'pokedex-promise-v2';
 import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
@@ -14,7 +13,6 @@ import 'animate.css';
 import { ICustomListFilters, ISettings } from './Types';
 
 const chance = new Chance();
-const pokeAPI = new Pokedex();
 
 // #region Constants
 export const STAT_NAMES = [
@@ -190,8 +188,12 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   (match) => match.substring(0, match.indexOf('-'))],
 ]);
 
-const apiName = (name: string, formName: string) => {
-  const fullName = `${name}-${formName}`;
+export const apiName = (specie: Pokemon, formName: string | null) => {
+  if (formName === null || formName === 'default') {
+    return specie.dexNo;
+  }
+
+  const fullName = `${specie.name}-${formName}`;
 
   let modifiedName = fullName.toLowerCase();
 
@@ -200,21 +202,6 @@ const apiName = (name: string, formName: string) => {
   });
 
   return modifiedName;
-};
-
-export const apiUrl = (specie: Pokemon, formName: string | null) => {
-  const baseUrl = 'https://pokeapi.co/api/v2/pokemon';
-  if (formName === null || formName === 'default') {
-    return `${baseUrl}/${specie.dexNo}`;
-  }
-
-  return `${baseUrl}/${apiName(specie.name, formName)}`;
-};
-
-export const apiRequest = async <T>(url: string): Promise<T> => {
-  const result = await pokeAPI.getResource(url);
-
-  return result;
 };
 // #endregion
 

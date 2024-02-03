@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PokemonType, getGenerations, getPokemon } from '@erezushi/pokemon-randomizer';
 import { Button, FormControlLabel } from '@mui/material';
-import { Pokedex } from 'pokedex-promise-v2';
+import PokeAPI from 'pokedex-promise-v2';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { CustomCheckbox } from '../../utilComponents';
-import { DEFAULT_FILTERS, apiRequest, getPokedexNumber } from '../../utils';
+import { DEFAULT_FILTERS, getPokedexNumber } from '../../utils';
 import PokedexSelectionModal from '../PokedexSelectionModal';
 
 import CustomListFilters from './CustomListFilters';
@@ -14,6 +14,7 @@ import CustomListFilters from './CustomListFilters';
 import './CustomList.css';
 
 const generationList = getGenerations();
+const pokeAPI = new PokeAPI();
 
 const CustomList = () => {
   const [fullList, setFullList] = useState<Record<string, boolean>>({});
@@ -184,9 +185,7 @@ const CustomList = () => {
     const pokedexResponses = await Promise.all(
       pokedex
         .split(' ')
-        .map((pokedexPart) => apiRequest<Pokedex>(
-          `https://pokeapi.co/api/v2/pokedex/${pokedexPart}/`,
-        )),
+        .map((pokedexPart) => pokeAPI.getPokedexByName(pokedexPart)),
     );
 
     pokedexResponses.forEach((response) => {

@@ -8,20 +8,18 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import { Ability as AbilityResponse, Pokemon as PokemonResponse } from 'pokedex-promise-v2';
+import PokeAPI from 'pokedex-promise-v2';
 
 import { LoadingSnackbar, PokemonImage } from '../../utilComponents';
 import {
-  apiRequest,
-  apiUrl,
-  errorToast,
-  generateLink,
-  siteLinks,
+  apiName, errorToast, generateLink, siteLinks,
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
 
 import './PokemonCard.css';
+
+const pokeAPI = new PokeAPI();
 
 interface ICardProps {
   instance: IPokemonInstance,
@@ -46,14 +44,14 @@ const PokemonCard = (props: ICardProps) => {
     if (!details.stats.length) {
       setSnackbarOpen(true);
       try {
-        const pokemonResponse = await apiRequest<PokemonResponse>(
-          apiUrl(specie, form?.name ?? null),
+        const pokemonResponse = await pokeAPI.getPokemonByName(
+          apiName(specie, form?.name ?? null),
         );
         const { abilities, stats } = pokemonResponse;
 
-        const abilityResponses = await Promise.all(abilities.map(
-          ((ability) => apiRequest<AbilityResponse>(ability.ability.url)),
-        ));
+        const abilityResponses = await Promise.all(
+          abilities.map((ability) => pokeAPI.getAbilityByName(ability.ability.name)),
+        );
 
         setDetails((currDetails) => ({
           ...currDetails,

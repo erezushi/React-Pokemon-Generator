@@ -25,7 +25,9 @@ const pokeAPI = new PokeAPI();
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState<IPokemonInstance[]>([]);
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
-  const [exportDetails, setExportDetails] = useState<Record<number, IExportDetails>>({});
+  const [exportDetails, setExportDetails] = useState<
+    Record<number, IExportDetails>
+  >({});
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleExport = useCallback(async () => {
@@ -79,20 +81,22 @@ const PokemonList = () => {
     try {
       const results = random(opt);
 
-      setPokemonList(results.map((specie) => {
-        const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
-        let form: Form | undefined;
-        if (specie.forms) {
-          form = randomArrayEntry(specie.forms);
-        }
+      setPokemonList(
+        results.map((specie) => {
+          const isShiny = chance.integer({ min: 0, max: 99 }) < shinyChance;
+          let form: Form | undefined;
+          if (specie.forms) {
+            form = randomArrayEntry(specie.forms);
+          }
 
-        return ({
-          specie,
-          form,
-          fullName: fullName(specie, isShiny, form),
-          isShiny,
-        });
-      }));
+          return ({
+            specie,
+            form,
+            fullName: fullName(specie, isShiny, form),
+            isShiny,
+          });
+        }),
+      );
     } catch (error: any) {
       errorToast.fire({
         html: `Couldn't generate Pokémon<br />${error.message}`,
@@ -114,8 +118,7 @@ const PokemonList = () => {
 
   return (
     <div className="pokemon-list">
-      {pokemonList.length > 0
-      && (
+      {pokemonList.length > 0 && (
         <>
           <Button
             className="showdown-export"
@@ -131,7 +134,10 @@ const PokemonList = () => {
             pokemonList={pokemonList}
             setOpen={setModalOpen}
           />
-          <LoadingSnackbar isOpen={isSnackbarOpen} title="'Pokémon Showdown!' Export" />
+          <LoadingSnackbar
+            isOpen={isSnackbarOpen}
+            title="'Pokémon Showdown!' Export"
+          />
         </>
       )}
       <VirtuosoGrid

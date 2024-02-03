@@ -22,7 +22,7 @@ import './PokemonCard.css';
 const pokeAPI = new PokeAPI();
 
 interface ICardProps {
-  instance: IPokemonInstance,
+  instance: IPokemonInstance;
 }
 
 const PokemonCard = (props: ICardProps) => {
@@ -30,9 +30,11 @@ const PokemonCard = (props: ICardProps) => {
   const { specie, isShiny, form } = instance;
 
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
-  const [details, setDetails] = useState<IPokemonDetails>(
-    { abilities: [], stats: [], type: form?.type ?? specie.type },
-  );
+  const [details, setDetails] = useState<IPokemonDetails>({
+    abilities: [],
+    stats: [],
+    type: form?.type ?? specie.type,
+  });
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -56,16 +58,20 @@ const PokemonCard = (props: ICardProps) => {
         setDetails((currDetails) => ({
           ...currDetails,
           abilities: abilityResponses.map((res) => {
-            const enFlavorTexts = res.flavor_text_entries
-              .filter((entry) => entry.language.name === 'en');
-            const flavorText = enFlavorTexts.length > 0
+            const enFlavorTexts = res.flavor_text_entries.filter(
+              (entry) => entry.language.name === 'en',
+            );
+
+            const flavorText = enFlavorTexts.length
               ? enFlavorTexts[enFlavorTexts.length - 1].flavor_text
               : 'No flavor text found';
 
             return {
               name: res.name,
               flavorText,
-              isHidden: abilities.find((ability) => ability.ability.name === res.name)!.is_hidden,
+              isHidden: abilities.find(
+                (ability) => ability.ability.name === res.name,
+              )!.is_hidden,
             };
           }),
           stats,
@@ -83,13 +89,14 @@ const PokemonCard = (props: ICardProps) => {
     }
   }, [details.stats.length, form?.name, specie]);
 
-  const handleButtonClick = useCallback((
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    const { id } = event.target as HTMLButtonElement;
-    window.open(generateLink(siteLinks[id], specie.name));
-    event.stopPropagation();
-  }, [specie.name]);
+  const handleButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const { id } = event.target as HTMLButtonElement;
+      window.open(generateLink(siteLinks[id], specie.name));
+      event.stopPropagation();
+    },
+    [specie.name],
+  );
 
   return (
     <Card className="pokemon-card" onClick={handleCardClick}>
@@ -104,10 +111,10 @@ const PokemonCard = (props: ICardProps) => {
         <Typography variant="h5">
           {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
           {isShiny && (
-          <span>
-            &nbsp;
-            <StarRounded fontSize="small" />
-          </span>
+            <span>
+              &nbsp;
+              <StarRounded fontSize="small" />
+            </span>
           )}
         </Typography>
       </CardContent>
@@ -124,10 +131,7 @@ const PokemonCard = (props: ICardProps) => {
           </Button>
         ))}
       </CardActions>
-      <LoadingSnackbar
-        isOpen={isSnackbarOpen}
-        title={instance.fullName}
-      />
+      <LoadingSnackbar isOpen={isSnackbarOpen} title={instance.fullName} />
       <DetailsModal
         details={details}
         instance={instance}

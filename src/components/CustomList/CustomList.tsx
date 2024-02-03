@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { PokemonType, getGenerations, getPokemon } from '@erezushi/pokemon-randomizer';
+import {
+  PokemonType,
+  getGenerations,
+  getPokemon,
+} from '@erezushi/pokemon-randomizer';
 import { Button, FormControlLabel } from '@mui/material';
 import PokeAPI from 'pokedex-promise-v2';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -51,25 +55,39 @@ const CustomList = () => {
 
   useEffect(() => {
     const pokemonList = getPokemon();
-    const { generations: generationFilter, types: typeFilter, searchTerm } = filters;
+    const {
+      generations: generationFilter,
+      types: typeFilter,
+      searchTerm,
+    } = filters;
 
-    const isGenerationFilterEmpty = Object.values(generationFilter).every((checked) => !checked);
-    const isTypeFilterEmpty = Object.values(typeFilter).every((checked) => !checked);
+    const isGenerationFilterEmpty = Object.values(generationFilter).every(
+      (checked) => !checked,
+    );
+    const isTypeFilterEmpty = Object.values(typeFilter).every(
+      (checked) => !checked,
+    );
     const isSearchFilterEmpty = searchTerm === '';
 
     setVisibleList(
-      Object.fromEntries(Object.entries(fullList).filter(([pokemonName], index) => {
-        const dexNo = index + 1;
+      Object.fromEntries(
+        Object.entries(fullList).filter(([pokemonName], index) => {
+          const dexNo = index + 1;
 
-        const generation = Object.keys(generationList).find(
-          (gen) => dexNo >= generationList[gen].first && dexNo <= generationList[gen].last,
-        );
-        const types = pokemonList[dexNo].type.split(' ') as PokemonType[];
+          const generation = Object.keys(generationList).find(
+            (gen) => dexNo >= generationList[gen].first
+              && dexNo <= generationList[gen].last,
+          );
+          const types = pokemonList[dexNo].type.split(' ') as PokemonType[];
 
-        return (isGenerationFilterEmpty || generationFilter[Number(generation)])
-          && (isTypeFilterEmpty || types.some((type) => typeFilter[type]))
-          && (isSearchFilterEmpty || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()));
-      })),
+          return (
+            (isGenerationFilterEmpty || generationFilter[Number(generation)])
+            && (isTypeFilterEmpty || types.some((type) => typeFilter[type]))
+            && (isSearchFilterEmpty
+              || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()))
+          );
+        }),
+      ),
     );
   }, [filters, fullList]);
 
@@ -107,24 +125,29 @@ const CustomList = () => {
     });
   }, []);
 
-  const changeSinglePokemon = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
+  const changeSinglePokemon = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, checked } = event.target;
 
-    setFullList((prevFullList) => {
-      const listCopy = { ...prevFullList };
+      setFullList((prevFullList) => {
+        const listCopy = { ...prevFullList };
 
-      listCopy[name] = checked;
+        listCopy[name] = checked;
 
-      return listCopy;
-    });
-  }, []);
+        return listCopy;
+      });
+    },
+    [],
+  );
 
   const returnHome = useCallback(() => {
     navigate('/', { state: fullList });
   }, [fullList, navigate]);
 
   const handleExport = useCallback(() => {
-    const textList = Object.keys(fullList).filter((name) => fullList[name]).join('\n');
+    const textList = Object.keys(fullList)
+      .filter((name) => fullList[name])
+      .join('\n');
 
     const url = URL.createObjectURL(new Blob([textList]));
 
@@ -155,13 +178,16 @@ const CustomList = () => {
     });
   }, []);
 
-  const handleExportFileChange = useCallback((event: Event) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      handleFileReaderLoadEnd(reader.result as string);
-    };
-    reader.readAsText((event.target as HTMLInputElement).files![0]);
-  }, [handleFileReaderLoadEnd]);
+  const handleExportFileChange = useCallback(
+    (event: Event) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleFileReaderLoadEnd(reader.result as string);
+      };
+      reader.readAsText((event.target as HTMLInputElement).files![0]);
+    },
+    [handleFileReaderLoadEnd],
+  );
 
   const handleImport = useCallback(() => {
     const input = document.createElement('input');
@@ -210,39 +236,42 @@ const CustomList = () => {
     setIsPokedexModalOpen(false);
   }, []);
 
-  const createCheckBox = useCallback((index: number) => {
-    const [pokemonName, isSelected] = Object.entries(visibleList)[index];
-    const dexNo = getPokedexNumber(pokemonName);
+  const createCheckBox = useCallback(
+    (index: number) => {
+      const [pokemonName, isSelected] = Object.entries(visibleList)[index];
+      const dexNo = getPokedexNumber(pokemonName);
 
-    return (
-      <FormControlLabel
-        key={pokemonName}
-        className="custom-list-pokemon"
-        control={(
-          <CustomCheckbox
-            checked={isSelected}
-            name={pokemonName}
-            onChange={changeSinglePokemon}
-          />
-      )}
-        label={(
-          <div className="custom-list-label">
-            <img
-              alt="Pokemon Sprite"
-              src={
-                `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                  dexNo
-                }.png`
-              }
+      return (
+        <FormControlLabel
+          key={pokemonName}
+          className="custom-list-pokemon"
+          control={(
+            <CustomCheckbox
+              checked={isSelected}
+              name={pokemonName}
+              onChange={changeSinglePokemon}
             />
-            <br />
-            {pokemonName}
-          </div>
-        )}
-        labelPlacement="bottom"
-      />
-    );
-  }, [changeSinglePokemon, visibleList]);
+          )}
+          label={(
+            <div className="custom-list-label">
+              <img
+                alt="Pokemon Sprite"
+                src={
+                  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                    dexNo
+                  }.png`
+                }
+              />
+              <br />
+              {pokemonName}
+            </div>
+          )}
+          labelPlacement="bottom"
+        />
+      );
+    },
+    [changeSinglePokemon, visibleList],
+  );
 
   return (
     <div className="custom-list-container">

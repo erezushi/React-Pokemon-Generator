@@ -11,7 +11,7 @@ import {
   TextField,
   Button,
   IconButton,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import _ from 'lodash';
 
@@ -32,7 +32,7 @@ interface ICustomListFiltersProps {
 
 const CustomListFilters = (props: ICustomListFiltersProps) => {
   const {
-    filters, setFilters, fetchGenerations, saveList, exportList, importList,
+    filters, setFilters, fetchGenerations, saveList, exportList, importList
   } = props;
   const { generations, types, searchTerm } = filters;
 
@@ -44,7 +44,7 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
 
       filtersCopy.generations = {
         ...filtersCopy.generations,
-        [name]: checked,
+        [name]: checked
       };
 
       return filtersCopy;
@@ -59,7 +59,7 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
 
       filtersCopy.types = {
         ...filtersCopy.types,
-        [name]: checked,
+        [name]: checked
       };
 
       return filtersCopy;

@@ -1,8 +1,8 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import {
-  AppHeader, CustomList, OptionsBox, PokemonList,
+  AppHeader, CustomList, OptionsBox, PokemonList
 } from './components';
 
 import './App.css';
@@ -15,12 +15,12 @@ const router = createBrowserRouter([
         <OptionsBox />
         <PokemonList />
       </>
-    ),
+    )
   },
   {
     path: '/list',
-    element: <CustomList />,
-  },
+    element: <CustomList />
+  }
 ]);
 
 const App = () => (
@@ -31,7 +31,9 @@ const App = () => (
       Site made by Erez Bracha, aka&nbsp;
       <a href="https://linktr.ee/erezushi">PokéErez</a>
       , powered by&nbsp;
-      <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">this</a>
+      <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">
+        this
+      </a>
       &nbsp;NPM library
     </div>
   </div>

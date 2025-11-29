@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   PokemonType,
   getGenerations,
-  getPokemon,
+  getPokemon
 } from '@erezushi/pokemon-randomizer';
 import { Button, FormControlLabel } from '@mui/material';
 import PokeAPI from 'pokedex-promise-v2';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { CustomCheckbox } from '../../utilComponents';
@@ -41,7 +41,7 @@ const CustomList = () => {
 
         filtersCopy.generations = {
           ...filtersCopy.generations,
-          [gen]: false,
+          [gen]: false
         };
 
         return filtersCopy;
@@ -58,14 +58,14 @@ const CustomList = () => {
     const {
       generations: generationFilter,
       types: typeFilter,
-      searchTerm,
+      searchTerm
     } = filters;
 
     const isGenerationFilterEmpty = Object.values(generationFilter).every(
-      (checked) => !checked,
+      (checked) => !checked
     );
     const isTypeFilterEmpty = Object.values(typeFilter).every(
-      (checked) => !checked,
+      (checked) => !checked
     );
     const isSearchFilterEmpty = searchTerm === '';
 
@@ -76,7 +76,7 @@ const CustomList = () => {
 
           const generation = Object.keys(generationList).find(
             (gen) => dexNo >= generationList[gen].first
-              && dexNo <= generationList[gen].last,
+              && dexNo <= generationList[gen].last
           );
           const types = pokemonList[dexNo].type.split(' ') as PokemonType[];
 
@@ -86,8 +86,8 @@ const CustomList = () => {
             && (isSearchFilterEmpty
               || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()))
           );
-        }),
-      ),
+        })
+      )
     );
   }, [filters, fullList]);
 
@@ -101,7 +101,7 @@ const CustomList = () => {
 
       setFullList((prevFullList) => ({
         ...prevFullList,
-        ...listCopy,
+        ...listCopy
       }));
 
       return listCopy;
@@ -118,7 +118,7 @@ const CustomList = () => {
 
       setFullList((prevFullList) => ({
         ...prevFullList,
-        ...listCopy,
+        ...listCopy
       }));
 
       return listCopy;
@@ -137,7 +137,7 @@ const CustomList = () => {
         return listCopy;
       });
     },
-    [],
+    []
   );
 
   const returnHome = useCallback(() => {
@@ -172,8 +172,8 @@ const CustomList = () => {
       return Object.fromEntries(
         Object.entries(fullListCopy).map(([name]) => [
           name,
-          importedList.includes(name),
-        ]),
+          importedList.includes(name)
+        ])
       );
     });
   }, []);
@@ -186,7 +186,7 @@ const CustomList = () => {
       };
       reader.readAsText((event.target as HTMLInputElement).files![0]);
     },
-    [handleFileReaderLoadEnd],
+    [handleFileReaderLoadEnd]
   );
 
   const handleImport = useCallback(() => {
@@ -211,14 +211,14 @@ const CustomList = () => {
     const pokedexResponses = await Promise.all(
       pokedex
         .split(' ')
-        .map((pokedexPart) => pokeAPI.getPokedexByName(pokedexPart)),
+        .map((pokedexPart) => pokeAPI.getPokedexByName(pokedexPart))
     );
 
     pokedexResponses.forEach((response) => {
       natDexNumbers = natDexNumbers.concat(
         response.pokemon_entries.map(
-          (pokemon) => pokemon.pokemon_species.url.split('/').at(-2) ?? '',
-        ),
+          (pokemon) => pokemon.pokemon_species.url.split('/').at(-2) ?? ''
+        )
       );
     });
 
@@ -228,8 +228,8 @@ const CustomList = () => {
       return Object.fromEntries(
         Object.entries(fullListCopy).map(([name], index) => [
           name,
-          natDexNumbers.includes((index + 1).toString()),
-        ]),
+          natDexNumbers.includes((index + 1).toString())
+        ])
       );
     });
 
@@ -270,7 +270,7 @@ const CustomList = () => {
         />
       );
     },
-    [changeSinglePokemon, visibleList],
+    [changeSinglePokemon, visibleList]
   );
 
   return (

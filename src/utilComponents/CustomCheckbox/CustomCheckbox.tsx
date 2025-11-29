@@ -8,7 +8,7 @@ const CustomCheckbox = ({
   checked,
   indeterminate,
   name,
-  onChange,
+  onChange
 }: CheckboxProps) => (
   <Checkbox
     checked={checked}

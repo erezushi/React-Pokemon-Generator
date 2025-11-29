@@ -2,7 +2,7 @@
 import React, {
   useCallback,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import Done from '@mui/icons-material/Done';
 import Star from '@mui/icons-material/Star';
@@ -25,7 +25,7 @@ import {
   SelectChangeEvent,
   OutlinedInput,
   Checkbox,
-  Pagination,
+  Pagination
 } from '@mui/material';
 import _ from 'lodash';
 
@@ -57,7 +57,7 @@ interface IExportModalProps {
 
 const Exportmodal = (props: IExportModalProps) => {
   const {
-    isOpen, pokemonDetails, pokemonList, setOpen,
+    isOpen, pokemonDetails, pokemonList, setOpen
   } = props;
 
   const [includedIndices, setIncludedIndices] = useState<Record<number, boolean>>({});
@@ -91,7 +91,7 @@ const Exportmodal = (props: IExportModalProps) => {
           nickname: '',
           ability: abilityList[0],
           level: 100,
-          isShiny: isShiny ?? false,
+          isShiny: isShiny ?? false
         };
         setExportValues((prevValues) => ({ ...prevValues, [index]: defaultValues }));
         setPageNumber(1);
@@ -131,8 +131,8 @@ const Exportmodal = (props: IExportModalProps) => {
       ...prevValues,
       [index]: {
         ...prevValues[index],
-        gender: value as 'male' | 'female' | 'random',
-      },
+        gender: value as 'male' | 'female' | 'random'
+      }
     }));
   }, []);
 
@@ -145,8 +145,8 @@ const Exportmodal = (props: IExportModalProps) => {
       ...prevValues,
       [index]: {
         ...prevValues[index],
-        nickname: value,
-      },
+        nickname: value
+      }
     }));
   }, []);
 
@@ -159,8 +159,8 @@ const Exportmodal = (props: IExportModalProps) => {
       ...prevValues,
       [index]: {
         ...prevValues[index],
-        ability: value,
-      },
+        ability: value
+      }
     }));
   }, []);
 
@@ -175,8 +175,8 @@ const Exportmodal = (props: IExportModalProps) => {
         ...prevValues,
         [index]: {
           ...prevValues[index],
-          level: Number(value),
-        },
+          level: Number(value)
+        }
       }));
     }
   }, []);
@@ -190,8 +190,8 @@ const Exportmodal = (props: IExportModalProps) => {
       ...prevValues,
       [index]: {
         ...prevValues[index],
-        isShiny: checked,
-      },
+        isShiny: checked
+      }
     }));
   }, []);
 
@@ -218,7 +218,7 @@ const Exportmodal = (props: IExportModalProps) => {
         }${
           pokemon.isShiny ? '\nShiny: Yes' : ''
         }`)
-        .join('\n\n'),
+        .join('\n\n')
     )
       .then(() => {
         setExported(true);
@@ -281,7 +281,7 @@ const Exportmodal = (props: IExportModalProps) => {
                       className="export-img"
                       instance={{
                         ...instance,
-                        isShiny: exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE]?.isShiny,
+                        isShiny: exportValues[index + (pageNumber - 1) * POKEMON_PER_PAGE]?.isShiny
                       }}
                       isLinking
                     />

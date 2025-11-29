@@ -9,7 +9,7 @@ import {
   Link,
   Modal,
   Tooltip,
-  Typography,
+  Typography
 } from '@mui/material';
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
@@ -21,7 +21,7 @@ import {
   getGeneration,
   nextEvos,
   prevEvos,
-  STAT_NAMES,
+  STAT_NAMES
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 
@@ -36,7 +36,7 @@ interface IDetailsModalProps {
 
 const DetailsModal = (props: IDetailsModalProps) => {
   const {
-    details, instance, isOpen, setOpen,
+    details, instance, isOpen, setOpen
   } = props;
 
   const [evolutions, setEvolutions] = useState<(Evolution|Evolution[])[]>([]);
@@ -178,7 +178,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
               const prevoInstance: IPokemonInstance = {
                 ...prevo,
                 fullName: fullName(prevo.specie, isShiny, prevo.form),
-                isShiny,
+                isShiny
               };
 
               return (
@@ -222,7 +222,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                           const splitEvoInstance: IPokemonInstance = {
                             ...splitEvo,
                             fullName: fullName(splitEvo.specie, isShiny, splitEvo.form),
-                            isShiny,
+                            isShiny
                           };
 
                           return name === 'MissingNo.'
@@ -258,7 +258,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                       const splitEvoInstance: IPokemonInstance = {
                         ...splitEvo,
                         fullName: fullName(splitEvo.specie, isShiny, splitEvo.form),
-                        isShiny,
+                        isShiny
                       };
 
                       return name === 'MissingNo.'
@@ -287,7 +287,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
               const evoInstance: IPokemonInstance = {
                 ...evo,
                 fullName: fullName(evo.specie, isShiny, evo.form),
-                isShiny,
+                isShiny
               };
 
               return (

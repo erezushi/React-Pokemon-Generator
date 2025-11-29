@@ -21,7 +21,7 @@ import {
   PsychicIcon,
   RockIcon,
   SteelIcon,
-  WaterIcon,
+  WaterIcon
 } from '../../assets';
 
 import './TypeIcon.css';
@@ -80,7 +80,7 @@ const renderMap = {
   ),
   water: () => (
     <WaterIcon />
-  ),
+  )
 };
 
 interface ITypeIconProps {

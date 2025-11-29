@@ -21,6 +21,7 @@
     "rules": {
         // Generic rules
         "arrow-parens": "warn",
+        "comma-dangle": ["warn", "never"],
         "linebreak-style": "off",
         "max-len": ["warn", 100],
         "newline-before-return": "error",

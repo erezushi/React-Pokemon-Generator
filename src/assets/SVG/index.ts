@@ -35,5 +35,5 @@ export {
   PsychicIcon,
   RockIcon,
   SteelIcon,
-  WaterIcon,
+  WaterIcon
 };

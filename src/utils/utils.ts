@@ -3,7 +3,7 @@ import {
   getGenerations,
   Form,
   Pokemon,
-  getTypes,
+  getTypes
 } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
 import { romanize } from 'romans';
@@ -21,7 +21,7 @@ export const STAT_NAMES = [
   'Defense',
   'Sp. Atk',
   'Sp. Def',
-  'Speed',
+  'Speed'
 ];
 
 export const DEFAULT_SETTINGS: ISettings = {
@@ -37,7 +37,7 @@ export const DEFAULT_SETTINGS: ISettings = {
   starter: false,
   legendary: false,
   mythical: false,
-  listMode: false,
+  listMode: false
 };
 
 export const DEFAULT_FILTERS: ICustomListFilters = {
@@ -60,9 +60,9 @@ export const DEFAULT_FILTERS: ICustomListFilters = {
     psychic: false,
     rock: false,
     steel: false,
-    water: false,
+    water: false
   },
-  searchTerm: '',
+  searchTerm: ''
 };
 // #endregion
 
@@ -92,7 +92,7 @@ const imgReplacements: Record<string, string> = {
   'Ogerpon-Teal-Mask': 'ogerpon-teal',
   'Ogerpon-Cornerstone-Mask': 'ogerpon-cornerstone',
   'Ogerpon-Hearthflame-Mask': 'ogerpon-hearthflame',
-  'Ogerpon-Wellspring-Mask': 'ogerpon-wellspring',
+  'Ogerpon-Wellspring-Mask': 'ogerpon-wellspring'
 };
 
 const imgSpecialStrings = /['.:♀♂é ]|-m$/g;
@@ -105,7 +105,7 @@ const imgStringMap: Record<string, string> = {
   '-m': '',
   '♀': '-f',
   '♂': '-m',
-  é: 'e',
+  é: 'e'
 };
 
 const imageName = (name: string) => imgReplacements[name]
@@ -121,7 +121,7 @@ export const imageUrl = (name: string, shiny: boolean): string => (
 
         return `alcremie-Ruby-Cream-${sweet}`;
       })
-      : name,
+      : name
   )}.png`);
 // #endregion
 
@@ -155,7 +155,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   // Altered Dialga & Palkia
   [
     /(dialga|palkia)-altered/g,
-    (match) => match.substring(0, match.indexOf('-')),
+    (match) => match.substring(0, match.indexOf('-'))
   ],
 
   // Oricorio Meteor form
@@ -174,7 +174,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
       if (gender === 'f') return `${specie}-female`;
 
       return specie === 'oinkologne' ? 'oinkologne' : 'male';
-    },
+    }
   ],
 
   // Zacian & Zamazenta Hero forms (not in next group because of Palafin)
@@ -193,12 +193,12 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
         '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas', // Gen VI
         '|silvally', // Gen VII
         '|cramorant|morpeko|zarude', // Gen VIII
-        '|maushold|squawkabilly|tatsugiri|dudunsparce|ogerpon)-.+', // Gen IX
+        '|maushold|squawkabilly|tatsugiri|dudunsparce|ogerpon)-.+' // Gen IX
       ].join(''),
-      'g',
+      'g'
     ),
-    (match) => match.substring(0, match.indexOf('-')),
-  ],
+    (match) => match.substring(0, match.indexOf('-'))
+  ]
 ]);
 
 export const apiName = (specie: Pokemon, formName: string | null) => {
@@ -223,7 +223,7 @@ const showdownReplacements: Record<string, string> = {
   Alolan: 'Alola',
   Galarian: 'Galar',
   Hisuian: 'Hisui',
-  Gigantamax: 'Gmax',
+  Gigantamax: 'Gmax'
 };
 
 const showdownRemovals = new RegExp(
@@ -233,9 +233,9 @@ const showdownRemovals = new RegExp(
     '|Standard|Pirouette',
     '|Blade|Active',
     '|Solo|School|Core|Busted',
-    '|Gulping|Gorging|Ice|Noice|Hangry|Hero|Single-Strike|Rider',
+    '|Gulping|Gorging|Ice|Noice|Hangry|Hero|Single-Strike|Rider'
   ].join('')})`,
-  'g',
+  'g'
 );
 
 export const showdownName = (pokemonName: string) => {
@@ -257,22 +257,22 @@ export const Toast = Swal.mixin({
   position: 'bottom-start',
   showConfirmButton: false,
   showClass: {
-    popup: 'animate__animated animate__slideInLeft',
+    popup: 'animate__animated animate__slideInLeft'
   },
   hideClass: {
-    popup: 'animate__animated animate__slideOutLeft',
-  },
+    popup: 'animate__animated animate__slideOutLeft'
+  }
 });
 
 export const errorToast = Toast.mixin({
   timer: 2500,
-  icon: 'error',
+  icon: 'error'
 });
 // #endregion
 
 // #region Alcremie
 export const randomArrayEntry = <Type>(array: Type[]) => array[chance.integer(
-  { min: 0, max: array.length - 1 },
+  { min: 0, max: array.length - 1 }
 )];
 
 const alcremieCreams = [
@@ -284,7 +284,7 @@ const alcremieCreams = [
   'Salted-Cream',
   'Ruby-Swirl',
   'Caramel-Swirl',
-  'Rainbow-Swirl',
+  'Rainbow-Swirl'
 ];
 
 const alcremieSweets = [
@@ -294,7 +294,7 @@ const alcremieSweets = [
   'Clover',
   'Flower',
   'Star',
-  'Ribbon',
+  'Ribbon'
 ];
 
 export const alcremieForm = (): string => {
@@ -315,15 +315,15 @@ const missingNo: Evolution = {
   specie: {
     name: 'MissingNo.',
     type: 'bird normal',
-    dexNo: 0,
-  },
+    dexNo: 0
+  }
 };
 
 const extraEvoForms = ['Mega', 'Primal', 'Ash', 'Gigantamax', 'Eternamax'];
 
 export const nextEvos = (
   pokemon: Pokemon,
-  form?: Form,
+  form?: Form
 ): (Evolution | Evolution[])[] => {
   const pokemonList = getPokemon();
 
@@ -333,9 +333,9 @@ export const nextEvos = (
         {
           specie: pokemon,
           form: pokemon.forms?.find(
-            (currForm) => currForm.name === `${form.name}-Gigantamax`,
-          ),
-        },
+            (currForm) => currForm.name === `${form.name}-Gigantamax`
+          )
+        }
       ]
       : [];
   }
@@ -348,11 +348,11 @@ export const nextEvos = (
       || form.name === 'Amped'
       || form.name === 'Low-Key')
     && pokemon.forms?.some(
-      (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+      (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
     )
   ) {
     const dexNo = Object.keys(pokemonList).find(
-      (currDexNo) => pokemonList[currDexNo].name === pokemon.name,
+      (currDexNo) => pokemonList[currDexNo].name === pokemon.name
     );
     if (evolveTo !== undefined) {
       evolveTo = `${evolveTo} ${pokemon.forms
@@ -376,16 +376,16 @@ export const nextEvos = (
         return {
           specie: { ...evolution, dexNo } as Pokemon,
           form: evolution.forms!.find(
-            (evoForm) => evoForm.name === evoString.substring(evoString.indexOf('-') + 1),
-          ),
+            (evoForm) => evoForm.name === evoString.substring(evoString.indexOf('-') + 1)
+          )
         };
       }
 
       return {
         specie: {
           ...pokemonList[evoString],
-          dexNo: Number(evoString),
-        } as Pokemon,
+          dexNo: Number(evoString)
+        } as Pokemon
       };
     });
 
@@ -398,7 +398,7 @@ export const nextEvos = (
           || evoForm.name === 'Amped'
           || evoForm.name === 'Low-Key')
         && specie.forms?.some(
-          (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo)),
+          (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
         );
 
       return Boolean(evolutionEvolveTo) || hasExtraEvos;
@@ -407,8 +407,8 @@ export const nextEvos = (
         evolutions,
         evolutions.map(
           (evolution) => (nextEvos(evolution.specie, evolution.form)[0] as Evolution)
-              ?? missingNo,
-        ),
+              ?? missingNo
+        )
       ]
       : [evolutions];
   }
@@ -418,20 +418,20 @@ export const nextEvos = (
       const dexNo = Number(evolveTo.substring(0, evolveTo.indexOf('-')));
       const evolution = { ...pokemonList[dexNo], dexNo } as Pokemon;
       const evoForm = evolution.forms!.find(
-        (currentForm) => currentForm.name === evolveTo!.substring(evolveTo!.indexOf('-') + 1),
+        (currentForm) => currentForm.name === evolveTo!.substring(evolveTo!.indexOf('-') + 1)
       );
 
       return [
         {
           specie: evolution,
-          form: evoForm,
+          form: evoForm
         },
-        ...nextEvos(evolution, evoForm),
+        ...nextEvos(evolution, evoForm)
       ];
     }
     const evolution = {
       ...pokemonList[evolveTo],
-      dexNo: Number(evolveTo),
+      dexNo: Number(evolveTo)
     } as Pokemon;
 
     return [{ specie: evolution }, ...nextEvos(evolution)];
@@ -448,7 +448,7 @@ const ignoreForms = [
   'Toxtricity',
   'Maushold',
   'Palafin',
-  'Dudunsparce',
+  'Dudunsparce'
 ];
 
 export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
@@ -456,15 +456,15 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
 
   if (pokemon.name === 'Urshifu') {
     const prevolutions: Evolution[] = [
-      { specie: { ...pokemonList['891'], dexNo: 891 } },
+      { specie: { ...pokemonList['891'], dexNo: 891 } }
     ];
 
     if (form?.name.includes('Gigantamax')) {
       prevolutions.push({
         specie: pokemon,
         form: pokemon.forms?.find(
-          (currForm) => currForm.name === form.name.substring(0, form.name.lastIndexOf('-')),
-        ),
+          (currForm) => currForm.name === form.name.substring(0, form.name.lastIndexOf('-'))
+        )
       });
     }
 
@@ -473,12 +473,12 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
 
   if (form && extraEvoForms.some((extraEvo) => form.name.includes(extraEvo))) {
     const prevoForm = pokemon.forms!.find(
-      (currForm) => currForm.name === 'default',
+      (currForm) => currForm.name === 'default'
     );
 
     return [
       ...prevEvos(pokemon, prevoForm),
-      { specie: pokemon, form: prevoForm },
+      { specie: pokemon, form: prevoForm }
     ];
   }
   const wantedEvoString = `${pokemon.dexNo}${
@@ -514,7 +514,7 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   return prevolution
     ? [
       ...prevEvos({ ...prevolution[1], dexNo: prevoDexNo }, prevoForm),
-      { specie: { ...prevolution[1], dexNo: prevoDexNo }, form: prevoForm },
+      { specie: { ...prevolution[1], dexNo: prevoDexNo }, form: prevoForm }
     ]
     : [];
 };
@@ -523,13 +523,13 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
 // #region fullName
 const shinyReplacements = new Map<RegExp, string>([
   [/Minior-.+-/g, 'Minior-'],
-  [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-'],
+  [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-']
 ]);
 
 export const fullName = (
   specie: Pokemon,
   isShiny: boolean,
-  form?: Form,
+  form?: Form
 ): string => {
   let name = `${specie.name}${
     form && form.name !== 'default' ? `-${form.name}` : ''
@@ -556,7 +556,7 @@ const siteSpecialCharMap: Record<string, string> = {
   '♂': 'm',
   ' ': '',
   '♀': 'f',
-  é: 'e',
+  é: 'e'
 };
 
 const pokeDbSpecialChars = /[. ♂♀é:']/g;
@@ -568,14 +568,14 @@ const pokeDbSpecialCharMap: Record<string, string> = {
   '♀': '-f',
   é: 'e',
   ':': '',
-  "'": '',
+  "'": ''
 };
 
 export const siteLinks: Record<string, string> = {
   bulbapedia: 'https://bulbapedia.bulbagarden.net/wiki/_pkmnu__(Pokémon)',
   serebii: 'https://www.serebii.net/pokemon/_pkmnlc_/',
   smogon: 'https://www.smogon.com/dex/sv/pokemon/_pkmnc_/',
-  pokeDB: 'https://pokemondb.net/pokedex/_pkmns_/',
+  pokeDB: 'https://pokemondb.net/pokedex/_pkmns_/'
 };
 
 export const generateLink = (baseLink: string, name: string) => {
@@ -585,7 +585,7 @@ export const generateLink = (baseLink: string, name: string) => {
     if (match.includes('c')) {
       formattedName = formattedName.replace(
         siteSpecialChars,
-        (charMatch) => siteSpecialCharMap[charMatch],
+        (charMatch) => siteSpecialCharMap[charMatch]
       );
     }
 
@@ -596,7 +596,7 @@ export const generateLink = (baseLink: string, name: string) => {
     if (match.includes('s')) {
       formattedName = formattedName.replace(
         pokeDbSpecialChars,
-        (charMatch) => pokeDbSpecialCharMap[charMatch],
+        (charMatch) => pokeDbSpecialCharMap[charMatch]
       );
     }
 
@@ -613,7 +613,7 @@ export const generateLink = (baseLink: string, name: string) => {
 export const getPokedexNumber = (wantedName: string): number => {
   const pokemonList = getPokemon();
   const wantedPokemon = Object.entries(pokemonList).find(
-    (entry) => entry[1].name === wantedName,
+    (entry) => entry[1].name === wantedName
   );
 
   return Number(wantedPokemon?.[0]);
@@ -625,9 +625,9 @@ export const getGeneration = (dexNo: number): string => {
   return romanize(
     Number(
       Object.keys(generations).find(
-        (gen) => dexNo >= generations[gen].first && dexNo <= generations[gen].last,
-      ),
-    ),
+        (gen) => dexNo >= generations[gen].first && dexNo <= generations[gen].last
+      )
+    )
   );
 };
 

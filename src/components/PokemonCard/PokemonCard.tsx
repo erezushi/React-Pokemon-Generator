@@ -6,13 +6,13 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Button,
+  Button
 } from '@mui/material';
 import PokeAPI from 'pokedex-promise-v2';
 
 import { LoadingSnackbar, PokemonImage } from '../../utilComponents';
 import {
-  apiName, errorToast, generateLink, siteLinks,
+  apiName, errorToast, generateLink, siteLinks
 } from '../../utils';
 import { IPokemonDetails, IPokemonInstance } from '../../utils/Types';
 import DetailsModal from '../DetailsModal';
@@ -33,7 +33,7 @@ const PokemonCard = (props: ICardProps) => {
   const [details, setDetails] = useState<IPokemonDetails>({
     abilities: [],
     stats: [],
-    type: form?.type ?? specie.type,
+    type: form?.type ?? specie.type
   });
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -47,19 +47,19 @@ const PokemonCard = (props: ICardProps) => {
       setSnackbarOpen(true);
       try {
         const pokemonResponse = await pokeAPI.getPokemonByName(
-          apiName(specie, form?.name ?? null),
+          apiName(specie, form?.name ?? null)
         );
         const { abilities, stats } = pokemonResponse;
 
         const abilityResponses = await Promise.all(
-          abilities.map((ability) => pokeAPI.getAbilityByName(ability.ability.name)),
+          abilities.map((ability) => pokeAPI.getAbilityByName(ability.ability.name))
         );
 
         setDetails((currDetails) => ({
           ...currDetails,
           abilities: abilityResponses.map((res) => {
             const enFlavorTexts = res.flavor_text_entries.filter(
-              (entry) => entry.language.name === 'en',
+              (entry) => entry.language.name === 'en'
             );
 
             const flavorText = enFlavorTexts.length
@@ -70,18 +70,18 @@ const PokemonCard = (props: ICardProps) => {
               name: res.name,
               flavorText,
               isHidden: abilities.find(
-                (ability) => ability.ability.name === res.name,
-              )!.is_hidden,
+                (ability) => ability.ability.name === res.name
+              )!.is_hidden
             };
           }),
-          stats,
+          stats
         }));
         setModalOpen(true);
         setSnackbarOpen(false);
       } catch (error: any) {
         setSnackbarOpen(false);
         errorToast.fire({
-          html: `Couldn't fetch details<br />${error.message}`,
+          html: `Couldn't fetch details<br />${error.message}`
         });
       }
     } else {
@@ -95,7 +95,7 @@ const PokemonCard = (props: ICardProps) => {
       window.open(generateLink(siteLinks[id], specie.name));
       event.stopPropagation();
     },
-    [specie.name],
+    [specie.name]
   );
 
   return (

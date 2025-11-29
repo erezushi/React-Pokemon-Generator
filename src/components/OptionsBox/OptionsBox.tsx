@@ -3,14 +3,14 @@ import React, {
   useCallback,
   useEffect,
   ChangeEvent,
-  useRef,
+  useRef
 } from 'react';
 import {
   PokemonType,
   Options,
   getGenerations,
   getTypes,
-  getPokemon,
+  getPokemon
 } from '@erezushi/pokemon-randomizer';
 import DownloadIcon from '@mui/icons-material/DownloadRounded';
 import UploadIcon from '@mui/icons-material/UploadRounded';
@@ -28,10 +28,10 @@ import {
   TextField,
   Typography,
   Tooltip,
-  Switch,
+  Switch
 } from '@mui/material';
 import _ from 'lodash';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import { CustomCheckbox } from '../../utilComponents';
 import { DEFAULT_SETTINGS, errorToast, isType } from '../../utils';
@@ -43,7 +43,7 @@ import './OptionsBox.css';
 const idMap = {
   Enter: 'generate',
   NumpadEnter: 'generate',
-  KeyC: 'reset',
+  KeyC: 'reset'
 };
 
 const OptionsBox = () => {
@@ -71,7 +71,7 @@ const OptionsBox = () => {
         setSingleSetting('generationList', value);
       }
     },
-    [setSingleSetting],
+    [setSingleSetting]
   );
 
   const fetchTypes = useCallback(() => {
@@ -84,7 +84,7 @@ const OptionsBox = () => {
     const genNumbers = Object.keys(gens);
     generationCount.current = genNumbers.length;
     genNumbers.forEach(
-      (gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true })),
+      (gen) => setGenerationList((prevGenList) => ({ ...prevGenList, [gen]: true }))
     );
   }, [setGenerationList]);
 
@@ -125,7 +125,7 @@ const OptionsBox = () => {
         starter,
         legendary,
         mythical,
-        listMode,
+        listMode
       } = JSON.parse(savedSettings) as ISettings;
 
       setSingleSetting('unique', unique);
@@ -150,7 +150,7 @@ const OptionsBox = () => {
 
   const uniqueClicked = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => setSingleSetting('unique', event.target.checked),
-    [setSingleSetting],
+    [setSingleSetting]
   );
 
   const changeAmount = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +164,7 @@ const OptionsBox = () => {
     (event: SelectChangeEvent<'all' | PokemonType | 'random'>) => {
       setSingleSetting('type', event.target.value);
     },
-    [setSingleSetting],
+    [setSingleSetting]
   );
 
   const allBoxClicked = useCallback(() => {
@@ -256,7 +256,7 @@ const OptionsBox = () => {
 
   const formsClicked = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => setSingleSetting('forms', event.target.checked),
-    [setSingleSetting],
+    [setSingleSetting]
   );
 
   const changeShinyChance = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -285,7 +285,7 @@ const OptionsBox = () => {
       evolved,
       starter,
       legendary,
-      mythical,
+      mythical
     } = settings;
 
     const options: Options = {
@@ -300,7 +300,7 @@ const OptionsBox = () => {
       evolved,
       starter,
       legendary,
-      mythical,
+      mythical
     };
 
     if (settings.listMode) {
@@ -346,7 +346,7 @@ const OptionsBox = () => {
         evolved,
         starter,
         legendary,
-        mythical,
+        mythical
       } = importObject;
 
       if (_.isBoolean(unique)) {
@@ -370,7 +370,7 @@ const OptionsBox = () => {
           && Object.keys(generationList).length === generationCount.current
           && Object.entries(generationList).every(
             ([key, value]) => Number(key) > 0
-              && Number(key) <= generationCount.current && _.isBoolean(value),
+              && Number(key) <= generationCount.current && _.isBoolean(value)
           )
       ) {
         setSingleSetting('generationList', generationList);
@@ -406,7 +406,7 @@ const OptionsBox = () => {
     } catch (error: unknown) {
       errorToast.fire(
         'Failed to parse',
-        "Couldn't parse file text.\nMake sure to select a JSON file",
+        `Couldn't parse file text.\nMake sure to select a JSON file\nError: ${error}`
       );
     }
   }, [generationCount, setSingleSetting]);
@@ -504,7 +504,7 @@ const OptionsBox = () => {
                       >
                         {_.capitalize(listType)}
                       </MenuItem>
-                    ),
+                    )
                   )
                 }
                 <MenuItem value="random">Random</MenuItem>

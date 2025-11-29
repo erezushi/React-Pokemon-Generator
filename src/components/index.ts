@@ -7,5 +7,5 @@ import PokemonCard from './PokemonCard';
 import PokemonList from './PokemonList';
 
 export {
-  AppHeader, DetailsModal, ExportModal, OptionsBox, PokemonCard, PokemonList, CustomList,
+  AppHeader, DetailsModal, ExportModal, OptionsBox, PokemonCard, PokemonList, CustomList
 };

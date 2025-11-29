@@ -10,7 +10,7 @@ import {
   apiName,
   errorToast,
   fullName,
-  randomArrayEntry,
+  randomArrayEntry
 } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IExportDetails, IPokemonInstance } from '../../utils/Types';
@@ -45,19 +45,19 @@ const PokemonList = () => {
 
             return Promise.all([
               pokeAPI.getPokemonByName(name),
-              pokeAPI.getPokemonSpeciesByName(specieName),
+              pokeAPI.getPokemonSpeciesByName(specieName)
             ]);
-          }),
+          })
         );
 
         responses.forEach(([pokemon, specie], index) => {
           const abilityList = pokemon.abilities.map(
-            (abilityObj) => abilityObj.ability.name,
+            (abilityObj) => abilityObj.ability.name
           );
           const genderRate = specie.gender_rate;
 
           setExportDetails((prevDetails) => ({
-            ...prevDetails, [index]: { abilityList, genderRate },
+            ...prevDetails, [index]: { abilityList, genderRate }
           }));
         });
 
@@ -66,7 +66,7 @@ const PokemonList = () => {
       } catch (error: any) {
         setSnackbarOpen(false);
         errorToast.fire({
-          html: `Error fetching details<br />${error.message}`,
+          html: `Error fetching details<br />${error.message}`
         });
       }
     }
@@ -74,7 +74,7 @@ const PokemonList = () => {
 
   const createCard = useCallback(
     (index: number) => <PokemonCard instance={pokemonList[index]} />,
-    [pokemonList],
+    [pokemonList]
   );
 
   const randomize = useCallback((opt: Options, shinyChance: number) => {
@@ -93,13 +93,13 @@ const PokemonList = () => {
             specie,
             form,
             fullName: fullName(specie, isShiny, form),
-            isShiny,
+            isShiny
           });
-        }),
+        })
       );
     } catch (error: any) {
       errorToast.fire({
-        html: `Couldn't generate Pokémon<br />${error.message}`,
+        html: `Couldn't generate Pokémon<br />${error.message}`
       });
     }
   }, []);

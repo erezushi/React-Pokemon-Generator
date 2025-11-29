@@ -5,5 +5,5 @@ import SlideTransition from './SlideTransition';
 import TypeIcon from './TypeIcon';
 
 export {
-  CustomCheckbox, LoadingSnackbar, SlideTransition, TypeIcon, PokemonImage,
+  CustomCheckbox, LoadingSnackbar, SlideTransition, TypeIcon, PokemonImage
 };

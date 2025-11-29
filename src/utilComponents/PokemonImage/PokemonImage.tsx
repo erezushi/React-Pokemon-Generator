@@ -16,11 +16,11 @@ interface IPokemonImageProps {
 
 const PokemonImage = (props: IPokemonImageProps) => {
   const {
-    className, instance, isLinking,
+    className, instance, isLinking
   } = props;
 
   const {
-    specie, fullName, isShiny, form,
+    specie, fullName, isShiny, form
   } = instance;
 
   if (specie.dexNo <= lastIdOnPokeDB && !missingFromDB.includes(fullName)) {

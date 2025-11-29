@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  Button, Card, CardContent, CardHeader, Modal, FormControlLabel,
+  Button, Card, CardContent, CardHeader, Modal, FormControlLabel
 } from '@mui/material';
 import _ from 'lodash';
 
@@ -17,68 +17,68 @@ const pokedexes: Record<string, PokedexObject[]> = {
   Kanto: [
     {
       games: 'Red / Green / Blue / Yellow / FireRed / LeafGreen',
-      apiName: 'kanto',
+      apiName: 'kanto'
     },
     {
       games: "Let's Go, Pikachu! / Let's Go, Eevee!",
-      apiName: 'letsgo-kanto',
-    },
+      apiName: 'letsgo-kanto'
+    }
   ],
   Johto: [
     {
       games: 'Gold / Silver / Crystal',
-      apiName: 'original-johto',
+      apiName: 'original-johto'
     },
     {
       games: 'HeartGold / SoulSilver',
-      apiName: 'updated-johto',
-    },
+      apiName: 'updated-johto'
+    }
   ],
   Hoenn: [
     {
       games: 'Ruby / Sapphire / Emerald',
-      apiName: 'hoenn',
+      apiName: 'hoenn'
     },
     {
       games: 'Omega Ruby / Alpha Sapphire',
-      apiName: 'updated-hoenn',
-    },
+      apiName: 'updated-hoenn'
+    }
   ],
   Sinnoh: [
     {
       games: 'Diamond / Pearl / Brilliant Diamond / Shining Pearl',
-      apiName: 'original-sinnoh',
+      apiName: 'original-sinnoh'
     },
     {
       games: 'Platinum',
-      apiName: 'extended-sinnoh',
-    },
+      apiName: 'extended-sinnoh'
+    }
   ],
   Unova: [
     {
       games: 'Black / White',
-      apiName: 'original-unova',
+      apiName: 'original-unova'
     },
     {
       games: 'Black 2 / White 2',
-      apiName: 'updated-unova',
-    },
+      apiName: 'updated-unova'
+    }
   ],
   Kalos: [
     {
       games: 'X / Y',
-      apiName: 'kalos-central kalos-coastal kalos-mountain',
-    },
+      apiName: 'kalos-central kalos-coastal kalos-mountain'
+    }
   ],
   Alola: [
     {
       games: 'Sun / Moon',
-      apiName: 'original-alola',
+      apiName: 'original-alola'
     },
     {
       games: 'Ultra Sun / Ultra Moon',
-      apiName: 'updated-alola',
-    },
+      apiName: 'updated-alola'
+    }
   ],
   Galar: [
     {
@@ -86,15 +86,15 @@ const pokedexes: Record<string, PokedexObject[]> = {
       apiName: 'galar',
       DLCs: {
         'isle-of-armor': 'isle-of-armor',
-        'crown-tundra': 'crown-tundra',
-      },
-    },
+        'crown-tundra': 'crown-tundra'
+      }
+    }
   ],
   Hisui: [
     {
       games: 'Legends: Arceus',
-      apiName: 'hisui',
-    },
+      apiName: 'hisui'
+    }
   ],
   Paldea: [
     {
@@ -102,10 +102,10 @@ const pokedexes: Record<string, PokedexObject[]> = {
       apiName: 'paldea',
       DLCs: {
         'teal-mask': 'kitakami',
-        'indigo-disk': 'blueberry',
-      },
-    },
-  ],
+        'indigo-disk': 'blueberry'
+      }
+    }
+  ]
 };
 
 interface IPokedexSelectionModalProps {
@@ -142,14 +142,14 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
         setSelectedRegion(region);
       }
     },
-    [selectPokedex],
+    [selectPokedex]
   );
 
   const handleGameButtonClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       selectPokedex(`${event.currentTarget.name} ${selectedDLCs.join(' ')}`.trim());
     },
-    [selectPokedex, selectedDLCs],
+    [selectPokedex, selectedDLCs]
   );
 
   const handleDLCCheckboxChange = useCallback(
@@ -162,7 +162,7 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
         setSelectedDLCs((prevSelectedDLCs) => prevSelectedDLCs.filter((dlc) => dlc !== name));
       }
     },
-    [],
+    []
   );
 
   const handleBackButtonClick = useCallback(() => {

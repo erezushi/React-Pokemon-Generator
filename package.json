@@ -10,20 +10,20 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@erezushi/pokemon-randomizer": "^1.15.2",
-    "@mui/icons-material": "^7.3.5",
-    "@mui/material": "^7.3.5",
+    "@erezushi/pokemon-randomizer": "^1.16.0",
+    "@mui/icons-material": "^7.3.7",
+    "@mui/material": "^7.3.7",
     "animate.css": "^4.1.1",
     "chance": "^1.1.13",
     "eventemitter3": "^5.0.1",
     "lodash": "^4.17.21",
     "pokedex-promise-v2": "^4.2.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router": "^7.9.6",
-    "react-virtuoso": "^4.15.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router": "^7.12.0",
+    "react-virtuoso": "^4.18.1",
     "romans": "^3.1.0",
-    "sweetalert2": "^11.26.3",
+    "sweetalert2": "^11.26.17",
     "typescript": "^4.9.5",
     "uuid": "^13.0.0"
   },
@@ -35,13 +35,6 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "depcheck": "depcheck"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "airbnb"
-    ]
   },
   "browserslist": {
     "production": [
@@ -56,21 +49,25 @@
     ]
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.1",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin": "^5.7.0",
     "@types/chance": "^1.1.7",
-    "@types/lodash": "^4.17.21",
-    "@types/react": "^19.2.7",
+    "@types/lodash": "^4.17.23",
+    "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "@types/romans": "^2.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.48.0",
-    "@typescript-eslint/parser": "^8.48.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
     "depcheck": "^1.4.7",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-react-app": "^7.0.1",
+    "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.8.0",
     "react-scripts": "^5.0.1"
   }
 }

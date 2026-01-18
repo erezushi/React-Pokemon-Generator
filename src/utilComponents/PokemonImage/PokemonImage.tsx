@@ -5,7 +5,57 @@ import { imageUrl } from '../../utils';
 import { IPokemonInstance } from '../../utils/Types';
 
 const lastIdOnPokeDB = 1025;
-const missingFromDB: string[] = [''];
+const missingFromDB: string[] = [
+  'Raichu-Mega-X',
+  'Raichu-Mega-Y',
+  'Clefable-Mega',
+  'Victreebel-Mega',
+  'Starmie-Mega',
+  'Dragonite-Mega',
+  'Meganium-Mega',
+  'Feraligatr-Mega',
+  'Skarmory-Mega',
+  'Chimecho-Mega',
+  'Absol-Mega-Z',
+  'Staraptor-Mega',
+  'Garchomp-Mega-Z',
+  'Lucario-Mega-Z',
+  'Froslass-Mega',
+  'Heatran-Mega',
+  'Darkrai-Mega',
+  'Emboar-Mega',
+  'Excadrill-Mega',
+  'Scolipede-Mega',
+  'Scrafty-Mega',
+  'Eelektross-Mega',
+  'Chandelure-Mega',
+  'Golurk-Mega',
+  'Chesnaught-Mega',
+  'Delphox-Mega',
+  'Greninja-Mega',
+  'Pyroar-Mega',
+  'Floette-Eternal',
+  'Floette-Mega',
+  'Meowstic-Mega',
+  'Malamar-Mega',
+  'Barbaracle-Mega',
+  'Dragalge-Mega',
+  'Hawlucha-Mega',
+  'Zygarde-Mega',
+  'Crabominable-Mega',
+  'Golisopod-Mega',
+  'Drampa-Mega',
+  'Magearna-Mega',
+  'Magearna-Mega-Original',
+  'Zeraora-Mega',
+  'Falinks-Mega',
+  'Scovillain-Mega',
+  'Glimmora-Mega',
+  'Tatsugiri-Mega-Curly',
+  'Tatsugiri-Mega-Droopy',
+  'Tatsugiri-Mega-Stretchy',
+  'Baxcalibur-Mega'
+];
 const defaultForms: string[] = [''];
 
 interface IPokemonImageProps {
@@ -35,9 +85,15 @@ const PokemonImage = (props: IPokemonImageProps) => {
         alt={fullName}
         className={className}
         src={`https://www.serebii.net/${
-          isShiny ? 'Shiny/SV' : 'scarletviolet/pokemon'
-        }/new/${specie.dexNo}${
-          form && !defaultForms.includes(form.name) ? `-${form.name[0].toLowerCase()}` : ''
+          isShiny ? 'Shiny/ZA' : 'legendsz-a/pokemon'
+        }/${specie.dexNo.toString().padStart(3, '0')}${
+          form && !defaultForms.includes(form.name)
+            ? `-${form.name
+              .replace('-Curly', '')
+              .split('-')
+              .map((part) => part[0].toLowerCase())
+              .join('')}`
+            : ''
         }.png`}
       />
     </Link>
@@ -45,10 +101,16 @@ const PokemonImage = (props: IPokemonImageProps) => {
     <img
       alt={fullName}
       className={className}
-      src={`https://www.serebii.net/${
-        isShiny ? 'Shiny/SV' : 'scarletviolet/pokemon'
-      }/new/${specie.dexNo}${
-        form && !defaultForms.includes(form.name) ? `-${form.name[0].toLowerCase()}` : ''
+      src={`https://www.serebii.net/${isShiny ? 'Shiny/ZA' : 'legendsz-a/pokemon'}/${
+        specie.dexNo.toString().padStart(3, '0')
+      }${
+        form && !defaultForms.includes(form.name)
+          ? `-${form.name
+            .replace('-Curly', '')
+            .split('-')
+            .map((part) => part[0].toLowerCase())
+            .join('')}`
+          : ''
       }.png`}
     />
   );

@@ -158,6 +158,9 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   // Specific form names not found in the API
   [/-(confined|core|mane|wings|rider|zero|chest)/g, () => ''],
 
+  // Mega Tatsugiri
+  [/(mega)-(curly|droopy|stretchy)/, (_, mega, form) => `${form}-${mega}`],
+
   // Pokémon with consistent stats throughout their forms
   [
     new RegExp(
@@ -168,7 +171,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
         '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas', // Gen VI
         '|silvally', // Gen VII
         '|cramorant|morpeko|zarude', // Gen VIII
-        '|maushold|squawkabilly|tatsugiri|dudunsparce|ogerpon)-.+' // Gen IX
+        '|maushold|squawkabilly|dudunsparce|ogerpon)-.+' // Gen IX
       ].join(''),
       'g'
     ),
@@ -315,6 +318,19 @@ export const nextEvos = (
       : [];
   }
 
+  if (pokemon.name === 'Tatsugiri') {
+    return form && !form.name.includes('Mega')
+      ? [
+        {
+          specie: pokemon,
+          form: pokemon.forms?.find(
+            (currForm) => currForm.name === `Mega-${form.name}`
+          )
+        }
+      ]
+      : [];
+  }
+
   let evolveTo = form ? form.evolveTo : pokemon.evolveTo;
 
   if (
@@ -444,6 +460,19 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
     }
 
     return prevolutions;
+  }
+  
+  if (pokemon.name === 'Tatsugiri') {
+    return form && form.name.includes('Mega')
+      ? [
+        {
+          specie: pokemon,
+          form: pokemon.forms?.find(
+            (currForm) => currForm.name === form.name.replace('Mega-', '')
+          )
+        }
+      ]
+      : [];
   }
 
   if (form && extraEvoForms.some((extraEvo) => form.name.includes(extraEvo))) {

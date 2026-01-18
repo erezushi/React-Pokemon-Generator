@@ -9,37 +9,23 @@ const missingFromDB: string[] = [''];
 const defaultForms: string[] = [''];
 
 interface IPokemonImageProps {
-    className: string;
-    instance: IPokemonInstance;
-    isLinking: boolean;
+  className: string;
+  instance: IPokemonInstance;
+  isLinking: boolean;
 }
 
 const PokemonImage = (props: IPokemonImageProps) => {
-  const {
-    className, instance, isLinking
-  } = props;
+  const { className, instance, isLinking } = props;
 
-  const {
-    specie, fullName, isShiny, form
-  } = instance;
+  const { specie, fullName, isShiny, form } = instance;
 
   if (specie.dexNo <= lastIdOnPokeDB && !missingFromDB.includes(fullName)) {
     return isLinking ? (
-      <Link
-        href={`https://pokemondb.net/pokedex/${specie.name.toLowerCase()}`}
-      >
-        <img
-          alt={fullName}
-          className={className}
-          src={imageUrl(fullName, isShiny)}
-        />
+      <Link href={`https://pokemondb.net/pokedex/${specie.name.toLowerCase()}`}>
+        <img alt={fullName} className={className} src={imageUrl(fullName, isShiny)} />
       </Link>
     ) : (
-      <img
-        alt={fullName}
-        className={className}
-        src={imageUrl(fullName, isShiny)}
-      />
+      <img alt={fullName} className={className} src={imageUrl(fullName, isShiny)} />
     );
   }
 
@@ -51,9 +37,7 @@ const PokemonImage = (props: IPokemonImageProps) => {
         src={`https://www.serebii.net/${
           isShiny ? 'Shiny/SV' : 'scarletviolet/pokemon'
         }/new/${specie.dexNo}${
-          form && !defaultForms.includes(form.name)
-            ? `-${form.name[0].toLowerCase()}`
-            : ''
+          form && !defaultForms.includes(form.name) ? `-${form.name[0].toLowerCase()}` : ''
         }.png`}
       />
     </Link>
@@ -64,9 +48,7 @@ const PokemonImage = (props: IPokemonImageProps) => {
       src={`https://www.serebii.net/${
         isShiny ? 'Shiny/SV' : 'scarletviolet/pokemon'
       }/new/${specie.dexNo}${
-        form && !defaultForms.includes(form.name)
-          ? `-${form.name[0].toLowerCase()}`
-          : ''
+        form && !defaultForms.includes(form.name) ? `-${form.name[0].toLowerCase()}` : ''
       }.png`}
     />
   );

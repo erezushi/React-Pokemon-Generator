@@ -10,7 +10,7 @@ import { romanize } from 'romans';
 import Swal from 'sweetalert2';
 
 import 'animate.css';
-import { ICustomListFilters, ISettings } from './Types';
+import { ISettings } from './Types';
 
 const chance = new Chance();
 
@@ -24,7 +24,7 @@ export const STAT_NAMES = [
   'Speed'
 ];
 
-export const DEFAULT_SETTINGS: ISettings = {
+export const EMPTY_SETTINGS: ISettings = {
   unique: true,
   forms: true,
   amount: 6,
@@ -38,31 +38,6 @@ export const DEFAULT_SETTINGS: ISettings = {
   legendary: false,
   mythical: false,
   listMode: false
-};
-
-export const DEFAULT_FILTERS: ICustomListFilters = {
-  generations: {},
-  types: {
-    bug: false,
-    dark: false,
-    dragon: false,
-    electric: false,
-    fairy: false,
-    fighting: false,
-    fire: false,
-    flying: false,
-    ghost: false,
-    grass: false,
-    ground: false,
-    ice: false,
-    normal: false,
-    poison: false,
-    psychic: false,
-    rock: false,
-    steel: false,
-    water: false
-  },
-  searchTerm: ''
 };
 // #endregion
 

@@ -1,7 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import {
-  Button, Card, CardContent, CardHeader, Modal, FormControlLabel
-} from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Button, Card, CardContent, CardHeader, Modal, FormControlLabel } from '@mui/material';
 import _ from 'lodash';
 
 import './PokedexSelectionModal.css';
@@ -68,6 +66,13 @@ const pokedexes: Record<string, PokedexObject[]> = {
     {
       games: 'X / Y',
       apiName: 'kalos-central kalos-coastal kalos-mountain'
+    },
+    {
+      games: 'Legends: Z-A',
+      apiName: 'lumiose-city',
+      DLCs: {
+        'mega-dimension': 'hyperspace'
+      }
     }
   ],
   Alola: [
@@ -120,15 +125,11 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedDLCs, setSelectedDLCs] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedRegion('');
-      setSelectedDLCs([]);
-    }
-  }, [isOpen]);
-
   const handleModalClose = useCallback(() => {
     setOpen(false);
+
+    setSelectedRegion('');
+    setSelectedDLCs([]);
   }, [setOpen]);
 
   const handleRegionButtonClick = useCallback(
@@ -138,32 +139,33 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
 
       if (regionPokedexes.length === 1 && !regionPokedexes[0].DLCs) {
         selectPokedex(regionPokedexes[0].apiName);
+
+        handleModalClose();
       } else {
         setSelectedRegion(region);
       }
     },
-    [selectPokedex]
+    [handleModalClose, selectPokedex]
   );
 
   const handleGameButtonClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       selectPokedex(`${event.currentTarget.name} ${selectedDLCs.join(' ')}`.trim());
+
+      handleModalClose();
     },
-    [selectPokedex, selectedDLCs]
+    [handleModalClose, selectPokedex, selectedDLCs]
   );
 
-  const handleDLCCheckboxChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, checked } = event.currentTarget;
+  const handleDLCCheckboxChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.currentTarget;
 
-      if (checked) {
-        setSelectedDLCs((prevSelectedDLCs) => [...prevSelectedDLCs, name]);
-      } else {
-        setSelectedDLCs((prevSelectedDLCs) => prevSelectedDLCs.filter((dlc) => dlc !== name));
-      }
-    },
-    []
-  );
+    if (checked) {
+      setSelectedDLCs((prevSelectedDLCs) => [...prevSelectedDLCs, name]);
+    } else {
+      setSelectedDLCs((prevSelectedDLCs) => prevSelectedDLCs.filter((dlc) => dlc !== name));
+    }
+  }, []);
 
   const handleBackButtonClick = useCallback(() => {
     setSelectedRegion('');
@@ -180,10 +182,7 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
               <strong>{`Select version of ${selectedRegion} regional Pokédex`}</strong>
               <div className="pokedex-button-grid">
                 {pokedexes[selectedRegion].map((pokedex) => (
-                  <div
-                    key={pokedex.apiName}
-                    className="pokedex-button-container"
-                  >
+                  <div key={pokedex.apiName} className="pokedex-button-container">
                     <Button
                       className="pokedex-button game"
                       name={pokedex.apiName}
@@ -192,19 +191,20 @@ const PokedexSelectionModal = (props: IPokedexSelectionModalProps) => {
                     >
                       {pokedex.games}
                     </Button>
-                    {pokedex.DLCs && Object.entries(pokedex.DLCs).map(([dlcName, pokedexName]) => (
-                      <FormControlLabel
-                        key={dlcName}
-                        control={(
-                          <CustomCheckbox
-                            checked={selectedDLCs.includes(pokedexName)}
-                            name={pokedexName}
-                            onChange={handleDLCCheckboxChange}
-                          />
-                        )}
-                        label={`Include the ${_.startCase(dlcName)} DLC`}
-                      />
-                    ))}
+                    {pokedex.DLCs &&
+                      Object.entries(pokedex.DLCs).map(([dlcName, pokedexName]) => (
+                        <FormControlLabel
+                          key={dlcName}
+                          control={
+                            <CustomCheckbox
+                              checked={selectedDLCs.includes(pokedexName)}
+                              name={pokedexName}
+                              onChange={handleDLCCheckboxChange}
+                            />
+                          }
+                          label={`Include the ${_.startCase(dlcName)} DLC`}
+                        />
+                      ))}
                   </div>
                 ))}
               </div>

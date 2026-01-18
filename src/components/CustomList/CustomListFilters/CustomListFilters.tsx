@@ -16,70 +16,71 @@ import {
 import _ from 'lodash';
 
 import { CustomCheckbox } from '../../../utilComponents';
-import { DEFAULT_FILTERS } from '../../../utils';
 import { ICustomListFilters } from '../../../utils/Types';
 
 import './CustomListFilters.css';
 
 interface ICustomListFiltersProps {
-    filters: ICustomListFilters;
-    setFilters: React.Dispatch<React.SetStateAction<ICustomListFilters>>;
-    fetchGenerations: () => void;
-    saveList: () => void;
-    exportList: () => void;
-    importList: () => void;
+  filters: ICustomListFilters;
+  setFilters: React.Dispatch<React.SetStateAction<ICustomListFilters>>;
+  resetFilters: () => void;
+  saveList: () => void;
+  exportList: () => void;
+  importList: () => void;
 }
 
 const CustomListFilters = (props: ICustomListFiltersProps) => {
-  const {
-    filters, setFilters, fetchGenerations, saveList, exportList, importList
-  } = props;
+  const { filters, setFilters, resetFilters, saveList, exportList, importList } = props;
   const { generations, types, searchTerm } = filters;
 
-  const genClicked = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
+  const genClicked = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, checked } = event.target;
 
-    setFilters((prevFilters) => {
-      const filtersCopy = { ...prevFilters };
+      setFilters((prevFilters) => {
+        const filtersCopy = { ...prevFilters };
 
-      filtersCopy.generations = {
-        ...filtersCopy.generations,
-        [name]: checked
-      };
+        filtersCopy.generations = {
+          ...filtersCopy.generations,
+          [name]: checked
+        };
 
-      return filtersCopy;
-    });
-  }, [setFilters]);
+        return filtersCopy;
+      });
+    },
+    [setFilters]
+  );
 
-  const typeClicked = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
+  const typeClicked = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, checked } = event.target;
 
-    setFilters((prevFilters) => {
-      const filtersCopy = { ...prevFilters };
+      setFilters((prevFilters) => {
+        const filtersCopy = { ...prevFilters };
 
-      filtersCopy.types = {
-        ...filtersCopy.types,
-        [name]: checked
-      };
+        filtersCopy.types = {
+          ...filtersCopy.types,
+          [name]: checked
+        };
 
-      return filtersCopy;
-    });
-  }, [setFilters]);
+        return filtersCopy;
+      });
+    },
+    [setFilters]
+  );
 
-  const changeSearchTerm = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters((prevFilters) => {
-      const filtersCopy = { ...prevFilters };
+  const changeSearchTerm = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFilters((prevFilters) => {
+        const filtersCopy = { ...prevFilters };
 
-      filtersCopy.searchTerm = event.target.value;
+        filtersCopy.searchTerm = event.target.value;
 
-      return filtersCopy;
-    });
-  }, [setFilters]);
-
-  const resetClick = useCallback(() => {
-    setFilters(DEFAULT_FILTERS);
-    fetchGenerations();
-  }, [fetchGenerations, setFilters]);
+        return filtersCopy;
+      });
+    },
+    [setFilters]
+  );
 
   return (
     <Paper className="list-filter-container">
@@ -103,13 +104,7 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
               <FormControlLabel
                 key={gen}
                 className="gen-checkbox"
-                control={(
-                  <CustomCheckbox
-                    checked={isSelected}
-                    name={gen}
-                    onChange={genClicked}
-                  />
-                )}
+                control={<CustomCheckbox checked={isSelected} name={gen} onChange={genClicked} />}
                 label={gen}
                 labelPlacement="bottom"
               />
@@ -119,53 +114,41 @@ const CustomListFilters = (props: ICustomListFiltersProps) => {
         <FormControl className="options-control">
           <FormHelperText>Types</FormHelperText>
           <FormGroup row>
-            {Object.entries(types).slice(0, 9).map(([type, isSelected]) => (
-              <FormControlLabel
-                key={type}
-                className="gen-checkbox"
-                control={(
-                  <CustomCheckbox
-                    checked={isSelected}
-                    name={type}
-                    onChange={typeClicked}
-                  />
-                  )}
-                label={_.startCase(type)}
-                labelPlacement="end"
-              />
-            ))}
+            {Object.entries(types)
+              .slice(0, 9)
+              .map(([type, isSelected]) => (
+                <FormControlLabel
+                  key={type}
+                  className="gen-checkbox"
+                  control={
+                    <CustomCheckbox checked={isSelected} name={type} onChange={typeClicked} />
+                  }
+                  label={_.startCase(type)}
+                  labelPlacement="end"
+                />
+              ))}
           </FormGroup>
           <FormGroup row>
-            {Object.entries(types).slice(9).map(([type, isSelected]) => (
-              <FormControlLabel
-                key={type}
-                className="gen-checkbox"
-                control={(
-                  <CustomCheckbox
-                    checked={isSelected}
-                    name={type}
-                    onChange={typeClicked}
-                  />
-                  )}
-                label={_.startCase(type)}
-                labelPlacement="end"
-              />
-            ))}
+            {Object.entries(types)
+              .slice(9)
+              .map(([type, isSelected]) => (
+                <FormControlLabel
+                  key={type}
+                  className="gen-checkbox"
+                  control={
+                    <CustomCheckbox checked={isSelected} name={type} onChange={typeClicked} />
+                  }
+                  label={_.startCase(type)}
+                  labelPlacement="end"
+                />
+              ))}
           </FormGroup>
         </FormControl>
         <div className="filters-actions">
-          <Button
-            className="filters-button"
-            onClick={saveList}
-            variant="contained"
-          >
+          <Button className="filters-button" onClick={saveList} variant="contained">
             Save and go back
           </Button>
-          <Button
-            className="filters-button"
-            color="error"
-            onClick={resetClick}
-          >
+          <Button className="filters-button" color="error" onClick={resetFilters}>
             Clear Filters
           </Button>
           <IconButton onClick={exportList}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import StarRounded from '@mui/icons-material/StarRounded';
 import {
   Card,
@@ -36,11 +36,6 @@ const PokemonCard = (props: ICardProps) => {
     type: form?.type ?? specie.type
   });
   const [isModalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    setDetails({ abilities: [], stats: [], type: form?.type ?? specie.type });
-    setModalOpen(false);
-  }, [specie, form]);
 
   const handleCardClick = useCallback(async () => {
     if (!details.stats.length) {
@@ -87,7 +82,7 @@ const PokemonCard = (props: ICardProps) => {
     } else {
       setModalOpen(true);
     }
-  }, [details.stats.length, form?.name, specie]);
+  }, [details.stats.length, form, specie]);
 
   const handleButtonClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

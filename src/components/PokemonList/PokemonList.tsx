@@ -6,12 +6,7 @@ import PokeAPI from 'pokedex-promise-v2';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { LoadingSnackbar } from '../../utilComponents';
-import {
-  apiName,
-  errorToast,
-  fullName,
-  randomArrayEntry
-} from '../../utils';
+import { apiName, errorToast, fullName, randomArrayEntry } from '../../utils';
 import eventEmitter, { generate } from '../../utils/EventEmitter';
 import { IExportDetails, IPokemonInstance } from '../../utils/Types';
 import ExportModal from '../ExportModal';
@@ -25,55 +20,55 @@ const pokeAPI = new PokeAPI();
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState<IPokemonInstance[]>([]);
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
-  const [exportDetails, setExportDetails] = useState<
-    Record<number, IExportDetails>
-  >({});
+  const [exportDetails, setExportDetails] = useState<IExportDetails[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleExport = useCallback(async () => {
-    if (0 in exportDetails) {
+    setSnackbarOpen(true);
+
+    try {
+      const responses = await Promise.all(
+        pokemonList.map((pokemon) => {
+          const { specie, form } = pokemon;
+          const name = apiName(specie, form?.name ?? null);
+          const specieName = apiName(specie, null);
+
+          return Promise.all([
+            pokeAPI.getPokemonByName(name),
+            pokeAPI.getPokemonSpeciesByName(specieName)
+          ]);
+        })
+      );
+
+      setExportDetails(responses.map(([pokemon, specie]) => {
+        const abilityList = pokemon.abilities.map((abilityObj) => abilityObj.ability.name);
+        const genderRate = specie.gender_rate;
+
+        return { abilityList, genderRate };
+      }))
+
+      setSnackbarOpen(false);
       setModalOpen(true);
-    } else {
-      setSnackbarOpen(true);
-
-      try {
-        const responses = await Promise.all(
-          pokemonList.map((pokemon) => {
-            const { specie, form } = pokemon;
-            const name = apiName(specie, form?.name ?? null);
-            const specieName = apiName(specie, null);
-
-            return Promise.all([
-              pokeAPI.getPokemonByName(name),
-              pokeAPI.getPokemonSpeciesByName(specieName)
-            ]);
-          })
-        );
-
-        responses.forEach(([pokemon, specie], index) => {
-          const abilityList = pokemon.abilities.map(
-            (abilityObj) => abilityObj.ability.name
-          );
-          const genderRate = specie.gender_rate;
-
-          setExportDetails((prevDetails) => ({
-            ...prevDetails, [index]: { abilityList, genderRate }
-          }));
-        });
-
-        setSnackbarOpen(false);
-        setModalOpen(true);
-      } catch (error: any) {
-        setSnackbarOpen(false);
-        errorToast.fire({
-          html: `Error fetching details<br />${error.message}`
-        });
-      }
+    } catch (error: any) {
+      setSnackbarOpen(false);
+      errorToast.fire({
+        html: `Error fetching details<br />${error.message}`
+      });
     }
-  }, [exportDetails, pokemonList]);
+  }, [pokemonList]);
 
   const createCard = useCallback(
-    (index: number) => <PokemonCard instance={pokemonList[index]} />,
+    (index: number) => {
+      const instance = pokemonList[index];
+      const { specie, form, isShiny } = instance;
+
+      return (
+        <PokemonCard
+          key={`${specie.name}${form ? `-${form.name}` : ''}-${isShiny}`}
+          instance={instance}
+        />
+      );
+    },
     [pokemonList]
   );
 
@@ -89,12 +84,12 @@ const PokemonList = () => {
             form = randomArrayEntry(specie.forms);
           }
 
-          return ({
+          return {
             specie,
             form,
             fullName: fullName(specie, isShiny, form),
             isShiny
-          });
+          };
         })
       );
     } catch (error: any) {
@@ -112,10 +107,6 @@ const PokemonList = () => {
     };
   }, [randomize]);
 
-  useEffect(() => {
-    setExportDetails({});
-  }, [pokemonList]);
-
   return (
     <div className="pokemon-list">
       {pokemonList.length > 0 && (
@@ -129,15 +120,13 @@ const PokemonList = () => {
             Export to &apos;Showdown!&apos;
           </Button>
           <ExportModal
+            key={isModalOpen ? 'open' : 'closed'}
             isOpen={isModalOpen}
             pokemonDetails={exportDetails}
             pokemonList={pokemonList}
             setOpen={setModalOpen}
           />
-          <LoadingSnackbar
-            isOpen={isSnackbarOpen}
-            title="'Pokémon Showdown!' Export"
-          />
+          <LoadingSnackbar isOpen={isSnackbarOpen} title="'Pokémon Showdown!' Export" />
         </>
       )}
       <VirtuosoGrid

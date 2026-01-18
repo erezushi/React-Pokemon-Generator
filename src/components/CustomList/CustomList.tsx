@@ -1,16 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  PokemonType,
-  getGenerations,
-  getPokemon
-} from '@erezushi/pokemon-randomizer';
+import React, { useCallback, useState, useMemo } from 'react';
+import { PokemonType, getGenerations, getPokemon, getTypes } from '@erezushi/pokemon-randomizer';
 import { Button, FormControlLabel } from '@mui/material';
 import PokeAPI from 'pokedex-promise-v2';
 import { useLocation, useNavigate } from 'react-router';
 import { VirtuosoGrid } from 'react-virtuoso';
 
 import { CustomCheckbox } from '../../utilComponents';
-import { DEFAULT_FILTERS, getPokedexNumber } from '../../utils';
+import { getPokedexNumber } from '../../utils';
+import { ICustomListFilters } from '../../utils/Types';
 import PokedexSelectionModal from '../PokedexSelectionModal';
 
 import CustomListFilters from './CustomListFilters';
@@ -20,125 +17,82 @@ import './CustomList.css';
 const generationList = getGenerations();
 const pokeAPI = new PokeAPI();
 
-const CustomList = () => {
-  const [fullList, setFullList] = useState<Record<string, boolean>>({});
-  const [visibleList, setVisibleList] = useState<Record<string, boolean>>(fullList);
-  const [filters, setFilters] = useState(DEFAULT_FILTERS);
-  const [isPokedexModalOpen, setIsPokedexModalOpen] = useState(false);
+const defaultFilters: ICustomListFilters = {
+  generations: Object.fromEntries(Object.keys(generationList).map((gen) => [gen, false])),
+  types: Object.fromEntries(
+    Object.keys(getTypes())
+      .sort((a, b) => a.localeCompare(b))
+      .map((type) => [type, false])
+  ) as Record<PokemonType, boolean>,
+  searchTerm: ''
+};
 
+const CustomList = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setFullList(location.state);
-    setVisibleList(location.state);
-  }, [location.state]);
+  const initialList = (location.state as Record<string, boolean>) ?? {};
+  const [fullList, setFullList] = useState(initialList);
+  const [filters, setFilters] = useState(defaultFilters);
+  const [isPokedexModalOpen, setIsPokedexModalOpen] = useState(false);
 
-  const fetchGenerations = useCallback(() => {
-    Object.keys(generationList).forEach((gen) => {
-      setFilters((prevFilters) => {
-        const filtersCopy = { ...prevFilters };
-
-        filtersCopy.generations = {
-          ...filtersCopy.generations,
-          [gen]: false
-        };
-
-        return filtersCopy;
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    fetchGenerations();
-  }, [fetchGenerations]);
-
-  useEffect(() => {
+  const visibleList = useMemo<Record<string, boolean>>(() => {
     const pokemonList = getPokemon();
-    const {
-      generations: generationFilter,
-      types: typeFilter,
-      searchTerm
-    } = filters;
+    const { generations: generationFilter, types: typeFilter, searchTerm } = filters;
 
-    const isGenerationFilterEmpty = Object.values(generationFilter).every(
-      (checked) => !checked
-    );
-    const isTypeFilterEmpty = Object.values(typeFilter).every(
-      (checked) => !checked
-    );
+    const isGenerationFilterEmpty = Object.values(generationFilter).every((checked) => !checked);
+    const isTypeFilterEmpty = Object.values(typeFilter).every((checked) => !checked);
     const isSearchFilterEmpty = searchTerm === '';
 
-    setVisibleList(
-      Object.fromEntries(
-        Object.entries(fullList).filter(([pokemonName], index) => {
-          const dexNo = index + 1;
+    return Object.fromEntries(
+      Object.entries(fullList).filter(([pokemonName], index) => {
+        const dexNo = index + 1;
 
-          const generation = Object.keys(generationList).find(
-            (gen) => dexNo >= generationList[gen].first
-              && dexNo <= generationList[gen].last
-          );
-          const types = pokemonList[dexNo].type.split(' ') as PokemonType[];
+        const generation = Object.keys(generationList).find(
+          (gen) => dexNo >= generationList[gen].first && dexNo <= generationList[gen].last
+        );
+        const types = pokemonList[dexNo].type.split(' ') as PokemonType[];
 
-          return (
-            (isGenerationFilterEmpty || generationFilter[Number(generation)])
-            && (isTypeFilterEmpty || types.some((type) => typeFilter[type]))
-            && (isSearchFilterEmpty
-              || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()))
-          );
-        })
-      )
+        return (
+          (isGenerationFilterEmpty || generationFilter[Number(generation)]) &&
+          (isTypeFilterEmpty || types.some((type) => typeFilter[type])) &&
+          (isSearchFilterEmpty || pokemonName.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+      })
     );
   }, [filters, fullList]);
 
   const selectAllVisible = useCallback(() => {
-    setVisibleList((prevVisibleList) => {
-      const listCopy = { ...prevVisibleList };
+    const listCopy = Object.fromEntries(
+      Object.keys(visibleList).map((pokemonName) => [pokemonName, true])
+    ) as Record<string, boolean>;
 
-      Object.keys(listCopy).forEach((pokemonName) => {
-        listCopy[pokemonName] = true;
-      });
-
-      setFullList((prevFullList) => ({
-        ...prevFullList,
-        ...listCopy
-      }));
-
-      return listCopy;
-    });
-  }, []);
+    setFullList((prevFullList) => ({ ...prevFullList, ...listCopy }));
+  }, [visibleList]);
 
   const deselectAllVisible = useCallback(() => {
-    setVisibleList((prevVisibleList) => {
-      const listCopy = { ...prevVisibleList };
+    const listCopy = Object.fromEntries(
+      Object.keys(visibleList).map((pokemonName) => [pokemonName, false])
+    ) as Record<string, boolean>;
 
-      Object.keys(listCopy).forEach((pokemonName) => {
-        listCopy[pokemonName] = false;
-      });
+    setFullList((prevFullList) => ({ ...prevFullList, ...listCopy }));
+  }, [visibleList]);
 
-      setFullList((prevFullList) => ({
-        ...prevFullList,
-        ...listCopy
-      }));
+  const changeSinglePokemon = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+
+    setFullList((prevFullList) => {
+      const listCopy = { ...prevFullList };
+
+      listCopy[name] = checked;
 
       return listCopy;
     });
   }, []);
 
-  const changeSinglePokemon = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, checked } = event.target;
-
-      setFullList((prevFullList) => {
-        const listCopy = { ...prevFullList };
-
-        listCopy[name] = checked;
-
-        return listCopy;
-      });
-    },
-    []
-  );
+  const resetFilters = useCallback(() => {
+    setFilters(defaultFilters)
+  }, []);
 
   const returnHome = useCallback(() => {
     navigate('/', { state: fullList });
@@ -170,10 +124,7 @@ const CustomList = () => {
       const fullListCopy = { ...prevFullList };
 
       return Object.fromEntries(
-        Object.entries(fullListCopy).map(([name]) => [
-          name,
-          importedList.includes(name)
-        ])
+        Object.entries(fullListCopy).map(([name]) => [name, importedList.includes(name)])
       );
     });
   }, []);
@@ -209,9 +160,7 @@ const CustomList = () => {
     let natDexNumbers: string[] = [];
 
     const pokedexResponses = await Promise.all(
-      pokedex
-        .split(' ')
-        .map((pokedexPart) => pokeAPI.getPokedexByName(pokedexPart))
+      pokedex.split(' ').map((pokedexPart) => pokeAPI.getPokedexByName(pokedexPart))
     );
 
     pokedexResponses.forEach((response) => {
@@ -232,8 +181,6 @@ const CustomList = () => {
         ])
       );
     });
-
-    setIsPokedexModalOpen(false);
   }, []);
 
   const createCheckBox = useCallback(
@@ -245,27 +192,25 @@ const CustomList = () => {
         <FormControlLabel
           key={pokemonName}
           className="custom-list-pokemon"
-          control={(
+          control={
             <CustomCheckbox
               checked={isSelected}
               name={pokemonName}
               onChange={changeSinglePokemon}
             />
-          )}
-          label={(
+          }
+          label={
             <div className="custom-list-label">
               <img
                 alt="Pokemon Sprite"
-                src={
-                  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                    dexNo
-                  }.png`
-                }
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                  dexNo
+                }.png`}
               />
               <br />
               {pokemonName}
             </div>
-          )}
+          }
           labelPlacement="bottom"
         />
       );
@@ -277,32 +222,20 @@ const CustomList = () => {
     <div className="custom-list-container">
       <CustomListFilters
         exportList={handleExport}
-        fetchGenerations={fetchGenerations}
         filters={filters}
         importList={handleImport}
+        resetFilters={resetFilters}
         saveList={returnHome}
         setFilters={setFilters}
       />
       <div className="custom-list-actions">
-        <Button
-          className="custom-list-button"
-          onClick={selectAllVisible}
-          variant="contained"
-        >
+        <Button className="custom-list-button" onClick={selectAllVisible} variant="contained">
           Select all filtered
         </Button>
-        <Button
-          className="custom-list-button"
-          onClick={deselectAllVisible}
-          variant="contained"
-        >
+        <Button className="custom-list-button" onClick={deselectAllVisible} variant="contained">
           Deselect all filtered
         </Button>
-        <Button
-          className="custom-list-button"
-          onClick={openPokedexModal}
-          variant="contained"
-        >
+        <Button className="custom-list-button" onClick={openPokedexModal} variant="contained">
           Select Pokédex
         </Button>
       </div>

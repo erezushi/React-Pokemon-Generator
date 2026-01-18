@@ -6,8 +6,8 @@ import SlideTransition from '../SlideTransition';
 import './LoadingSnackbar.css';
 
 interface ILoadingSnackbarProps {
-    isOpen: boolean,
-    title: string,
+  isOpen: boolean;
+  title: string;
 }
 
 const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
@@ -18,16 +18,16 @@ const LoadingSnackbar = (props: ILoadingSnackbarProps) => {
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       autoHideDuration={1000}
       className="loading-snackbar"
-      message={(
+      message={
         <>
           <strong>{title.replace(/-em$/, '-!').replace(/-qm$/, '-?')}</strong>
           <p>Fetching details...</p>
           <br />
           <CircularProgress />
         </>
-    )}
+      }
       open={isOpen}
-      TransitionComponent={SlideTransition}
+      slots={{ transition: SlideTransition }}
     />
   );
 };

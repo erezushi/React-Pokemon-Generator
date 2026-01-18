@@ -29,7 +29,7 @@ const App = () => (
     <RouterProvider router={router} />
     <div className="footer">
       Site made by Erez Bracha, aka&nbsp;
-      <a href="https://linktr.ee/erezushi">PokéErez</a>
+      <a href="https://www.PokeErez.com/">PokéErez</a>
       , powered by&nbsp;
       <a href="https://www.npmjs.com/package/@erezushi/pokemon-randomizer">
         this

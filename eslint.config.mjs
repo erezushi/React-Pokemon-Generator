@@ -9,8 +9,8 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import { defineConfig } from 'eslint/config';
 import _import from 'eslint-plugin-import';
-import react from 'eslint-plugin-react';
 import perfectionist from 'eslint-plugin-perfectionist';
+import react from 'eslint-plugin-react';
 import globals from 'globals';
 
 const __filename = fileURLToPath(import.meta.url);

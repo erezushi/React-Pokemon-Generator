@@ -1,5 +1,5 @@
 import { Form, Pokemon, PokemonType } from '@erezushi/pokemon-randomizer';
-import { StatElement } from 'pokedex-promise-v2';
+import type { PokemonStat } from 'pokedex-promise-v2';
 
 export interface IPokemonInstance {
   specie: Pokemon,
@@ -14,7 +14,7 @@ export interface IPokemonDetails {
     flavorText: string,
     isHidden: boolean
   }[],
-  stats: StatElement[],
+  stats: PokemonStat[],
   type: string
 }
 

@@ -165,13 +165,15 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   [
     new RegExp(
       [
-        '(unown', // Gen II
+        '(',
+        'unown', // Gen II
         '|burmy|cherrim|shellos|gastrodon|arceus', // Gen IV
         '|unfezant|deerling|sawsbuck|frillish|jellicent|genesect', // Gen V
         '|vivillon|pyroar|floette|florges|furfrou|meowstic|xerneas', // Gen VI
         '|silvally', // Gen VII
         '|cramorant|morpeko|zarude', // Gen VIII
-        '|maushold|squawkabilly|dudunsparce|ogerpon)-.+' // Gen IX
+        '|maushold|dudunsparce|ogerpon', // Gen IX
+        ')-.+'
       ].join(''),
       'g'
     ),

@@ -1,14 +1,9 @@
 .icon {
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
     margin: auto;
-}
-
-.icon svg {
-    height: 60%;
-    width: 60%;
-    margin: 20%;
+    padding: 0.3em;
 }
 
 .MuiTooltip-popper .MuiTooltip-tooltip {

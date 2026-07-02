@@ -1,10 +1,4 @@
-import {
-  getPokemon,
-  getGenerations,
-  Form,
-  Pokemon,
-  getTypes
-} from '@erezushi/pokemon-randomizer';
+import { getPokemon, getGenerations, Form, Pokemon, getTypes } from '@erezushi/pokemon-randomizer';
 import Chance from 'chance';
 import { romanize } from 'romans';
 import Swal from 'sweetalert2';
@@ -15,14 +9,7 @@ import { ISettings } from './Types';
 const chance = new Chance();
 
 // #region Constants
-export const STAT_NAMES = [
-  'HP',
-  'Attack',
-  'Defense',
-  'Sp. Atk',
-  'Sp. Def',
-  'Speed'
-];
+export const STAT_NAMES = ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'];
 
 export const EMPTY_SETTINGS: ISettings = {
   unique: true,
@@ -83,13 +70,12 @@ const imgStringMap: Record<string, string> = {
   é: 'e'
 };
 
-const imageName = (name: string) => imgReplacements[name]
-  ?? name.toLowerCase().replace(imgSpecialStrings, (match) => imgStringMap[match]);
+const imageName = (name: string) =>
+  imgReplacements[name] ??
+  name.toLowerCase().replace(imgSpecialStrings, (match) => imgStringMap[match]);
 
-export const imageUrl = (name: string, shiny: boolean): string => (
-  `https://img.pokemondb.net/sprites/home/${
-    shiny ? 'shiny' : 'normal'
-  }/${imageName(
+export const imageUrl = (name: string, shiny: boolean): string =>
+  `https://img.pokemondb.net/sprites/home/${shiny ? 'shiny' : 'normal'}/${imageName(
     shiny
       ? name.replace(/Alcremie-(?!Gigantamax)/, (match) => {
         const sweet = match.split('-')[1];
@@ -97,13 +83,11 @@ export const imageUrl = (name: string, shiny: boolean): string => (
         return `alcremie-Ruby-Cream-${sweet}`;
       })
       : name
-  )}.png`);
+  )}.png`;
 // #endregion
 
 // #region PokéAPI
-type replacerFunc =
-  | ((match: string, ...args: any[]) => string)
-  | (() => string);
+type replacerFunc = ((match: string, ...args: any[]) => string) | (() => string);
 
 const apiStringMap = new Map<string | RegExp, replacerFunc>([
   /*
@@ -128,10 +112,7 @@ const apiStringMap = new Map<string | RegExp, replacerFunc>([
   [/(combat|blaze|aqua)/, (match) => `paldea-${match}-breed`],
 
   // Altered Dialga & Palkia
-  [
-    /(dialga|palkia)-altered/g,
-    (match) => match.substring(0, match.indexOf('-'))
-  ],
+  [/(dialga|palkia)-altered/g, (match) => match.substring(0, match.indexOf('-'))],
 
   // Oricorio Meteor form
   ['meteor', () => 'red-meteor'],
@@ -251,9 +232,8 @@ export const errorToast = Toast.mixin({
 // #endregion
 
 // #region Alcremie
-export const randomArrayEntry = <Type>(array: Type[]) => array[chance.integer(
-  { min: 0, max: array.length - 1 }
-)];
+export const randomArrayEntry = <Type>(array: Type[]) =>
+  array[chance.integer({ min: 0, max: array.length - 1 })];
 
 const alcremieCreams = [
   'Vanilla-Cream',
@@ -267,15 +247,7 @@ const alcremieCreams = [
   'Rainbow-Swirl'
 ];
 
-const alcremieSweets = [
-  'Strawberry',
-  'Love',
-  'Berry',
-  'Clover',
-  'Flower',
-  'Star',
-  'Ribbon'
-];
+const alcremieSweets = ['Strawberry', 'Love', 'Berry', 'Clover', 'Flower', 'Star', 'Ribbon'];
 
 export const alcremieForm = (): string => {
   const cream = randomArrayEntry(alcremieCreams);
@@ -301,10 +273,7 @@ const missingNo: Evolution = {
 
 const extraEvoForms = ['Mega', 'Primal', 'Ash', 'Gigantamax', 'Eternamax'];
 
-export const nextEvos = (
-  pokemon: Pokemon,
-  form?: Form
-): (Evolution | Evolution[])[] => {
+export const nextEvos = (pokemon: Pokemon, form?: Form): (Evolution | Evolution[])[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
@@ -312,9 +281,7 @@ export const nextEvos = (
       ? [
         {
           specie: pokemon,
-          form: pokemon.forms?.find(
-            (currForm) => currForm.name === `${form.name}-Gigantamax`
-          )
+          form: pokemon.forms?.find((currForm) => currForm.name === `${form.name}-Gigantamax`)
         }
       ]
       : [];
@@ -325,9 +292,7 @@ export const nextEvos = (
       ? [
         {
           specie: pokemon,
-          form: pokemon.forms?.find(
-            (currForm) => currForm.name === `Mega-${form.name}`
-          )
+          form: pokemon.forms?.find((currForm) => currForm.name === `Mega-${form.name}`)
         }
       ]
       : [];
@@ -336,12 +301,9 @@ export const nextEvos = (
   let evolveTo = form ? form.evolveTo : pokemon.evolveTo;
 
   if (
-    (!form
-      || form.name === 'default'
-      || form.name === 'Amped'
-      || form.name === 'Low-Key')
-    && pokemon.forms?.some(
-      (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
+    (!form || form.name === 'default' || form.name === 'Amped' || form.name === 'Low-Key') &&
+    pokemon.forms?.some((currForm) =>
+      extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
     )
   ) {
     const dexNo = Object.keys(pokemonList).find(
@@ -386,22 +348,25 @@ export const nextEvos = (
       const { specie, form: evoForm } = evolution;
 
       const evolutionEvolveTo = evoForm ? evoForm.evolveTo : specie.evolveTo;
-      const hasExtraEvos = (!evoForm
-          || evoForm.name === 'default'
-          || evoForm.name === 'Amped'
-          || evoForm.name === 'Low-Key')
-        && specie.forms?.some(
-          (currForm) => extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
+      const hasExtraEvos =
+        (!evoForm ||
+          evoForm.name === 'default' ||
+          evoForm.name === 'Amped' ||
+          evoForm.name === 'Low-Key') &&
+        specie.forms?.some((currForm) =>
+          extraEvoForms.some((extraEvo) => currForm.name.includes(extraEvo))
         );
 
       return Boolean(evolutionEvolveTo) || hasExtraEvos;
     })
       ? [
         evolutions,
-        evolutions.map(
-          (evolution) => (nextEvos(evolution.specie, evolution.form)[0] as Evolution)
-              ?? missingNo
-        )
+        evolutions
+          .map(
+            (evolution) =>
+              (nextEvos(evolution.specie, evolution.form)[0] as Evolution) ?? missingNo
+          )
+          .flat()
       ]
       : [evolutions];
   }
@@ -448,9 +413,7 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   const pokemonList = getPokemon();
 
   if (pokemon.name === 'Urshifu') {
-    const prevolutions: Evolution[] = [
-      { specie: { ...pokemonList['891'], dexNo: 891 } }
-    ];
+    const prevolutions: Evolution[] = [{ specie: { ...pokemonList['891'], dexNo: 891 } }];
 
     if (form?.name.includes('Gigantamax')) {
       prevolutions.push({
@@ -463,7 +426,7 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
 
     return prevolutions;
   }
-  
+
   if (pokemon.name === 'Tatsugiri') {
     return form && form.name.includes('Mega')
       ? [
@@ -478,14 +441,9 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   }
 
   if (form && extraEvoForms.some((extraEvo) => form.name.includes(extraEvo))) {
-    const prevoForm = pokemon.forms!.find(
-      (currForm) => currForm.name === 'default'
-    );
+    const prevoForm = pokemon.forms!.find((currForm) => currForm.name === 'default');
 
-    return [
-      ...prevEvos(pokemon, prevoForm),
-      { specie: pokemon, form: prevoForm }
-    ];
+    return [...prevEvos(pokemon, prevoForm), { specie: pokemon, form: prevoForm }];
   }
   const wantedEvoString = `${pokemon.dexNo}${
     form?.name && form.name !== 'default' && !ignoreForms.includes(pokemon.name)
@@ -496,9 +454,9 @@ export const prevEvos = (pokemon: Pokemon, form?: Form): Evolution[] => {
   let prevoForm: Form | undefined;
   let prevoDexNo = 0;
   const prevolution = Object.entries(pokemonList).find(([dexNo, listMon]) => {
-    prevoForm = listMon.forms?.find((currForm) => currForm.evolveTo
-      ?.split(' ')
-      .some((evoString) => evoString === wantedEvoString));
+    prevoForm = listMon.forms?.find((currForm) =>
+      currForm.evolveTo?.split(' ').some((evoString) => evoString === wantedEvoString)
+    );
 
     if (prevoForm) {
       prevoDexNo = Number(dexNo);
@@ -532,14 +490,8 @@ const shinyReplacements = new Map<RegExp, string>([
   [/Alcremie-.+-(Cream|Swirl)-/g, 'Alcremie-']
 ]);
 
-export const fullName = (
-  specie: Pokemon,
-  isShiny: boolean,
-  form?: Form
-): string => {
-  let name = `${specie.name}${
-    form && form.name !== 'default' ? `-${form.name}` : ''
-  }`;
+export const fullName = (specie: Pokemon, isShiny: boolean, form?: Form): string => {
+  let name = `${specie.name}${form && form.name !== 'default' ? `-${form.name}` : ''}`;
 
   if (specie.name === 'Alcremie' && form?.name === 'default') {
     name = `${name}-${alcremieForm()}`;
@@ -618,9 +570,7 @@ export const generateLink = (baseLink: string, name: string) => {
 // #region General utils
 export const getPokedexNumber = (wantedName: string): number => {
   const pokemonList = getPokemon();
-  const wantedPokemon = Object.entries(pokemonList).find(
-    (entry) => entry[1].name === wantedName
-  );
+  const wantedPokemon = Object.entries(pokemonList).find((entry) => entry[1].name === wantedName);
 
   return Number(wantedPokemon?.[0]);
 };

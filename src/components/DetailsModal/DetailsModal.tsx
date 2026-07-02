@@ -46,7 +46,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
   const calculateBST = useCallback(
     () =>
-      stats.map((statObj) => statObj.base_stat).reduce((partialBST, curr) => partialBST + curr, 0),
+      stats.reduce((partialBST, curr) => partialBST + curr.base_stat, 0),
     [stats]
   );
 
@@ -97,9 +97,14 @@ const DetailsModal = (props: IDetailsModalProps) => {
               return (
                 <>
                   {index === 1 && ' / '}
-                  <Tooltip arrow disableInteractive placement="top" title={ability.flavorText}>
+                  <Tooltip
+                    key={uuid()}
+                    arrow
+                    disableInteractive
+                    placement="top"
+                    title={ability.flavorText}
+                  >
                     <Link
-                      key={uuid()}
                       href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName.replace(
                         ' ',
                         '_'
@@ -130,7 +135,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
             const { base_stat: baseStat } = stat;
             const statName = STAT_NAMES[index];
 
-            return <Typography key={uuid()}>{`${statName}: ${baseStat}`}</Typography>;
+            return <Typography key={statName}>{`${statName}: ${baseStat}`}</Typography>;
           })}
           <Typography>
             <strong>BST: </strong>
@@ -165,7 +170,10 @@ const DetailsModal = (props: IDetailsModalProps) => {
             </div>
             {evolutions.map((evo) => {
               if (Array.isArray(evo)) {
-                if (evo.length > 3) {
+                if (
+                  evo.length > 3 &&
+                  !evo.some((splitEvo) => splitEvo.specie.name === 'MissingNo.')
+                ) {
                   const cols = Math.ceil(evo.length / 3);
                   const arr: Evolution[][] = [];
 
@@ -210,6 +218,8 @@ const DetailsModal = (props: IDetailsModalProps) => {
                   <div key={`evolution-${evo[0].specie.name}`}>
                     {evo.map((splitEvo) => {
                       const { name } = splitEvo.specie;
+                      
+                      if (name === 'MissingNo.') return <div key={uuid()} className="MissingNo" />;
 
                       const splitEvoInstance: IPokemonInstance = {
                         ...splitEvo,
@@ -217,9 +227,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                         isShiny
                       };
 
-                      return name === 'MissingNo.' ? (
-                        <div key={uuid()} className="MissingNo" />
-                      ) : (
+                      return (
                         <div key={uuid()} className="evolution-list">
                           <ArrowRightAltRounded />
                           <div>

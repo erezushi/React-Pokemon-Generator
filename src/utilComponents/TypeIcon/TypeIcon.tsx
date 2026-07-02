@@ -27,24 +27,24 @@ import {
 import './TypeIcon.css';
 
 const renderMap = {
-  bug: () => <BugIcon />,
-  dark: () => <DarkIcon />,
-  dragon: () => <DragonIcon />,
-  electric: () => <ElectricIcon />,
-  fairy: () => <FairyIcon />,
-  fighting: () => <FightingIcon />,
-  fire: () => <FireIcon />,
-  flying: () => <FlyingIcon />,
-  ghost: () => <GhostIcon />,
-  grass: () => <GrassIcon />,
-  ground: () => <GroundIcon />,
-  ice: () => <IceIcon />,
-  normal: () => <NormalIcon />,
-  poison: () => <PoisonIcon />,
-  psychic: () => <PsychicIcon />,
-  rock: () => <RockIcon />,
-  steel: () => <SteelIcon />,
-  water: () => <WaterIcon />
+  bug: () => <BugIcon className="icon bug" />,
+  dark: () => <DarkIcon className="icon dark" />,
+  dragon: () => <DragonIcon className="icon dragon" />,
+  electric: () => <ElectricIcon className="icon electric" />,
+  fairy: () => <FairyIcon className="icon fairy" />,
+  fighting: () => <FightingIcon className="icon fighting" />,
+  fire: () => <FireIcon className="icon fire" />,
+  flying: () => <FlyingIcon className="icon flying" />,
+  ghost: () => <GhostIcon className="icon ghost" />,
+  grass: () => <GrassIcon className="icon grass" />,
+  ground: () => <GroundIcon className="icon ground" />,
+  ice: () => <IceIcon className="icon ice" />,
+  normal: () => <NormalIcon className="icon normal" />,
+  poison: () => <PoisonIcon className="icon poison" />,
+  psychic: () => <PsychicIcon className="icon psychic" />,
+  rock: () => <RockIcon className="icon rock" />,
+  steel: () => <SteelIcon className="icon steel" />,
+  water: () => <WaterIcon className="icon water" />
 };
 
 interface ITypeIconProps {
@@ -56,7 +56,7 @@ const TypeIcon = (props: ITypeIconProps) => {
 
   return (
     <Tooltip arrow placement="top" title={_.capitalize(type)}>
-      <div className={`icon ${type}`}>{renderMap[type]()}</div>
+      {renderMap[type]()}
     </Tooltip>
   );
 };

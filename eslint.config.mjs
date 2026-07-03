@@ -8,7 +8,6 @@ import stylistic from '@stylistic/eslint-plugin';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import { defineConfig } from 'eslint/config';
-import _import from 'eslint-plugin-import';
 import perfectionist from 'eslint-plugin-perfectionist';
 import react from 'eslint-plugin-react';
 import globals from 'globals';
@@ -34,7 +33,6 @@ export default defineConfig([
     plugins: {
       react: fixupPluginRules(react),
       '@typescript-eslint': fixupPluginRules(typescriptEslint),
-      import: fixupPluginRules(_import),
       '@stylistic': stylistic,
       perfectionist
     },
@@ -90,6 +88,7 @@ export default defineConfig([
       // React Rules
       'react/function-component-definition': ['error', { namedComponents: 'arrow-function' }],
       'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx', '.tsx'] }],
+      'react/react-in-jsx-scope': 'off',
 
       // TypeScript Rules
       '@typescript-eslint/ban-ts-comment': 'warn',
@@ -98,27 +97,6 @@ export default defineConfig([
       '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-use-before-define': 'error',
-
-      // Import Rules
-      'import/extensions': 'off',
-      'import/no-unresolved': 'off',
-      'import/order': [
-        'warn',
-        {
-          groups: ['builtin', 'external', 'parent'],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
-          pathGroups: [
-            {
-              pattern: 'react',
-              group: 'external',
-              position: 'before'
-            }
-          ],
-          pathGroupsExcludedImportTypes: ['react'],
-          distinctGroup: false
-        }
-      ]
     }
   }
 ]);

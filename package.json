@@ -17,6 +17,7 @@
     "chance": "^1.1.13",
     "eventemitter3": "^5.0.4",
     "lodash": "^4.18.1",
+    "next": "^16.2.10",
     "pokedex-promise-v2": "^4.2.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -27,6 +28,9 @@
     "uuid": "^14.0.1"
   },
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx serve@latest ./build",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "depcheck": "depcheck"
@@ -50,6 +54,7 @@
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/chance": "^1.1.8",
     "@types/lodash": "^4.17.24",
+    "@types/node": "26.1.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/romans": "^2.0.2",

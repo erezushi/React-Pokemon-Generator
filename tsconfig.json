@@ -14,13 +14,25 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "build/types/**/*.ts",
+    "build/dev/types/**/*.ts",
+    "next-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

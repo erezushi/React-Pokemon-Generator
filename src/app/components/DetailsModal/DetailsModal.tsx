@@ -45,8 +45,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
   }, []);
 
   const calculateBST = useCallback(
-    () =>
-      stats.reduce((partialBST, curr) => partialBST + curr.base_stat, 0),
+    () => stats.reduce((partialBST, curr) => partialBST + curr.base_stat, 0),
     [stats]
   );
 
@@ -57,7 +56,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
           <PokemonImage className="details-img" instance={instance} isLinking />
         </CardMedia>
         <CardContent className="details-content">
-          <Typography variant="h5">
+          <div className="details-title">
             {instance.fullName.replace(/-em$/, '-!').replace(/-qm$/, '-?')}
             {isShiny && (
               <span>
@@ -65,11 +64,11 @@ const DetailsModal = (props: IDetailsModalProps) => {
                 <StarRounded fontSize="small" />
               </span>
             )}
-          </Typography>
-          <Typography variant="h5">
+          </div>
+          <div className="details-number">
             {`#${specie.dexNo.toString().padStart(3, '0')} (Gen ${getGeneration(specie.dexNo)})`}
-          </Typography>
-          <Typography className="details-typing">
+          </div>
+          <div className="details-typing">
             Type:&nbsp;
             {type.split(' ').map((currentType, index) => {
               const formattedName = _.startCase(currentType);
@@ -78,7 +77,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                 <>
                   {index === 1 && <>&nbsp;/&nbsp;</>}
                   <Link
-                    key={uuid()}
+                    key={formattedName}
                     href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName}_(type)`}
                   >
                     <TypeIcon type={currentType as PokemonType} />
@@ -86,39 +85,38 @@ const DetailsModal = (props: IDetailsModalProps) => {
                 </>
               );
             })}
-          </Typography>
-          <Typography>
-            Abilities:&nbsp;
-            {normalAbilities.map((ability, index) => {
-              const formattedName = _.startCase(ability.name)
-                .replace('Soul Heart', 'Soul-Heart')
-                .replace(/As One.*/, 'As One');
+          </div>
+          Abilities:&nbsp;
+          {normalAbilities.map((ability, index) => {
+            const formattedName = _.startCase(ability.name)
+              .replace('Soul Heart', 'Soul-Heart')
+              .replace(/As One.*/, 'As One');
 
-              return (
-                <>
-                  {index === 1 && ' / '}
-                  <Tooltip
-                    key={uuid()}
-                    arrow
-                    disableInteractive
-                    placement="top"
-                    title={ability.flavorText}
+            return (
+              <>
+                {index === 1 && ' / '}
+                <Tooltip
+                  key={formattedName}
+                  arrow
+                  disableInteractive
+                  placement="top"
+                  title={ability.flavorText}
+                >
+                  <Link
+                    href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName.replace(
+                      ' ',
+                      '_'
+                    )}_(Ability)`}
                   >
-                    <Link
-                      href={`https://bulbapedia.bulbagarden.net/wiki/${formattedName.replace(
-                        ' ',
-                        '_'
-                      )}_(Ability)`}
-                    >
-                      {formattedName}
-                    </Link>
-                  </Tooltip>
-                </>
-              );
-            })}
-          </Typography>
+                    {formattedName}
+                  </Link>
+                </Tooltip>
+              </>
+            );
+          })}
+          <br />
           {hiddenAbility && (
-            <Typography>
+            <>
               Hidden Ability:&nbsp;
               <Tooltip arrow disableInteractive title={hiddenAbility.flavorText}>
                 <Link
@@ -129,7 +127,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                   {_.startCase(hiddenAbility.name)}
                 </Link>
               </Tooltip>
-            </Typography>
+            </>
           )}
           {stats.map((stat, index) => {
             const { base_stat: baseStat } = stat;
@@ -137,11 +135,10 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
             return <Typography key={statName}>{`${statName}: ${baseStat}`}</Typography>;
           })}
-          <Typography>
-            <strong>BST: </strong>
-            {calculateBST()}
-          </Typography>
-          <Typography>Evolution line:</Typography>
+          <strong>BST: </strong>
+          {calculateBST()}
+          <br />
+          Evolution line:
           <div className="evolution-list">
             {prevolutions.map((prevo) => {
               const prevoInstance: IPokemonInstance = {
@@ -152,7 +149,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
 
               return (
                 <>
-                  <div key={uuid()}>
+                  <div key={prevoInstance.fullName}>
                     <CardMedia>
                       <PokemonImage className="evolution-img" instance={prevoInstance} isLinking />
                     </CardMedia>
@@ -193,9 +190,9 @@ const DetailsModal = (props: IDetailsModalProps) => {
                         };
 
                         return name === 'MissingNo.' ? (
-                          <div key={uuid()} className="MissingNo" />
+                          <div key="MissingNo" className="MissingNo" />
                         ) : (
-                          <div key={uuid()} className="evolution-list">
+                          <div key={splitEvoInstance.fullName} className="evolution-list">
                             {index === 0 && <ArrowRightAltRounded />}
                             <div>
                               <CardMedia>
@@ -218,7 +215,7 @@ const DetailsModal = (props: IDetailsModalProps) => {
                   <div key={`evolution-${evo[0].specie.name}`}>
                     {evo.map((splitEvo) => {
                       const { name } = splitEvo.specie;
-                      
+
                       if (name === 'MissingNo.') return <div key={uuid()} className="MissingNo" />;
 
                       const splitEvoInstance: IPokemonInstance = {

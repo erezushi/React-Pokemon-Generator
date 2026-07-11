@@ -59,7 +59,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/romans": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
-    "@typescript-eslint/parser": "^8.62.1",
+    "@typescript-eslint/parser": "^8.63.0",
     "depcheck": "^1.4.7",
     "eslint": "^9.39.4",
     "eslint-plugin-perfectionist": "^5.9.1",

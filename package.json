@@ -12,7 +12,7 @@
     "@emotion/styled": "^11.14.1",
     "@erezushi/pokemon-randomizer": "^1.16.0",
     "@mui/icons-material": "^9.3.1",
-    "@mui/material": "^9.3.0",
+    "@mui/material": "^9.4.0",
     "animate.css": "^4.1.1",
     "chance": "^1.1.13",
     "eventemitter3": "^5.0.4",
